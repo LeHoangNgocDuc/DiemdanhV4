@@ -442,7 +442,7 @@
                     let formattedToday = `${dd}/${mm}/${yyyy}`;
 
                     // Nội dung tin nhắn thu học phí chi tiết ngày thu và tháng học phí
-                    let msg = `Trung Tâm An Phúc xin thông báo: Kính báo: Vào ngày ${formattedToday}, Trung tâm đã thu thành công ${Number(amt).toLocaleString()} VNĐ học phí THÁNG ${targetMonth}/${targetYear} của học sinh ${studentName} qua hình thức ${methodLabel}. Cảm ơn Quý phụ huynh!`;
+                    let msg = `Trung Tâm An Phúc xin thông báo: Vào ngày ${formattedToday}, Trung tâm đã thu thành công ${Number(amt).toLocaleString()} VNĐ học phí THÁNG ${targetMonth}/${targetYear} của học sinh ${studentName} qua hình thức ${methodLabel}. Cảm ơn Quý phụ huynh!`;
                     sendZaloMessage(phone, msg);
                 }
             } else { alert(r.message); }

@@ -452,35 +452,32 @@
 
   function saveFeeSetting() { callAPI('saveSettings', {tuition_amount_default:document.getElementById('hp-def').value}, 'POST').then(() => showToast("Đã lưu")).catch(showError); }
 
- // --- TỰ ĐỘNG GỬI ZALO NHẮC HỌC PHÍ (GỬI LUÔN KHI BẤM) ---
+ // --- TỰ ĐỘNG GỬI ZALO NHẮC HỌC PHÍ (GỬI 1 DÒNG DUY NHẤT) ---
   function guiNhacNhoHocPhiZalo() {
       const homNay = new Date();
       const m = document.getElementById('hp-thang').value || (homNay.getMonth() + 1);
       const y = document.getElementById('hp-nam').value || homNay.getFullYear();
-
       const k = document.getElementById('hp-khoi').value;
       const l = document.getElementById('hp-lop').value; 
 
-      // 1. CHẶN LỖI: Bắt buộc chọn Khối và Lớp trước khi quét
       if (!k || !l) {
           showToast("Vui lòng chọn Khối và Lớp trước khi nhắc học phí!", "error");
           return;
       }
 
-      // 2. Hiển thị thông báo đang xử lý
+      if (!confirm(`Bạn có chắc chắn muốn gửi Zalo nhắc nhở cho TẤT CẢ học sinh CHƯA đóng học phí tháng ${m}/${y} không?`)) return;
+
       showToast("⏳ Đang quét danh sách học sinh chưa đóng học phí...", "success");
       loading(true);
       
       callAPI('getPaymentStatus', {grade: k, className: l, month: m, year: y}).then(d => {
           loading(false);
           
-          // Kiểm tra nếu API báo lỗi
           if (d.success === false) {
               showToast("Lỗi dữ liệu: " + d.message, "error");
               return;
           }
           
-          // 3. Lọc danh sách học sinh CHƯA đóng tiền và CÓ số điện thoại
           let unpaidList = d.filter(s => !s.is_paid && s.parent_phone);
           
           if (unpaidList.length === 0) {
@@ -490,15 +487,16 @@
 
           showToast(`🚀 Bắt đầu gửi tự động ${unpaidList.length} tin nhắn Zalo...`, 'success');
           
-          // 4. Chạy vòng lặp gửi tin nhắn
           unpaidList.forEach((s, index) => {
+              // Delay 2.5 giây giữa mỗi tin nhắn để Bot hoạt động mượt mà
               setTimeout(() => {
-                  let msg = `Trung Tâm An Phúc xin thông báo: Học sinh ${studentName} hiện chưa đóng tiền học phí THÁNG ${targetMonth}/${targetYear}. Kính mong quý phụ huynh thanh toán học phí để trung tâm thuận tiện trong việc làm hồ sơ và báo cáo thuế. Xin cảm ơn quý phụ huynh!`;
                   
-                  // SỬA LỖI TẠI ĐÂY: Ép kiểu String() cho số điện thoại
+                  // NỘI DUNG 1 DÒNG DUY NHẤT THEO ĐÚNG MẪU ĐIỂM DANH
+                  let msg = `Trung tâm An Phúc Education xin thông báo: Học sinh ${s.name} hiện chưa thanh toán học phí tháng ${m}. Kính mong phụ huynh thanh toán học phí cho cháu trước ngày 27 tháng ${m} để trung tâm hoàn thiện hồ sơ báo cáo thuế. Xin cảm ơn quý phụ huynh.`;
+                  
                   sendZaloMessage(String(s.parent_phone), msg);
                   
-              }, index * 3000); 
+              }, index * 2500); 
           });
       }).catch(err => {
           loading(false);

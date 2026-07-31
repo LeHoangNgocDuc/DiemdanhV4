@@ -452,43 +452,57 @@
 
   function saveFeeSetting() { callAPI('saveSettings', {tuition_amount_default:document.getElementById('hp-def').value}, 'POST').then(() => showToast("Đã lưu")).catch(showError); }
 
-  // --- TỰ ĐỘNG GỬI ZALO NHẮC HỌC PHÍ ---
-  // --- TỰ ĐỘNG GỬI ZALO NHẮC HỌC PHÍ (GỬI LUÔN KHI BẤM) ---
+ // --- TỰ ĐỘNG GỬI ZALO NHẮC HỌC PHÍ (GỬI LUÔN KHI BẤM) ---
   function guiNhacNhoHocPhiZalo() {
       const homNay = new Date();
       const m = document.getElementById('hp-thang').value || (homNay.getMonth() + 1);
       const y = document.getElementById('hp-nam').value || homNay.getFullYear();
 
-      // Hiển thị thông báo đang xử lý thay vì hỏi xác nhận
-      showToast("⏳ Đang quét danh sách học sinh chưa đóng học phí...", "success");
-      loading(true);
-      
       const k = document.getElementById('hp-khoi').value;
       const l = document.getElementById('hp-lop').value; 
+
+      // 1. CHẶN LỖI: Bắt buộc chọn Khối và Lớp trước khi quét
+      if (!k || !l) {
+          showToast("Vui lòng chọn Khối và Lớp trước khi nhắc học phí!", "error");
+          return;
+      }
+
+      // 2. Hiển thị thông báo đang xử lý
+      showToast("⏳ Đang quét danh sách học sinh chưa đóng học phí...", "success");
+      loading(true);
       
       callAPI('getPaymentStatus', {grade: k, className: l, month: m, year: y}).then(d => {
           loading(false);
           
-          // Lọc danh sách học sinh CHƯA đóng tiền và CÓ số điện thoại
+          // Kiểm tra nếu API báo lỗi
+          if (d.success === false) {
+              showToast("Lỗi dữ liệu: " + d.message, "error");
+              return;
+          }
+          
+          // 3. Lọc danh sách học sinh CHƯA đóng tiền và CÓ số điện thoại
           let unpaidList = d.filter(s => !s.is_paid && s.parent_phone);
           
           if (unpaidList.length === 0) {
-              showToast("Tuyệt vời! Tất cả học sinh đều đã đóng học phí hoặc không có thông tin SĐT!");
+              showToast("Tuyệt vời! Tất cả học sinh lớp này đều đã đóng học phí hoặc không có SĐT!");
               return;
           }
 
           showToast(`🚀 Bắt đầu gửi tự động ${unpaidList.length} tin nhắn Zalo...`, 'success');
           
-          // Chạy vòng lặp gửi tin nhắn luôn, có độ trễ 3 giây giữa các tin để tránh nghẽn Bot
+          // 4. Chạy vòng lặp gửi tin nhắn
           unpaidList.forEach((s, index) => {
               setTimeout(() => {
                   let msg = `Trung tâm An Phúc Education xin thông báo.\n\nKính gửi Quý phụ huynh em ${s.name}.\nHiện tại đã về cuối tháng, Trung tâm xin phép nhắc nhẹ gia đình về khoản học phí tháng ${m}/${y} của em ạ.\nNếu gia đình đã chuyển khoản hoặc đóng tiền mặt tại lớp, xin Quý phụ huynh hoan hỉ bỏ qua tin nhắn này giúp Trung tâm nhé.\n\nXin cảm ơn quý phụ huynh!`;
                   sendZaloMessage(s.parent_phone, msg);
               }, index * 3000); 
           });
-      }).catch(showError);
+      }).catch(err => {
+          loading(false);
+          console.error("Lỗi khi quét danh sách:", err);
+          showToast("Có lỗi xảy ra khi kết nối máy chủ!", "error");
+      });
   }
-
   // --- TÀI LIỆU, THỐNG KÊ, VÀ CÁC HÀM KHÁC ---
   function loadMaterials() { loading(true); callAPI('getMaterialStatus', {grade: document.getElementById('tl-khoi').value, className: document.getElementById('tl-lop').value}).then(r=>{ loading(false); document.getElementById('list-tl').innerHTML=r.data.map((s,i)=>`<tr><td style="text-align:center">${i+1}</td><td><b>${s.name}</b></td><td>${s.class_info}</td>${[1,2,3,4,5,6].map(j=>`<td style="text-align:center"><input type="checkbox" class="cb-material" ${s['batch'+j]?'checked':''} onchange="toggleMaterial('${s.student_id}',${j},this.checked)"></td>`).join('')}</tr>`).join(''); }).catch(showError); }
   function toggleMaterial(id,b,c) { callAPI('updateMaterialStatus', {id: id, batch: b, checked: c}, 'POST').then(r=>{ if(!r.success) { alert(r.message); loadMaterials(); } }); }

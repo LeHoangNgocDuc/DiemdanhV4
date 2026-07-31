@@ -494,7 +494,10 @@
           unpaidList.forEach((s, index) => {
               setTimeout(() => {
                   let msg = `Trung tâm An Phúc Education xin thông báo.\n\nKính gửi Quý phụ huynh em ${s.name}.\nHiện tại đã về cuối tháng, Trung tâm xin phép nhắc nhẹ gia đình về khoản học phí tháng ${m}/${y} của em ạ.\nNếu gia đình đã chuyển khoản hoặc đóng tiền mặt tại lớp, xin Quý phụ huynh hoan hỉ bỏ qua tin nhắn này giúp Trung tâm nhé.\n\nXin cảm ơn quý phụ huynh!`;
-                  sendZaloMessage(s.parent_phone, msg);
+                  
+                  // SỬA LỖI TẠI ĐÂY: Ép kiểu String() cho số điện thoại
+                  sendZaloMessage(String(s.parent_phone), msg);
+                  
               }, index * 3000); 
           });
       }).catch(err => {

@@ -453,26 +453,22 @@
   function saveFeeSetting() { callAPI('saveSettings', {tuition_amount_default:document.getElementById('hp-def').value}, 'POST').then(() => showToast("Đã lưu")).catch(showError); }
 
   // --- TỰ ĐỘNG GỬI ZALO NHẮC HỌC PHÍ ---
+  // --- TỰ ĐỘNG GỬI ZALO NHẮC HỌC PHÍ (GỬI LUÔN KHI BẤM) ---
   function guiNhacNhoHocPhiZalo() {
       const homNay = new Date();
-      const ngay = homNay.getDate();
       const m = document.getElementById('hp-thang').value || (homNay.getMonth() + 1);
       const y = document.getElementById('hp-nam').value || homNay.getFullYear();
 
-      // Kiểm tra điều kiện phải từ ngày 25 trở đi
-      if (ngay < 25) {
-          showToast("Chưa đến ngày 25! Hệ thống chỉ cho phép nhắc nợ từ ngày 25 trở đi để tránh phiền phụ huynh.", 'error');
-          return;
-      }
-      
-      if (!confirm(`Bạn có chắc chắn muốn gửi Zalo nhắc nhở cho TẤT CẢ học sinh CHƯA đóng học phí tháng ${m}/${y} không?`)) return;
-
+      // Hiển thị thông báo đang xử lý thay vì hỏi xác nhận
+      showToast("⏳ Đang quét danh sách học sinh chưa đóng học phí...", "success");
       loading(true);
+      
       const k = document.getElementById('hp-khoi').value;
       const l = document.getElementById('hp-lop').value; 
       
       callAPI('getPaymentStatus', {grade: k, className: l, month: m, year: y}).then(d => {
           loading(false);
+          
           // Lọc danh sách học sinh CHƯA đóng tiền và CÓ số điện thoại
           let unpaidList = d.filter(s => !s.is_paid && s.parent_phone);
           
@@ -481,12 +477,12 @@
               return;
           }
 
-          showToast(`Đang lên lịch gửi tự động ${unpaidList.length} tin nhắn Zalo...`, 'success');
+          showToast(`🚀 Bắt đầu gửi tự động ${unpaidList.length} tin nhắn Zalo...`, 'success');
           
-          // Chạy vòng lặp gửi tin nhắn, có độ trễ 3 giây giữa các tin để tránh nghẽn Bot
+          // Chạy vòng lặp gửi tin nhắn luôn, có độ trễ 3 giây giữa các tin để tránh nghẽn Bot
           unpaidList.forEach((s, index) => {
               setTimeout(() => {
-                  let msg = `Trung tâm An Phúc Education xin thông báo.\n\nKính gửi Quý phụ huynh em ${s.name}.\nHiện tại đã về cuối tháng, Trung tâm xin phép thông báo gia đình về khoản học phí tháng ${m}/${y} của em ạ.\nNếu gia đình đã chuyển khoản hoặc đóng tiền mặt tại lớp, xin Quý phụ huynh trao đổi lại với Trung tâm và bỏ qua tin nhắn này giúp Trung tâm nhé.\n\nXin cảm ơn quý phụ huynh!`;
+                  let msg = `Trung tâm An Phúc Education xin thông báo.\n\nKính gửi Quý phụ huynh em ${s.name}.\nHiện tại đã về cuối tháng, Trung tâm xin phép nhắc nhẹ gia đình về khoản học phí tháng ${m}/${y} của em ạ.\nNếu gia đình đã chuyển khoản hoặc đóng tiền mặt tại lớp, xin Quý phụ huynh hoan hỉ bỏ qua tin nhắn này giúp Trung tâm nhé.\n\nXin cảm ơn quý phụ huynh!`;
                   sendZaloMessage(s.parent_phone, msg);
               }, index * 3000); 
           });

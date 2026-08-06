@@ -440,7 +440,7 @@
                 showToast(`Thu ${methodLabel} thành công!`); 
                 loadHP(); 
 
-                // Zalo báo đóng tiền (1 dòng)
+                // Zalo báo đóng tiền (đúng định dạng mẫu yêu cầu)
                 try {
                     if (phone && phone !== "undefined" && phone.trim() !== "") {
                         let today = new Date();
@@ -449,7 +449,7 @@
                         let yyyy = today.getFullYear();
                         let formattedToday = `${dd}/${mm}/${yyyy}`;
 
-                        let msg = `Trung tâm An Phúc Education xin thông báo: Đã thu thành công ${Number(amt).toLocaleString()} VNĐ học phí tháng ${targetMonth}/${targetYear} của học sinh ${studentName} qua hình thức ${methodLabel}. Xin cảm ơn quý phụ huynh.`;
+                        let msg = `Trung Tâm An Phúc xin thông báo: Vào ngày ${formattedToday}, Trung tâm đã thu thành công ${Number(amt).toLocaleString('vi-VN')} VNĐ học phí THÁNG ${targetMonth}/${targetYear} của học sinh ${studentName} qua hình thức ${methodLabel}. Cảm ơn Quý phụ huynh!`;
                         sendZaloMessage(String(phone), msg);
                     }
                 } catch(err) { console.log(err); }
@@ -465,6 +465,8 @@
           return;
       }
       const m = document.getElementById('hp-thang').value || (new Date().getMonth() + 1);
+      
+      // Định dạng tin nhắn nhắc nợ 1 dòng
       let msg = `Trung tâm An Phúc Education xin thông báo: Học sinh ${studentName} hiện chưa thanh toán học phí tháng ${m}. Kính mong phụ huynh thanh toán học phí cho cháu trước ngày 27 tháng ${m} để trung tâm hoàn thiện hồ sơ báo cáo thuế. Xin cảm ơn quý phụ huynh.`;
       
       showToast(`Đang đẩy lệnh Zalo cho phụ huynh em ${studentName}...`, "success");
@@ -507,8 +509,12 @@
           
           unpaidList.forEach((s, index) => {
               setTimeout(() => {
+                  
+                  // Định dạng tin nhắn nhắc nợ 1 dòng
                   let msg = `Trung tâm An Phúc Education xin thông báo: Học sinh ${s.name} hiện chưa thanh toán học phí tháng ${m}. Kính mong phụ huynh thanh toán học phí cho cháu trước ngày 27 tháng ${m} để trung tâm hoàn thiện hồ sơ báo cáo thuế. Xin cảm ơn quý phụ huynh.`;
+                  
                   sendZaloMessage(String(s.parent_phone), msg);
+                  
               }, index * 2500); 
           });
       }).catch(err => {

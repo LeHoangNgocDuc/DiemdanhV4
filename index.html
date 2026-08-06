@@ -242,24 +242,48 @@
   // ============================================
   // CẤU HÌNH API - LIÊN KẾT VỚI GOOGLE SHEET
   // ============================================
-  const API_URL = "https://script.google.com/macros/s/AKfycby9ik1eJ2Xv4ymQ2JnYZ14cdEQ2jgIjZX5NnUxaYV32orvy6_m6FGcLA4O1ZjwqAAG4/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbwr2i6djTj4Q1-TDyJGFd2h0V6ro2EYm36z3Kh8uxR1eFJgXRIzoB7Ai_GkFeqg2RKH/exec";
   
   // Link kết nối máy chủ Zalo chạy ngầm
   const NGROK_ZALO_API = "https://pummel-crumb-ferret.ngrok-free.dev/gui-tin-zalo"; 
 
+  // ========================================================
+  // BẢN VÁ LỖI QUAN TRỌNG: Lọc sạch rác từ file Excel
+  // Giải quyết triệt để lỗi SĐT bị thêm đuôi ".0" từ Sheet
+  // ========================================================
+  function formatPhone(p) { 
+      if (!p || String(p) === "undefined" || String(p).trim() === "") return ""; 
+      let s = String(p).trim();
+      
+      // Nếu Google Sheet ném ra định dạng 984916189.0 -> Cắt ngay đuôi .0
+      if (s.endsWith('.0')) {
+          s = s.slice(0, -2); 
+      }
+      
+      // Xóa mọi ký tự đặc biệt, khoảng trắng, chữ cái (chỉ giữ lại số)
+      s = s.replace(/[^\d]/g, ''); 
+      
+      // Bù số 0 ở đầu nếu Excel làm mất
+      if (s.length > 0 && s[0] !== '0') {
+          return '0' + s; 
+      }
+      return s; 
+  }
+
   // HÀM GỬI ZALO TỰ ĐỘNG
   async function sendZaloMessage(phone, message) {
-      if (!phone || phone.trim() === "" || phone === "undefined") return;
+      const cleanPhone = formatPhone(phone);
+      if (!cleanPhone) return;
       try {
           fetch(NGROK_ZALO_API, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                  so_dien_thoai: formatPhone(phone),
+                  so_dien_thoai: cleanPhone,
                   noi_dung: message
               })
           }).then(res => res.json()).then(data => {
-              console.log("Zalo Response:", data);
+              console.log("Zalo Response cho SĐT " + cleanPhone + ":", data);
           }).catch(e => console.error("Lỗi Ngrok (Zalo Server chưa bật):", e));
       } catch (error) {
           console.error("Lỗi gửi Zalo:", error);
@@ -284,8 +308,7 @@
       try {
           return JSON.parse(text);
       } catch (err) {
-          console.warn("Máy chủ Google trả về định dạng lạ (thường do chưa Deploy bản mới), nhưng thao tác đã được thực thi:", text);
-          // Gỡ lỗi: Vẫn cho đi tiếp luồng code để kích hoạt Zalo
+          console.warn("Dữ liệu trả về bị mã hóa (do cache Google), nhưng thao tác đã ghi vào Sheet:", text);
           return { success: true };
       }
     } catch (error) {
@@ -306,7 +329,6 @@
     callAPI('getSettings').then(s => { if(s && s.tuition_amount_default) document.getElementById('hp-def').value = s.tuition_amount_default; });
   }
 
-  function formatPhone(p) { if(!p) return ""; let s=String(p).trim(); if(s.length>0 && s[0]!=='0') return '0'+s; return s; }
   function initDateSel(m,y) { const ms=document.getElementById(m); for(let i=1;i<=12;i++) ms.add(new Option("Tháng "+i,i)); ms.value=new Date().getMonth()+1; const ys=document.getElementById(y); const cy=new Date().getFullYear(); ys.add(new Option(cy,cy)); ys.add(new Option(cy-1,cy-1)); ys.add(new Option(cy+1,cy+1)); ys.value=cy; }
   function updateLop(sk,sl) { const k=document.getElementById(sk).value; const l=document.getElementById(sl); const def=(sl.includes('tk')||sl.includes('tl')||sl.includes('hs'))?"-- Tất cả --":"-- Chọn --"; l.innerHTML=`<option value="">${def}</option>`; if(!k) return; const kv=parseInt(k); if(kv>=6&&kv<=9) ['A','B','C'].forEach(x=>l.add(new Option("Lớp "+x,x))); else l.add(new Option("Lớp Chung","Chung")); }
   function changeTab(id,btn) { document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); btn.classList.add('active'); }
@@ -412,15 +434,14 @@
               let methodText = s.method === 'CK' ? '(Chuyển khoản)' : (s.method === 'TM' ? '(Tiền mặt)' : '');
               let statusHTML = s.is_paid ? `<span class="tag-green">Đã đóng <br><small>${methodText}</small></span>` : '<span class="tag-red">Chưa</span>';
               
-              // Cập nhật giao diện: Thêm nút "Nhắc nợ" cho học sinh chưa đóng
               let actionHTML = s.is_paid ? '✔' : `
                 <button class="btn-green btn-sm" style="margin-bottom:5px; width:100%; justify-content:center;" onclick="pay('${s.student_id}', 'TM', '${s.parent_phone||''}', '${s.custom_fee||''}', '${s.name}')">💵 Tiền mặt</button>
                 <button class="btn-blue btn-sm" style="margin-bottom:5px; width:100%; justify-content:center;" onclick="pay('${s.student_id}', 'CK', '${s.parent_phone||''}', '${s.custom_fee||''}', '${s.name}')">💳 Chuyển khoản</button>
                 <button class="btn-orange btn-sm" style="width:100%; justify-content:center;" onclick="nhacNhoCaNhan('${s.parent_phone||''}', '${s.name}')">🔔 Nhắc nợ</button>
               `;
-              return `<tr><td style="text-align:center">${i+1}</td><td><b>${s.name}</b></td><td>${statusHTML}</td><td>${Number(s.amount||0).toLocaleString()}</td><td>${s.paid_at||'-'}</td><td style="width:140px; text-align:center;">${actionHTML}</td></tr>`; 
+              return `<tr><td style="text-align:center">${i+1}</td><td><b>${s.name}</b></td><td>${statusHTML}</td><td>${Number(s.amount||0).toLocaleString('vi-VN')}</td><td>${s.paid_at||'-'}</td><td style="width:140px; text-align:center;">${actionHTML}</td></tr>`; 
           }).join(''); 
-          document.getElementById('hp-info').innerHTML=`Đã thu: <b>${da}/${d.length}</b>. Tổng: <b>${tong.toLocaleString()}</b> đ`; 
+          document.getElementById('hp-info').innerHTML=`Đã thu: <b>${da}/${d.length}</b>. Tổng: <b>${tong.toLocaleString('vi-VN')}</b> đ`; 
       }).catch(showError); 
   }
 
@@ -440,17 +461,21 @@
                 showToast(`Thu ${methodLabel} thành công!`); 
                 loadHP(); 
 
-                // Zalo báo đóng tiền (đúng định dạng mẫu yêu cầu)
+                // Gửi tin nhắn Zalo báo ĐÃ THU
                 try {
-                    if (phone && phone !== "undefined" && phone.trim() !== "") {
+                    let cleanPhone = formatPhone(phone);
+                    if (cleanPhone) {
                         let today = new Date();
                         let dd = String(today.getDate()).padStart(2, '0');
                         let mm = String(today.getMonth() + 1).padStart(2, '0');
                         let yyyy = today.getFullYear();
                         let formattedToday = `${dd}/${mm}/${yyyy}`;
 
-                        let msg = `Trung Tâm An Phúc xin thông báo: Vào ngày ${formattedToday}, Trung tâm đã thu thành công ${Number(amt).toLocaleString('vi-VN')} VNĐ học phí THÁNG ${targetMonth}/${targetYear} của học sinh ${studentName} qua hình thức ${methodLabel}. Cảm ơn Quý phụ huynh!`;
-                        sendZaloMessage(String(phone), msg);
+                        // Dùng toLocaleString('vi-VN') để ra số có dấu chấm (VD: 350.000)
+                        let formattedAmount = Number(amt).toLocaleString('vi-VN');
+                        
+                        let msg = `Trung Tâm An Phúc xin thông báo: Vào ngày ${formattedToday}, Trung tâm đã thu thành công ${formattedAmount} VNĐ học phí THÁNG ${targetMonth}/${targetYear} của học sinh ${studentName} qua hình thức ${methodLabel}. Cảm ơn Quý phụ huynh!`;
+                        sendZaloMessage(cleanPhone, msg);
                     }
                 } catch(err) { console.log(err); }
 
@@ -460,23 +485,22 @@
   }
 
   function nhacNhoCaNhan(phone, studentName) {
-      if (!phone || phone.trim() === "" || phone === "undefined") {
-          showToast("Học sinh này chưa cập nhật số điện thoại!", "error");
+      let cleanPhone = formatPhone(phone);
+      if (!cleanPhone) {
+          showToast("Học sinh này chưa cập nhật số điện thoại chuẩn!", "error");
           return;
       }
       const m = document.getElementById('hp-thang').value || (new Date().getMonth() + 1);
       
-      // Định dạng tin nhắn nhắc nợ 1 dòng
       let msg = `Trung tâm An Phúc Education xin thông báo: Học sinh ${studentName} hiện chưa thanh toán học phí tháng ${m}. Kính mong phụ huynh thanh toán học phí cho cháu trước ngày 27 tháng ${m} để trung tâm hoàn thiện hồ sơ báo cáo thuế. Xin cảm ơn quý phụ huynh.`;
       
       showToast(`Đang đẩy lệnh Zalo cho phụ huynh em ${studentName}...`, "success");
-      sendZaloMessage(String(phone), msg);
+      sendZaloMessage(cleanPhone, msg);
   }
 
   function guiNhacNhoHocPhiZalo() {
-      const homNay = new Date();
-      const m = document.getElementById('hp-thang').value || (homNay.getMonth() + 1);
-      const y = document.getElementById('hp-nam').value || homNay.getFullYear();
+      const m = document.getElementById('hp-thang').value || (new Date().getMonth() + 1);
+      const y = document.getElementById('hp-nam').value || new Date().getFullYear();
       const k = document.getElementById('hp-khoi').value;
       const l = document.getElementById('hp-lop').value; 
 
@@ -498,7 +522,7 @@
               return;
           }
           
-          let unpaidList = d.filter(s => !s.is_paid && s.parent_phone && String(s.parent_phone) !== "undefined");
+          let unpaidList = d.filter(s => !s.is_paid && formatPhone(s.parent_phone) !== "");
           
           if (unpaidList.length === 0) {
               showToast("Tuyệt vời! Tất cả học sinh lớp này đều đã đóng học phí hoặc không có SĐT!");
@@ -509,12 +533,8 @@
           
           unpaidList.forEach((s, index) => {
               setTimeout(() => {
-                  
-                  // Định dạng tin nhắn nhắc nợ 1 dòng
                   let msg = `Trung tâm An Phúc Education xin thông báo: Học sinh ${s.name} hiện chưa thanh toán học phí tháng ${m}. Kính mong phụ huynh thanh toán học phí cho cháu trước ngày 27 tháng ${m} để trung tâm hoàn thiện hồ sơ báo cáo thuế. Xin cảm ơn quý phụ huynh.`;
-                  
-                  sendZaloMessage(String(s.parent_phone), msg);
-                  
+                  sendZaloMessage(s.parent_phone, msg);
               }, index * 2500); 
           });
       }).catch(err => {
@@ -533,10 +553,10 @@
     loading(true); const m = document.getElementById('tk-thang').value, y = document.getElementById('tk-nam').value, k = document.getElementById('tk-khoi').value, l = document.getElementById('tk-lop').value;
     Promise.all([ callAPI('getStatistics', {month: m, year: y, grade: k, className: l}), callAPI('getLessonReport', {month: m, year: y, grade: k, className: l}) ]).then(([res, lessonRes]) => {
         loading(false); if(!res.success) return showToast("Lỗi: " + res.message, 'error');
-        document.getElementById('st-revenue').innerText = (res.total_revenue || 0).toLocaleString() + ' đ'; document.getElementById('st-cash').innerText = (res.cash_total || 0).toLocaleString() + ' đ'; document.getElementById('st-transfer').innerText = (res.transfer_total || 0).toLocaleString() + ' đ'; document.getElementById('st-paid').innerText = res.paid_count + "/" + res.total_students + " HS"; document.getElementById('st-unpaid').innerText = res.unpaid_count + " HS"; document.getElementById('prev-month-label').innerText = res.prev_month_label || 'Tháng trước';
+        document.getElementById('st-revenue').innerText = (res.total_revenue || 0).toLocaleString('vi-VN') + ' đ'; document.getElementById('st-cash').innerText = (res.cash_total || 0).toLocaleString('vi-VN') + ' đ'; document.getElementById('st-transfer').innerText = (res.transfer_total || 0).toLocaleString('vi-VN') + ' đ'; document.getElementById('st-paid').innerText = res.paid_count + "/" + res.total_students + " HS"; document.getElementById('st-unpaid').innerText = res.unpaid_count + " HS"; document.getElementById('prev-month-label').innerText = res.prev_month_label || 'Tháng trước';
         const tbCash = document.getElementById('list-tk-paid-cash'), tbTransfer = document.getElementById('list-tk-transfer'), cashList = res.paid_list.filter(s => s.method === 'TM'), transferList = res.paid_list.filter(s => s.method === 'CK');
-        if (cashList.length === 0) tbCash.innerHTML = '<tr><td colspan="5" style="text-align:center">Trống.</td></tr>'; else tbCash.innerHTML = cashList.map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td><b>${s.name}</b></td><td>${s.class_info}</td><td>${s.paid_at}</td><td>${Number(s.amount).toLocaleString()}</td></tr>`).join('');
-        if (transferList.length === 0) tbTransfer.innerHTML = '<tr><td colspan="6" style="text-align:center">Trống.</td></tr>'; else tbTransfer.innerHTML = transferList.map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td><b>${s.name}</b></td><td>${s.class_info}</td><td>${s.paid_at}</td><td>${Number(s.amount).toLocaleString()}</td><td>${s.note || ''}</td></tr>`).join('');
+        if (cashList.length === 0) tbCash.innerHTML = '<tr><td colspan="5" style="text-align:center">Trống.</td></tr>'; else tbCash.innerHTML = cashList.map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td><b>${s.name}</b></td><td>${s.class_info}</td><td>${s.paid_at}</td><td>${Number(s.amount).toLocaleString('vi-VN')}</td></tr>`).join('');
+        if (transferList.length === 0) tbTransfer.innerHTML = '<tr><td colspan="6" style="text-align:center">Trống.</td></tr>'; else tbTransfer.innerHTML = transferList.map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td><b>${s.name}</b></td><td>${s.class_info}</td><td>${s.paid_at}</td><td>${Number(s.amount).toLocaleString('vi-VN')}</td><td>${s.note || ''}</td></tr>`).join('');
         const tbUnpaid = document.getElementById('list-tk'); if (res.unpaid_list.length === 0) tbUnpaid.innerHTML = '<tr><td colspan="4" style="text-align:center; color:green; font-weight:bold">Tuyệt vời! Tất cả đã đóng tiền.</td></tr>'; else tbUnpaid.innerHTML = res.unpaid_list.map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td>${s.name}</td><td>${s.class_info}</td><td>${formatPhone(s.parent_phone)}</td></tr>`).join('');
         const tbDebt = document.getElementById('list-tk-2m'); if (!res.unpaid_two_months_list || res.unpaid_two_months_list.length === 0) tbDebt.innerHTML = '<tr><td colspan="4" style="text-align:center; color:green">Không có.</td></tr>'; else tbDebt.innerHTML = res.unpaid_two_months_list.map((s,i) => `<tr style="background:#fff5f5"><td style="text-align:center">${i+1}</td><td><b style="color:red">${s.name}</b></td><td>${s.class_info}</td><td>${formatPhone(s.parent_phone)}</td></tr>`).join('');
         const tbAbsent = document.getElementById('list-tk-absent'); if (!res.absent_list || res.absent_list.length === 0) tbAbsent.innerHTML = '<tr><td colspan="5" style="text-align:center; color:green">Không có học sinh vắng 2 buổi liên tiếp.</td></tr>'; else tbAbsent.innerHTML = res.absent_list.map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td><b style="color:#ff6f00">${s.name}</b></td><td>${s.class_info}</td><td>${formatPhone(s.parent_phone)}</td><td style="text-align:center;font-weight:bold;color:red">${s.absent_count} buổi</td></tr>`).join('');

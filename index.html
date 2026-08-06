@@ -153,9 +153,21 @@
         <tbody id="list-tk-paid-cash"></tbody>
       </table>
 
-      <h3 class="section-title" style="color:#1976d2">3. Danh sách Thu Chuyển Khoản</h3>
+      <!-- BỔ SUNG NÚT XUẤT EXCEL BÁO CÁO THUẾ -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; margin-top: 30px;">
+        <h3 class="section-title" style="margin: 0; color:#1976d2">3. Danh sách Thu Chuyển Khoản</h3>
+        <button class="btn-green" onclick="exportTransferExcel()">📥 Xuất Excel Báo cáo Thuế</button>
+      </div>
+      <!-- BẢNG CẬP NHẬT ĐÚNG THỨ TỰ 6 CỘT -->
       <table id="table-transfer" style="margin-bottom:30px;">
-        <thead><tr><th style="text-align:center;width:50px;">STT</th><th>Họ và tên</th><th>Lớp</th><th>Ngày nộp</th><th>Số tiền</th></tr></thead>
+        <thead><tr>
+          <th style="text-align:center;width:50px;">STT</th>
+          <th>Họ và tên</th>
+          <th style="text-align:center">Lớp</th>
+          <th style="text-align:right">Số tiền</th>
+          <th style="text-align:center">Ngày đóng</th>
+          <th>Ghi chú</th>
+        </tr></thead>
         <tbody id="list-tk-transfer"></tbody>
       </table>
 
@@ -201,12 +213,11 @@
 
 <script>
   // ĐIỀN LINK GOOGLE APPS SCRIPT WEB APP MỚI NHẤT VÀO ĐÂY
-  const API_URL = "https://script.google.com/macros/s/AKfycbwmTEgQmJCh7d7Hqz2Ved21Jfgnt6tpHrpuRqXtNiQIvNnjcVb9mssmx9GLe9rzSW5n/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbwMoQD2-9meYFqrWOItR62Fr9sTiTP_dx8aPsM5PiHPT-XFKgr76cvaDYe9O-0bmp3p/exec";
   
-  let PAYMENT_STUDENTS = new Map(); // Lưu an toàn cho Học phí
-  let CURRENT_STUDENTS = []; // Lưu cho quản lý Học sinh
+  let PAYMENT_STUDENTS = new Map(); 
+  let CURRENT_STUDENTS = []; 
 
-  // HÀM CALL API ĐƯỢC VIẾT LẠI CHUẨN MỰC TƯƠNG THÍCH NGƯỢC
   async function callAPI(action, params = {}, method = 'GET') {
     let url = API_URL;
     const options = { method: method, redirect: 'follow' };
@@ -221,14 +232,11 @@
     const response = await fetch(url, options);
     const text = await response.text();
     let result;
-
     try { result = JSON.parse(text); } 
     catch (error) { throw new Error('API không trả JSON. HTTP ' + response.status + ': ' + text.slice(0, 100)); }
 
     if (!response.ok) throw new Error(result.message || 'HTTP ' + response.status);
     if (result.success === false) throw new Error(result.message || 'Thao tác thất bại');
-
-    // Trả về NGUYÊN BẢN object result để tương thích 100% với code cũ
     return result; 
   }
 
@@ -259,7 +267,7 @@
   function showToast(msg, type='success') { const t = document.getElementById('toast'); t.innerHTML = (type==='success'?'✅ ':'❌ ') + msg; t.className = type + " show"; setTimeout(() => { t.className = t.className.replace("show", ""); }, 4000); }
   function showError(e) { showToast(e.message || "Có lỗi xảy ra", 'error'); }
 
-  // --- CÁC HÀM CŨ: HỌC SINH ---
+  // --- HỌC SINH ---
   function loadHS() { 
     loading(true); 
     const term=document.getElementById('search-hs').value, g=document.getElementById('hs-khoi').value, c=document.getElementById('hs-lop').value; 
@@ -281,48 +289,112 @@
   // --- TÀI LIỆU & THỐNG KÊ ---
   function loadMaterials() { loading(true); callAPI('getMaterialStatus', {grade: document.getElementById('tl-khoi').value, className: document.getElementById('tl-lop').value}).then(r=>{ loading(false); document.getElementById('list-tl').innerHTML=r.data.map((s,i)=>`<tr><td style="text-align:center">${i+1}</td><td><b>${escapeHtml(s.name)}</b></td><td>${s.class_info}</td>${[1,2,3,4,5,6].map(j=>`<td style="text-align:center"><input type="checkbox" class="cb-material" ${s['batch'+j]?'checked':''} onchange="toggleMaterial('${s.student_id}',${j},this.checked)"></td>`).join('')}</tr>`).join(''); }).catch(showError); }
   function toggleMaterial(id,b,c) { callAPI('updateMaterialStatus', {id: id, batch: b, checked: c}, 'POST').then(r=>{ if(!r.success) { showToast(r.message, 'error'); loadMaterials(); } }); }
-  function loadStats() { loading(true); const m = document.getElementById('tk-thang').value, y = document.getElementById('tk-nam').value, k = document.getElementById('tk-khoi').value, l = document.getElementById('tk-lop').value; Promise.all([ callAPI('getStatistics', {month: m, year: y, grade: k, className: l}), callAPI('getLessonReport', {month: m, year: y, grade: k, className: l}) ]).then(([res, lessonRes]) => { loading(false); const r = res.data; document.getElementById('st-revenue').innerText = (r.total_revenue || 0).toLocaleString() + ' đ'; document.getElementById('st-cash').innerText = (r.cash_total || 0).toLocaleString() + ' đ'; document.getElementById('st-transfer').innerText = (r.transfer_total || 0).toLocaleString() + ' đ'; document.getElementById('st-paid').innerText = r.paid_count + "/" + r.total_students + " HS"; document.getElementById('st-unpaid').innerText = r.unpaid_count + " HS"; document.getElementById('prev-month-label').innerText = r.prev_month_label || 'Tháng trước'; const tbCash = document.getElementById('list-tk-paid-cash'), tbTransfer = document.getElementById('list-tk-transfer'); if (r.paid_list.filter(s => s.method === 'TM').length === 0) tbCash.innerHTML = '<tr><td colspan="5" style="text-align:center">Trống.</td></tr>'; else tbCash.innerHTML = r.paid_list.filter(s => s.method === 'TM').map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td><b>${escapeHtml(s.name)}</b></td><td>${s.class_info}</td><td>${s.paid_at}</td><td>${Number(s.amount).toLocaleString()}</td></tr>`).join(''); if (r.paid_list.filter(s => s.method === 'CK').length === 0) tbTransfer.innerHTML = '<tr><td colspan="5" style="text-align:center">Trống.</td></tr>'; else tbTransfer.innerHTML = r.paid_list.filter(s => s.method === 'CK').map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td><b>${escapeHtml(s.name)}</b></td><td>${s.class_info}</td><td>${s.paid_at}</td><td>${Number(s.amount).toLocaleString()}</td></tr>`).join(''); const tbUnpaid = document.getElementById('list-tk'); if (r.unpaid_list.length === 0) tbUnpaid.innerHTML = '<tr><td colspan="4" style="text-align:center; color:green; font-weight:bold">Tất cả đã đóng tiền.</td></tr>'; else tbUnpaid.innerHTML = r.unpaid_list.map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td>${escapeHtml(s.name)}</td><td>${s.class_info}</td><td>${s.parent_phone}</td></tr>`).join(''); const tbDebt = document.getElementById('list-tk-2m'); if (!r.unpaid_two_months_list || r.unpaid_two_months_list.length === 0) tbDebt.innerHTML = '<tr><td colspan="4" style="text-align:center; color:green">Không có.</td></tr>'; else tbDebt.innerHTML = r.unpaid_two_months_list.map((s,i) => `<tr style="background:#fff5f5"><td style="text-align:center">${i+1}</td><td><b style="color:red">${escapeHtml(s.name)}</b></td><td>${s.class_info}</td><td>${s.parent_phone}</td></tr>`).join(''); const tbAbsent = document.getElementById('list-tk-absent'); if (!r.absent_list || r.absent_list.length === 0) tbAbsent.innerHTML = '<tr><td colspan="5" style="text-align:center; color:green">Không có.</td></tr>'; else tbAbsent.innerHTML = r.absent_list.map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td><b style="color:#ff6f00">${escapeHtml(s.name)}</b></td><td>${s.class_info}</td><td>${s.parent_phone}</td><td style="text-align:center;font-weight:bold;color:red">${s.absent_count} buổi</td></tr>`).join(''); const tbLesson = document.getElementById('list-tk-lesson'); if(lessonRes.data && lessonRes.data.length) tbLesson.innerHTML = lessonRes.data.map((item, i) => `<tr><td style="text-align:center">${i+1}</td><td style="text-align:center;font-weight:bold">${item.class_name}</td><td style="text-align:center">${item.total_sessions}</td><td>${item.dates_str}</td></tr>`).join(''); else tbLesson.innerHTML = '<tr><td colspan="4" style="text-align:center">Chưa có dữ liệu</td></tr>'; }).catch(showError); }
+  
+  function loadStats() { 
+    loading(true); 
+    const m = document.getElementById('tk-thang').value, y = document.getElementById('tk-nam').value, k = document.getElementById('tk-khoi').value, l = document.getElementById('tk-lop').value; 
+    Promise.all([ callAPI('getStatistics', {month: m, year: y, grade: k, className: l}), callAPI('getLessonReport', {month: m, year: y, grade: k, className: l}) ]).then(([res, lessonRes]) => { 
+      loading(false); 
+      const r = res.data; 
+      document.getElementById('st-revenue').innerText = (r.total_revenue || 0).toLocaleString('vi-VN') + ' đ'; 
+      document.getElementById('st-cash').innerText = (r.cash_total || 0).toLocaleString('vi-VN') + ' đ'; 
+      document.getElementById('st-transfer').innerText = (r.transfer_total || 0).toLocaleString('vi-VN') + ' đ'; 
+      document.getElementById('st-paid').innerText = r.paid_count + "/" + r.total_students + " HS"; 
+      document.getElementById('st-unpaid').innerText = r.unpaid_count + " HS"; 
+      document.getElementById('prev-month-label').innerText = r.prev_month_label || 'Tháng trước'; 
+      
+      const tbCash = document.getElementById('list-tk-paid-cash'), tbTransfer = document.getElementById('list-tk-transfer'); 
+      if (r.paid_list.filter(s => s.method === 'TM').length === 0) tbCash.innerHTML = '<tr><td colspan="5" style="text-align:center">Trống.</td></tr>'; 
+      else tbCash.innerHTML = r.paid_list.filter(s => s.method === 'TM').map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td><b>${escapeHtml(s.name)}</b></td><td>${s.class_info}</td><td>${s.paid_at}</td><td>${Number(s.amount).toLocaleString('vi-VN')}</td></tr>`).join(''); 
+      
+      // BẢNG CHUYỂN KHOẢN THEO ĐÚNG 6 CỘT: STT | Họ tên | Lớp | Số tiền | Ngày đóng | Ghi chú
+      if (r.paid_list.filter(s => s.method === 'CK').length === 0) tbTransfer.innerHTML = '<tr><td colspan="6" style="text-align:center">Trống.</td></tr>'; 
+      else tbTransfer.innerHTML = r.paid_list.filter(s => s.method === 'CK').map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td><b>${escapeHtml(s.name)}</b></td><td style="text-align:center">${s.class_info}</td><td style="text-align:right">${Number(s.amount).toLocaleString('vi-VN')}</td><td style="text-align:center">${s.paid_at}</td><td>${escapeHtml(s.note || '')}</td></tr>`).join(''); 
+      
+      const tbUnpaid = document.getElementById('list-tk'); 
+      if (r.unpaid_list.length === 0) tbUnpaid.innerHTML = '<tr><td colspan="4" style="text-align:center; color:green; font-weight:bold">Tất cả đã đóng tiền.</td></tr>'; 
+      else tbUnpaid.innerHTML = r.unpaid_list.map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td>${escapeHtml(s.name)}</td><td>${s.class_info}</td><td>${s.parent_phone}</td></tr>`).join(''); 
+      
+      const tbDebt = document.getElementById('list-tk-2m'); 
+      if (!r.unpaid_two_months_list || r.unpaid_two_months_list.length === 0) tbDebt.innerHTML = '<tr><td colspan="4" style="text-align:center; color:green">Không có.</td></tr>'; 
+      else tbDebt.innerHTML = r.unpaid_two_months_list.map((s,i) => `<tr style="background:#fff5f5"><td style="text-align:center">${i+1}</td><td><b style="color:red">${escapeHtml(s.name)}</b></td><td>${s.class_info}</td><td>${s.parent_phone}</td></tr>`).join(''); 
+      
+      const tbAbsent = document.getElementById('list-tk-absent'); 
+      if (!r.absent_list || r.absent_list.length === 0) tbAbsent.innerHTML = '<tr><td colspan="5" style="text-align:center; color:green">Không có.</td></tr>'; 
+      else tbAbsent.innerHTML = r.absent_list.map((s,i) => `<tr><td style="text-align:center">${i+1}</td><td><b style="color:#ff6f00">${escapeHtml(s.name)}</b></td><td>${s.class_info}</td><td>${s.parent_phone}</td><td style="text-align:center;font-weight:bold;color:red">${s.absent_count} buổi</td></tr>`).join(''); 
+      
+      const tbLesson = document.getElementById('list-tk-lesson'); 
+      if(lessonRes.data && lessonRes.data.length) tbLesson.innerHTML = lessonRes.data.map((item, i) => `<tr><td style="text-align:center">${i+1}</td><td style="text-align:center;font-weight:bold">${item.class_name}</td><td style="text-align:center">${item.total_sessions}</td><td>${item.dates_str}</td></tr>`).join(''); 
+      else tbLesson.innerHTML = '<tr><td colspan="4" style="text-align:center">Chưa có dữ liệu</td></tr>'; 
+    }).catch(showError); 
+  }
+
+  // --- XUẤT EXCEL BÁO CÁO THUẾ ---
+  function exportTransferExcel() {
+    const table = document.getElementById("table-transfer");
+    if (!table || table.rows.length <= 1) return showToast("Không có dữ liệu để xuất!", "error");
+    
+    const tableClone = table.cloneNode(true);
+    const m = document.getElementById('tk-thang').value;
+    const y = document.getElementById('tk-nam').value;
+    const fileName = `Bao_Cao_Chuyen_Khoan_T${m}_${y}.xls`;
+
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <meta charset="utf-8">
+        <style>
+          table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; } 
+          th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+          th { background-color: #e3f2fd; font-weight: bold; text-align: center; }
+        </style>
+      </head>
+      <body>
+        <h2>BÁO CÁO THU HỌC PHÍ CHUYỂN KHOẢN - THÁNG ${m}/${y}</h2>
+        ${tableClone.outerHTML}
+      </body>
+      </html>
+    `;
+    
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("Đã tải xuống thành công!", "success");
+  }
 
   // --- CÀI ĐẶT ---
   async function saveFeeSetting() { try { await callAPI('saveSettings', { tuition_amount_default: document.getElementById('hp-def').value }, 'POST'); showToast('Đã lưu mức học phí.'); } catch (error) { showError(error); } }
 
-  // ============================================================================
-  // HỌC PHÍ & ZALO (SỬA CHUẨN XÁC)
-  // ============================================================================
+  // --- HỌC PHÍ & ZALO ---
   async function loadHP() { 
-    const k = document.getElementById('hp-khoi').value;
-    const l = document.getElementById('hp-lop').value; 
+    const k = document.getElementById('hp-khoi').value; const l = document.getElementById('hp-lop').value; 
     if(!k||!l) return showToast("Chọn Khối/Lớp",'error'); 
-    
     loading(true); 
-    const m = document.getElementById('hp-thang').value;
-    const y = document.getElementById('hp-nam').value; 
-    
+    const m = document.getElementById('hp-thang').value; const y = document.getElementById('hp-nam').value; 
     try {
         const response = await callAPI('getPaymentStatus', {grade: k, className: l, month: m, year: y});
         loading(false); 
-        const students = response.data; // Lấy Array từ data
-        
+        const students = response.data; 
         if (!Array.isArray(students)) throw new Error('API không trả về danh sách hợp lệ');
-        
-        const tb = document.getElementById('list-hp'); 
-        PAYMENT_STUDENTS.clear(); 
+        const tb = document.getElementById('list-hp'); PAYMENT_STUDENTS.clear(); 
         
         if (students.length === 0) {
             tb.innerHTML = '<tr><td colspan="6" style="text-align:center">Không có học sinh trong lớp này.</td></tr>';
-            document.getElementById('hp-info').innerHTML = '';
-            return;
+            document.getElementById('hp-info').innerHTML = ''; return;
         }
 
         let da = 0, tong = 0; 
-        
         tb.innerHTML = students.map((s, i) => { 
             PAYMENT_STUDENTS.set(s.student_id, s); 
-
             if(s.is_paid){ da++; tong += parseFloat(s.amount||0); } 
             let methodText = s.method === 'CK' ? '(Chuyển khoản)' : (s.method === 'TM' ? '(Tiền mặt)' : '');
             let statusHTML = s.is_paid ? `<span class="tag-green">Đã đóng <br><small>${methodText}</small></span>` : '<span class="tag-red">Chưa</span>';
-            
             let actionHTML = s.is_paid ? '✔' : `
               <button class="btn-green btn-sm" style="margin-bottom:5px; width:100%" onclick="pay('${s.student_id}', 'TM')">💵 Tiền mặt</button>
               <button class="btn-blue btn-sm" style="margin-bottom:5px; width:100%" onclick="pay('${s.student_id}', 'CK')">💳 Chuyển khoản</button>
@@ -330,18 +402,13 @@
             `;
             return `<tr><td style="text-align:center">${i+1}</td><td><b>${escapeHtml(s.name)}</b></td><td>${statusHTML}</td><td>${Number(s.amount||0).toLocaleString('vi-VN')}</td><td>${s.paid_at||'-'}</td><td style="width:140px; text-align:center;">${actionHTML}</td></tr>`; 
         }).join(''); 
-        
         document.getElementById('hp-info').innerHTML=`Đã thu: <b>${da}/${students.length}</b>. Tổng: <b>${tong.toLocaleString('vi-VN')}</b> đ`; 
-    } catch(e) {
-        loading(false); showError(e);
-    }
+    } catch(e) { loading(false); showError(e); }
   }
 
   async function pay(studentId, method) {
       try {
-        const month = Number(document.getElementById('hp-thang').value);
-        const year = Number(document.getElementById('hp-nam').value);
-
+        const month = Number(document.getElementById('hp-thang').value); const year = Number(document.getElementById('hp-nam').value);
         const defaultAmount = PAYMENT_STUDENTS.get(studentId)?.custom_fee || Number(document.getElementById('hp-def').value) || 0;
         const input = prompt(method === 'TM' ? 'Nhập số tiền thu bằng TIỀN MẶT:' : 'Nhập số tiền thu bằng CHUYỂN KHOẢN:', defaultAmount);
         
@@ -350,45 +417,29 @@
         if (!Number.isFinite(amount) || amount <= 0) throw new Error('Số tiền không hợp lệ');
 
         loading(true);
-        // Bước 1: Ghi nhận học phí
         await callAPI('markAsPaid', { id: studentId, month, year, amount, method }, 'POST');
         showToast('Đã ghi nhận thu học phí thành công!');
         
         try {
           await callAPI('sendTuitionMessage', { student_id: studentId, message_type: 'PAYMENT_RECEIVED', month, year, amount, method }, 'POST');
-          showToast('Đã thu và đã gửi Zalo xác nhận cho phụ huynh!');
-        } catch (messageError) {
-          showToast('Đã thu học phí nhưng hệ thống Zalo gửi thất bại: ' + messageError.message, 'error');
-        }
-
+          showToast('Đã đẩy tin Zalo biên lai vào hàng đợi!');
+        } catch (messageError) { showToast('Đã thu học phí nhưng hệ thống Zalo gửi thất bại.', 'error'); }
         await loadHP();
-      } catch (error) {
-        showError(error);
-      } finally {
-        loading(false);
-      }
+      } catch (error) { showError(error); } finally { loading(false); }
   }
 
   async function nhacNhoCaNhan(studentId) {
       try {
-        const month = Number(document.getElementById('hp-thang').value);
-        const year = Number(document.getElementById('hp-nam').value);
-        
+        const month = Number(document.getElementById('hp-thang').value); const year = Number(document.getElementById('hp-nam').value);
         loading(true);
         await callAPI('sendTuitionMessage', { student_id: studentId, message_type: 'PAYMENT_REMINDER', month, year }, 'POST');
-        showToast('Đã gửi tin nhắc học phí thành công!');
-      } catch (error) {
-        showToast('Không gửi được tin nhắc: ' + error.message, 'error');
-      } finally {
-        loading(false);
-      }
+        showToast('Đã đưa lệnh nhắc nợ Zalo vào hàng đợi!');
+      } catch (error) { showToast('Không gửi được: ' + error.message, 'error'); } finally { loading(false); }
   }
 
   async function guiNhacNhoHocPhiZalo() {
-      const grade = document.getElementById('hp-khoi').value;
-      const className = document.getElementById('hp-lop').value; 
-      const month = Number(document.getElementById('hp-thang').value);
-      const year = Number(document.getElementById('hp-nam').value);
+      const grade = document.getElementById('hp-khoi').value; const className = document.getElementById('hp-lop').value; 
+      const month = Number(document.getElementById('hp-thang').value); const year = Number(document.getElementById('hp-nam').value);
 
       if (!grade || !className) { showToast('Vui lòng chọn Khối và Lớp.', 'error'); return; }
       if (!confirm(`Hệ thống sẽ gửi nhắc học phí tháng ${month}/${year} cho toàn bộ học sinh lớp chưa đóng. Bạn chắc chắn chứ?`)) return;
@@ -397,13 +448,8 @@
         loading(true);
         const response = await callAPI('sendBulkTuitionReminders', { grade, className, month, year }, 'POST');
         const result = response.data;
-        showToast(`Hoàn tất: Đã gửi ${result.sent}, Lỗi ${result.failed}, Bỏ qua ${result.skipped} (đã đóng).`, result.failed > 0 ? 'error' : 'success');
-        console.table(result.results || []);
-      } catch (error) {
-        showToast('Lỗi khi nhắc học phí hàng loạt: ' + error.message, 'error');
-      } finally {
-        loading(false);
-      }
+        showToast(`Hoàn tất: Đã đưa ${result.queued} tin vào hàng đợi. Bỏ qua ${result.skipped} (đã đóng).`, 'success');
+      } catch (error) { showToast('Lỗi: ' + error.message, 'error'); } finally { loading(false); }
   }
 </script>
 </body>

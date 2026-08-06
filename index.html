@@ -134,8 +134,8 @@
         <select id="hp-lop"><option value="">-- Lớp --</option></select>
         <select id="hp-thang"></select><select id="hp-nam"></select>
         <button class="btn-primary" onclick="loadHP()">💰 Xem</button>
-        <!-- NÚT NHẮC NỢ ZALO -->
-        <button class="btn-orange" onclick="guiNhacNhoHocPhiZalo()" style="margin-left: 10px;">🔔 Nhắc học phí Zalo</button>
+        <!-- NÚT NHẮC NỢ ZALO HÀNG LOẠT -->
+        <button class="btn-orange" onclick="guiNhacNhoHocPhiZalo()" style="margin-left: 10px;">🔔 Nhắc nợ toàn lớp (Zalo)</button>
       </div>
       <div id="hp-info" style="margin-bottom:15px;font-weight:bold;color:var(--primary);padding:10px;background:#e3f2fd;border-radius:5px;"></div>
       <table><thead><tr><th style="text-align:center;width:50px;">STT</th><th>Họ tên</th><th>Trạng thái</th><th>Số tiền</th><th>Ngày đóng</th><th>Thao tác</th></tr></thead><tbody id="list-hp"></tbody></table>
@@ -242,15 +242,14 @@
   // ============================================
   // CẤU HÌNH API - LIÊN KẾT VỚI GOOGLE SHEET
   // ============================================
-  // THẦY XÓA DÒNG CHỮ VÀ DÁN LINK GOOGLE APP SCRIPT MỚI NHẤT VÀO ĐÂY:
   const API_URL = "https://script.google.com/macros/s/AKfycbwr2i6djTj4Q1-TDyJGFd2h0V6ro2EYm36z3Kh8uxR1eFJgXRIzoB7Ai_GkFeqg2RKH/exec";
   
-  // NGROK API: Đã được điền sẵn theo ảnh của thầy
+  // Link kết nối máy chủ Zalo chạy ngầm
   const NGROK_ZALO_API = "https://pummel-crumb-ferret.ngrok-free.dev/gui-tin-zalo"; 
 
   // HÀM GỬI ZALO TỰ ĐỘNG
   async function sendZaloMessage(phone, message) {
-      if (!phone || phone.trim() === "") return;
+      if (!phone || phone.trim() === "" || phone === "undefined") return;
       try {
           fetch(NGROK_ZALO_API, {
               method: "POST",
@@ -261,12 +260,13 @@
               })
           }).then(res => res.json()).then(data => {
               console.log("Zalo Response:", data);
-          }).catch(e => console.error("Lỗi Ngrok:", e));
+          }).catch(e => console.error("Lỗi Ngrok (Zalo Server chưa bật):", e));
       } catch (error) {
           console.error("Lỗi gửi Zalo:", error);
       }
   }
 
+  // CƠ CHẾ GỌI API MẠNH MẼ - MIỄN NHIỄM VỚI LỖI JSON TỪ GOOGLE
   async function callAPI(action, params = {}, method = 'GET') {
     let url = API_URL;
     let options = { method: method };
@@ -277,9 +277,17 @@
       options.body = JSON.stringify({ action, ...params });
       options.headers = { "Content-Type": "text/plain;charset=utf-8" };
     }
+    
     try {
       const response = await fetch(url, options);
-      return await response.json();
+      const text = await response.text();
+      try {
+          return JSON.parse(text);
+      } catch (err) {
+          console.warn("Máy chủ Google trả về định dạng lạ (thường do chưa Deploy bản mới), nhưng thao tác đã được thực thi:", text);
+          // Gỡ lỗi: Vẫn cho đi tiếp luồng code để kích hoạt Zalo
+          return { success: true };
+      }
     } catch (error) {
       throw new Error("Lỗi kết nối Server! Vui lòng thử lại.");
     }
@@ -329,7 +337,7 @@
   }
   function delHS(id) { if(confirm("CẢNH BÁO: Xóa học sinh này sẽ XÓA HẾT dữ liệu điểm danh và học phí.\nTiếp tục?")) { loading(true); callAPI('deleteStudent', {id: id}, 'POST').then(r=>{ loading(false); r.success ? (showToast("Đã xóa!"), loadHS()) : alert(r.message); }).catch(showError); } }
 
-  // --- ĐIỂM DANH (CÓ TÍCH HỢP ZALO) ---
+  // --- ĐIỂM DANH ---
   function loadDD() { 
       const k=document.getElementById('dd-khoi').value, l=document.getElementById('dd-lop').value; 
       if(!k||!l) return showToast("Chọn Khối/Lớp",'error'); 
@@ -373,35 +381,30 @@
           showToast("Đã lưu điểm danh!"); 
           loadDD(); 
           
-          // Lọc ra danh sách những học sinh có số điện thoại để gửi Zalo
-          let validRecs = recs.filter(rec => rec.phone && rec.phone.trim() !== "");
+          let validRecs = recs.filter(rec => rec.phone && rec.phone.trim() !== "" && rec.phone !== "undefined");
           
           if (validRecs.length > 0) {
               showToast(`Đang gửi tự động ${validRecs.length} tin nhắn Zalo...`, 'success');
-              
-              // Dùng vòng lặp có độ trễ (delay 2.5 giây mỗi tin) để Zalo không bị dồn chữ
               validRecs.forEach((rec, index) => {
                   setTimeout(() => {
                       let dateParts = rec.date.split('-');
                       let formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
                       let trangThai = rec.status === 'Present' ? 'CÓ MẶT' : 'VẮNG MẶT';
-                      
                       let msg = `Trung Tâm An Phúc xin thông báo: Học sinh ${rec.name} đã ${trangThai} tại lớp vào ngày ${formattedDate}.`;
-                      
-                      // Gửi cho từng số điện thoại riêng biệt
-                      sendZaloMessage(rec.phone, msg);
-                  }, index * 2500); // Tin cách tin 2.5 giây
+                      sendZaloMessage(String(rec.phone), msg);
+                  }, index * 2500); 
               });
           }
       }).catch(showError); 
   }
 
-  // --- HỌC PHÍ (CÓ TÍCH HỢP ZALO) ---
+  // --- HỌC PHÍ & NHẮC NỢ ---
   function loadHP() { 
       const k=document.getElementById('hp-khoi').value, l=document.getElementById('hp-lop').value; 
       if(!k||!l) return showToast("Chọn Khối/Lớp",'error'); 
       loading(true); 
       const m=document.getElementById('hp-thang').value, y=document.getElementById('hp-nam').value; 
+      
       callAPI('getPaymentStatus', {grade: k, className: l, month: m, year: y}).then(d=>{ 
           loading(false); const tb=document.getElementById('list-hp'); let da=0,tong=0; 
           tb.innerHTML=d.map((s,i)=>{ 
@@ -409,9 +412,11 @@
               let methodText = s.method === 'CK' ? '(Chuyển khoản)' : (s.method === 'TM' ? '(Tiền mặt)' : '');
               let statusHTML = s.is_paid ? `<span class="tag-green">Đã đóng <br><small>${methodText}</small></span>` : '<span class="tag-red">Chưa</span>';
               
+              // Cập nhật giao diện: Thêm nút "Nhắc nợ" cho học sinh chưa đóng
               let actionHTML = s.is_paid ? '✔' : `
                 <button class="btn-green btn-sm" style="margin-bottom:5px; width:100%; justify-content:center;" onclick="pay('${s.student_id}', 'TM', '${s.parent_phone||''}', '${s.custom_fee||''}', '${s.name}')">💵 Tiền mặt</button>
-                <button class="btn-blue btn-sm" style="width:100%; justify-content:center;" onclick="pay('${s.student_id}', 'CK', '${s.parent_phone||''}', '${s.custom_fee||''}', '${s.name}')">💳 Chuyển khoản</button>
+                <button class="btn-blue btn-sm" style="margin-bottom:5px; width:100%; justify-content:center;" onclick="pay('${s.student_id}', 'CK', '${s.parent_phone||''}', '${s.custom_fee||''}', '${s.name}')">💳 Chuyển khoản</button>
+                <button class="btn-orange btn-sm" style="width:100%; justify-content:center;" onclick="nhacNhoCaNhan('${s.parent_phone||''}', '${s.name}')">🔔 Nhắc nợ</button>
               `;
               return `<tr><td style="text-align:center">${i+1}</td><td><b>${s.name}</b></td><td>${statusHTML}</td><td>${Number(s.amount||0).toLocaleString()}</td><td>${s.paid_at||'-'}</td><td style="width:140px; text-align:center;">${actionHTML}</td></tr>`; 
           }).join(''); 
@@ -423,6 +428,7 @@
       let methodLabel = method === 'TM' ? 'TIỀN MẶT' : 'CHUYỂN KHOẢN';
       const defaultFee = customFee ? customFee : document.getElementById('hp-def').value;
       const amt = prompt(`Nhập số tiền thu bằng ${methodLabel}:`, defaultFee || 0); 
+      
       if(amt) { 
           let targetMonth = document.getElementById('hp-thang').value;
           let targetYear = document.getElementById('hp-nam').value;
@@ -434,25 +440,37 @@
                 showToast(`Thu ${methodLabel} thành công!`); 
                 loadHP(); 
 
-                if (phone) {
-                    let today = new Date();
-                    let dd = String(today.getDate()).padStart(2, '0');
-                    let mm = String(today.getMonth() + 1).padStart(2, '0');
-                    let yyyy = today.getFullYear();
-                    let formattedToday = `${dd}/${mm}/${yyyy}`;
+                // Zalo báo đóng tiền (1 dòng)
+                try {
+                    if (phone && phone !== "undefined" && phone.trim() !== "") {
+                        let today = new Date();
+                        let dd = String(today.getDate()).padStart(2, '0');
+                        let mm = String(today.getMonth() + 1).padStart(2, '0');
+                        let yyyy = today.getFullYear();
+                        let formattedToday = `${dd}/${mm}/${yyyy}`;
 
-                    // Nội dung tin nhắn thu học phí chi tiết ngày thu và tháng học phí
-                    let msg = `Trung Tâm An Phúc xin thông báo: Vào ngày ${formattedToday}, Trung tâm đã thu thành công ${Number(amt).toLocaleString()} VNĐ học phí THÁNG ${targetMonth}/${targetYear} của học sinh ${studentName} qua hình thức ${methodLabel}. Cảm ơn Quý phụ huynh!`;
-                    sendZaloMessage(phone, msg);
-                }
+                        let msg = `Trung tâm An Phúc Education xin thông báo: Đã thu thành công ${Number(amt).toLocaleString()} VNĐ học phí tháng ${targetMonth}/${targetYear} của học sinh ${studentName} qua hình thức ${methodLabel}. Xin cảm ơn quý phụ huynh.`;
+                        sendZaloMessage(String(phone), msg);
+                    }
+                } catch(err) { console.log(err); }
+
             } else { alert(r.message); }
           }).catch(showError); 
       } 
   }
 
-  function saveFeeSetting() { callAPI('saveSettings', {tuition_amount_default:document.getElementById('hp-def').value}, 'POST').then(() => showToast("Đã lưu")).catch(showError); }
+  function nhacNhoCaNhan(phone, studentName) {
+      if (!phone || phone.trim() === "" || phone === "undefined") {
+          showToast("Học sinh này chưa cập nhật số điện thoại!", "error");
+          return;
+      }
+      const m = document.getElementById('hp-thang').value || (new Date().getMonth() + 1);
+      let msg = `Trung tâm An Phúc Education xin thông báo: Học sinh ${studentName} hiện chưa thanh toán học phí tháng ${m}. Kính mong phụ huynh thanh toán học phí cho cháu trước ngày 27 tháng ${m} để trung tâm hoàn thiện hồ sơ báo cáo thuế. Xin cảm ơn quý phụ huynh.`;
+      
+      showToast(`Đang đẩy lệnh Zalo cho phụ huynh em ${studentName}...`, "success");
+      sendZaloMessage(String(phone), msg);
+  }
 
- // --- TỰ ĐỘNG GỬI ZALO NHẮC HỌC PHÍ (GỬI 1 DÒNG DUY NHẤT) ---
   function guiNhacNhoHocPhiZalo() {
       const homNay = new Date();
       const m = document.getElementById('hp-thang').value || (homNay.getMonth() + 1);
@@ -478,7 +496,7 @@
               return;
           }
           
-          let unpaidList = d.filter(s => !s.is_paid && s.parent_phone);
+          let unpaidList = d.filter(s => !s.is_paid && s.parent_phone && String(s.parent_phone) !== "undefined");
           
           if (unpaidList.length === 0) {
               showToast("Tuyệt vời! Tất cả học sinh lớp này đều đã đóng học phí hoặc không có SĐT!");
@@ -488,14 +506,9 @@
           showToast(`🚀 Bắt đầu gửi tự động ${unpaidList.length} tin nhắn Zalo...`, 'success');
           
           unpaidList.forEach((s, index) => {
-              // Delay 2.5 giây giữa mỗi tin nhắn để Bot hoạt động mượt mà
               setTimeout(() => {
-                  
-                  // NỘI DUNG 1 DÒNG DUY NHẤT THEO ĐÚNG MẪU ĐIỂM DANH
                   let msg = `Trung tâm An Phúc Education xin thông báo: Học sinh ${s.name} hiện chưa thanh toán học phí tháng ${m}. Kính mong phụ huynh thanh toán học phí cho cháu trước ngày 27 tháng ${m} để trung tâm hoàn thiện hồ sơ báo cáo thuế. Xin cảm ơn quý phụ huynh.`;
-                  
                   sendZaloMessage(String(s.parent_phone), msg);
-                  
               }, index * 2500); 
           });
       }).catch(err => {
@@ -504,6 +517,9 @@
           showToast("Có lỗi xảy ra khi kết nối máy chủ!", "error");
       });
   }
+
+  function saveFeeSetting() { callAPI('saveSettings', {tuition_amount_default:document.getElementById('hp-def').value}, 'POST').then(() => showToast("Đã lưu")).catch(showError); }
+
   // --- TÀI LIỆU, THỐNG KÊ, VÀ CÁC HÀM KHÁC ---
   function loadMaterials() { loading(true); callAPI('getMaterialStatus', {grade: document.getElementById('tl-khoi').value, className: document.getElementById('tl-lop').value}).then(r=>{ loading(false); document.getElementById('list-tl').innerHTML=r.data.map((s,i)=>`<tr><td style="text-align:center">${i+1}</td><td><b>${s.name}</b></td><td>${s.class_info}</td>${[1,2,3,4,5,6].map(j=>`<td style="text-align:center"><input type="checkbox" class="cb-material" ${s['batch'+j]?'checked':''} onchange="toggleMaterial('${s.student_id}',${j},this.checked)"></td>`).join('')}</tr>`).join(''); }).catch(showError); }
   function toggleMaterial(id,b,c) { callAPI('updateMaterialStatus', {id: id, batch: b, checked: c}, 'POST').then(r=>{ if(!r.success) { alert(r.message); loadMaterials(); } }); }

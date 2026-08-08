@@ -591,23 +591,25 @@
       
       const setSafeText = (id, text) => { const el = document.getElementById(id); if(el) el.innerText = text; };
       
-      setSafeText('st-revenue', (r.total_revenue || 0).toLocaleString('vi-VN') + ' đ');
-      setSafeText('st-cash', (r.cash_total || 0).toLocaleString('vi-VN') + ' đ');
-      setSafeText('st-transfer', (r.transfer_total || 0).toLocaleString('vi-VN') + ' đ');
-      setSafeText('st-paid', r.paid_count + "/" + r.total_students + " HS");
-      setSafeText('st-unpaid', r.unpaid_count + " HS");
+      // 1. CẬP NHẬT 4 THẺ THỐNG KÊ TRÊN CÙNG THEO THÁNG ĐƯỢC CHỌN
+      setSafeText('dash-total-hs', r.total_students);
+      setSafeText('dash-revenue', (r.total_revenue || 0).toLocaleString('vi-VN') + ' đ');
+      setSafeText('dash-paid', r.paid_count);
+      setSafeText('dash-unpaid', r.unpaid_count);
+
+      // Cập nhật nhãn tháng trước
       setSafeText('prev-month-label', r.prev_month_label || 'Tháng trước');
       
       const tbCash = document.getElementById('list-tk-paid-cash');
       if(tbCash) {
         if (r.paid_list.filter(s => s.method === 'TM').length === 0) tbCash.innerHTML = '<tr><td colspan="5" style="text-align:center">Trống.</td></tr>'; 
-        else tbCash.innerHTML = r.paid_list.filter(s => s.method === 'TM').map((s,i) => `<tr><td data-label="STT">${i+1}</td><td data-label="Họ tên" style="font-weight:600">${escapeHtml(s.name)}</td><td data-label="Lớp"><span class="badge badge-success">${s.class_info}</span></td><td data-label="Ngày nộp">${s.paid_at}</td><td data-label="Số tiền">${Number(s.amount).toLocaleString('vi-VN')}</td></tr>`).join(''); 
+        else tbCash.innerHTML = r.paid_list.filter(s => s.method === 'TM').map((s,i) => `<tr><td data-label="STT">${i+1}</td><td data-label="Họ tên" style="font-weight:600">${escapeHtml(s.name)}</td><td data-label="Lớp"><span class="badge badge-success">${s.class_info}</span></td><td data-label="Ngày nộp">${(s.paid_at||'').split(' ')[0]}</td><td data-label="Số tiền">${Number(s.amount).toLocaleString('vi-VN')}</td></tr>`).join(''); 
       }
       
       const tbTransfer = document.getElementById('list-tk-transfer');
       if(tbTransfer) {
         if (r.paid_list.filter(s => s.method === 'CK').length === 0) tbTransfer.innerHTML = '<tr><td colspan="6" style="text-align:center">Trống.</td></tr>'; 
-        else tbTransfer.innerHTML = r.paid_list.filter(s => s.method === 'CK').map((s,i) => `<tr><td data-label="STT">${i+1}</td><td data-label="Họ tên" style="font-weight:600">${escapeHtml(s.name)}</td><td data-label="Lớp" style="text-align:center"><span class="badge badge-success">${s.class_info}</span></td><td data-label="Số tiền" style="text-align:right; font-weight:600; color:var(--primary)">${Number(s.amount).toLocaleString('vi-VN')}</td><td data-label="Ngày đóng" style="text-align:center">${s.paid_at}</td><td data-label="Ghi chú">${escapeHtml(s.note || '')}</td></tr>`).join(''); 
+        else tbTransfer.innerHTML = r.paid_list.filter(s => s.method === 'CK').map((s,i) => `<tr><td data-label="STT">${i+1}</td><td data-label="Họ tên" style="font-weight:600">${escapeHtml(s.name)}</td><td data-label="Lớp" style="text-align:center"><span class="badge badge-success">${s.class_info}</span></td><td data-label="Số tiền" style="text-align:right; font-weight:600; color:var(--primary)">${Number(s.amount).toLocaleString('vi-VN')}</td><td data-label="Ngày đóng" style="text-align:center">${(s.paid_at||'').split(' ')[0]}</td><td data-label="Ghi chú">${escapeHtml(s.note || '')}</td></tr>`).join(''); 
       }
       
       const tbUnpaid = document.getElementById('list-tk'); 
@@ -639,12 +641,29 @@
   function exportTransferExcel() {
     const table = document.getElementById("table-transfer");
     if (!table || table.rows.length <= 1) return showToast("Không có dữ liệu để xuất!", "error");
+    
+    // Tạo một bản sao để sửa dữ liệu xuất (bỏ dấu phẩy của tiền) mà không làm ảnh hưởng giao diện web
     const tableClone = table.cloneNode(true);
+    const rows = tableClone.getElementsByTagName('tr');
+    
+    for (let i = 1; i < rows.length; i++) {
+      const cells = rows[i].getElementsByTagName('td');
+      if (cells.length >= 5) {
+        // Cột Số tiền (index 3): Bỏ mọi ký tự không phải số để Excel nhận diện là 350000
+        let rawAmount = cells[3].innerText.replace(/\\D/g, '');
+        cells[3].innerText = rawAmount;
+        
+        // Cột Ngày đóng (index 4): Cắt bỏ khoảng trắng và giờ (nếu vô tình dính vào)
+        let rawDate = cells[4].innerText.split(' ')[0];
+        cells[4].innerText = rawDate;
+      }
+    }
+
     const m = document.getElementById('tk-thang').value; const y = document.getElementById('tk-nam').value;
-    const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; } th, td { border: 1px solid #000; padding: 8px; text-align: left; } th { background-color: #e3f2fd; font-weight: bold; text-align: center; }</style></head><body><h2>BÁO CÁO THU HỌC PHÍ CHUYỂN KHOẢN - THÁNG ${m}/${y}</h2>${tableClone.outerHTML}</body></html>`;
+    const html = \`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; } th, td { border: 1px solid #000; padding: 8px; text-align: left; vertical-align: middle; } th { background-color: #e3f2fd; font-weight: bold; text-align: center; }</style></head><body><h2>BÁO CÁO THU HỌC PHÍ CHUYỂN KHOẢN - THÁNG \${m}/\${y}</h2>\${tableClone.outerHTML}</body></html>\`;
     const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = `Bao_Cao_Chuyen_Khoan_T${m}_${y}.xls`;
+    const a = document.createElement('a'); a.href = url; a.download = \`Bao_Cao_Chuyen_Khoan_T\${m}_\${y}.xls\`;
     document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
     showToast("Đã tải xuống thành công!", "success");
   }

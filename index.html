@@ -183,6 +183,13 @@
     #toast.show { visibility: visible; opacity: 1; bottom: 40px; }
     #toast.success { background-color: var(--success); }
     #toast.error { background-color: var(--danger); }
+
+    .settings-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius-md); padding:20px; margin-bottom:24px; }
+    .class-actions { display:flex; gap:6px; flex-wrap:wrap; }
+    .class-status-on { color:var(--success); font-weight:700; }
+    .class-status-off { color:var(--text-muted); font-weight:700; }
+    .skeleton-line { height:18px; border-radius:6px; background:#E2E8F0; animation:pulse 1.2s infinite ease-in-out; }
+    @keyframes pulse { 0%,100%{opacity:.55} 50%{opacity:1} }
   </style>
 </head>
 <body>
@@ -388,6 +395,21 @@
     <!-- PANEL CÀI ĐẶT -->
     <div id="st" class="panel">
       <h3 class="section-title"><i class="bi bi-sliders"></i> Cài đặt Hệ thống</h3>
+      <div class="settings-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+          <div>
+            <h4 style="font-size:17px;margin:0 0 4px;">QUẢN LÝ LỚP HỌC</h4>
+            <div style="font-size:13px;color:var(--text-muted)">Danh sách lớp lấy trực tiếp từ ClassConfig. Ngừng sử dụng không xóa dữ liệu cũ.</div>
+          </div>
+          <button class="btn btn-success" onclick="openClassModal()"><i class="bi bi-plus-lg"></i> Thêm lớp</button>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead><tr><th>Khối</th><th>Mã lớp</th><th>Tên lớp</th><th>Nhóm Zalo</th><th>Giáo viên</th><th>Học phí</th><th>Lịch học</th><th>Năm học</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+            <tbody id="class-config-list"><tr><td colspan="10" style="text-align:center">Mở tab Cài đặt để tải cấu hình lớp.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
       <div class="danger-zone" style="background:#FEF2F2; border:1px solid #FCA5A5; padding:20px; border-radius:var(--radius-md);">
         <h4 style="color:var(--danger); margin-bottom:8px; display:flex; align-items:center; gap:8px;"><i class="bi bi-cone-striped"></i> VÙNG NGUY HIỂM</h4>
         <p style="color:#7F1D1D; margin-bottom:16px;">Chức năng Lên lớp tự động sẽ chuyển khối học sinh lên 1 bậc.</p>
@@ -419,6 +441,31 @@
         <button type="submit" class="btn btn-primary">Lưu thông tin</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- MODAL QUẢN LÝ LỚP -->
+<div id="modal-class" class="modal">
+  <div class="modal-box" style="max-width:720px;">
+    <h3 id="class-modal-title" style="margin:0 0 22px;font-size:20px;">Thêm lớp</h3>
+    <input type="hidden" id="c-class-id">
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;">
+      <div class="row"><label>Khối *</label><input id="c-grade" style="width:100%" placeholder="6" required></div>
+      <div class="row"><label>Mã lớp *</label><input id="c-code" style="width:100%" placeholder="A" required></div>
+      <div class="row"><label>Tên lớp *</label><input id="c-name" style="width:100%" placeholder="Toán 6A nâng cao" required></div>
+      <div class="row"><label>Tên nhóm Zalo</label><input id="c-zalo" style="width:100%" placeholder="Tên chính xác trên Zalo"></div>
+      <div class="row"><label>Giáo viên</label><input id="c-teacher" style="width:100%"></div>
+      <div class="row"><label>Học phí riêng</label><input type="number" min="0" id="c-fee" style="width:100%"></div>
+      <div class="row"><label>Lịch học</label><input id="c-schedule" style="width:100%" placeholder="Thứ 3 - Thứ 6"></div>
+      <div class="row"><label>Giờ học</label><input id="c-start" style="width:100%" placeholder="18:00"></div>
+      <div class="row"><label>Năm học</label><input id="c-year" style="width:100%" placeholder="2026-2027"></div>
+      <div class="row"><label>Thứ tự hiển thị</label><input type="number" id="c-order" style="width:100%" value="10"></div>
+    </div>
+    <div class="row"><label>Ghi chú</label><input id="c-note" style="width:100%"></div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap">
+      <button class="btn" style="background:#F1F5F9" onclick="closeClassModal()">Hủy</button>
+      <button class="btn btn-primary" onclick="saveClassFromModal()"><i class="bi bi-floppy"></i> Lưu lớp</button>
+    </div>
   </div>
 </div>
 
@@ -462,7 +509,7 @@
   // ============================================
   // CẤU HÌNH API - LIÊN KẾT VỚI GOOGLE SHEET
   // ============================================
-  const API_URL = "https://script.google.com/macros/s/AKfycbxqW7cOGRSFwzFQTHkbLXCuGAvRx8MX9XeURdq33kM2SPx76wFatxsEu7DpqMp9POqKtQ/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbwuCuYOCsYTztEFWbkeXVfXeRJGykdGci-MH3cXN-HgJRQmAE0Flx8_qKEGwY7FdJ08og/exec";
   
   let PAYMENT_STUDENTS = new Map(); 
   let CURRENT_STUDENTS = []; 
@@ -497,39 +544,66 @@
     throw lastError || new Error('Không kết nối được API');
   }
 
-  const KHOI = [6, 7, 8, 9, 10, 11, 12];
-  
-  window.onload = async function() {
-    const today = new Date();
-    const yyyy = today.getFullYear(); const mm = String(today.getMonth()+1).padStart(2,'0'); const dd = String(today.getDate()).padStart(2,'0');
-    document.getElementById('dd-date').value = `${yyyy}-${mm}-${dd}`;
-    ['dd-khoi','hp-khoi','m-khoi','tk-khoi','tl-khoi','hs-khoi'].forEach(id => { const el = document.getElementById(id); KHOI.forEach(k => el.add(new Option("Khối "+k, k))); });
+  let CLASS_CONFIG = [];
+  let ALL_CLASS_CONFIG = [];
+  let APP_SETTINGS = {};
+  let LOADED_TABS = new Set(['hs']);
+  const CONFIG_CACHE_KEY = 'anphuc_v17_bootstrap';
+
+  function activeClasses() { return CLASS_CONFIG.filter(c => c.active !== false); }
+  function classByLegacy(grade, code) { return ALL_CLASS_CONFIG.find(c => String(c.grade)===String(grade) && String(c.class_code).toUpperCase()===String(code||'').toUpperCase()); }
+  function classById(id) { return ALL_CLASS_CONFIG.find(c => String(c.class_id)===String(id)); }
+  function selectedClass(selectId) { const el=document.getElementById(selectId); if(!el) return null; const op=el.options[el.selectedIndex]; return op && op.dataset.classId ? classById(op.dataset.classId) : classByLegacy((selectId.includes('-')?document.getElementById(selectId.replace('lop','khoi'))?.value:''), el.value); }
+  function classIdFromSelect(selectId) { return selectedClass(selectId)?.class_id || ''; }
+
+  function applyBootstrap(data, fromCache=false) {
+    if(!data) return;
+    APP_SETTINGS = data.settings || APP_SETTINGS || {};
+    if(Array.isArray(data.classConfig)) { CLASS_CONFIG=data.classConfig; ALL_CLASS_CONFIG=data.classConfig.slice(); }
+    const def=document.getElementById('hp-def'); if(def && APP_SETTINGS.tuition_amount_default !== undefined) def.value=APP_SETTINGS.tuition_amount_default;
+    renderAllGradeOptions();
+    const d=data.dashboardSummary||{};
+    if(d.total_students!==undefined) document.getElementById('dash-total-hs').innerText=d.total_students;
+    if(d.paid_count!==undefined) document.getElementById('dash-paid').innerText=d.paid_count;
+    if(d.unpaid_count!==undefined) document.getElementById('dash-unpaid').innerText=d.unpaid_count;
+    if(!fromCache) { try { localStorage.setItem(CONFIG_CACHE_KEY, JSON.stringify({saved_at:Date.now(),data})); } catch(e){} }
+  }
+  function renderAllGradeOptions() {
+    const ids=['dd-khoi','hp-khoi','m-khoi','tk-khoi','tl-khoi','hs-khoi'];
+    const grades=[...new Set(activeClasses().map(c=>String(c.grade)))].sort((a,b)=>Number(a)-Number(b));
+    ids.forEach(id=>{ const el=document.getElementById(id); if(!el)return; const old=el.value; const first=el.options[0]?.text || '-- Khối --'; el.innerHTML=`<option value="">${first}</option>`; grades.forEach(g=>el.add(new Option('Khối '+g,g))); if(grades.includes(String(old)))el.value=old; });
+  }
+  function updateLop(sk, sl) {
+    const grade=document.getElementById(sk)?.value || '', el=document.getElementById(sl); if(!el)return;
+    const old=el.value; el.innerHTML='<option value="">-- Chọn --</option>';
+    activeClasses().filter(c=>!grade || String(c.grade)===String(grade)).forEach(c=>{ const op=new Option(c.class_name || `Lớp ${c.class_code}`, c.class_code); op.dataset.classId=c.class_id; el.add(op); });
+    if([...el.options].some(o=>o.value===old)) el.value=old;
+  }
+  async function refreshBootstrap() {
+    const r=await callAPI('getBootstrapData'); applyBootstrap(r.data,false); return r.data;
+  }
+  window.onload = function() {
+    const today=new Date(), yyyy=today.getFullYear(), mm=String(today.getMonth()+1).padStart(2,'0'), dd=String(today.getDate()).padStart(2,'0');
+    document.getElementById('dd-date').value=`${yyyy}-${mm}-${dd}`;
     initDateSel('hp-thang','hp-nam'); initDateSel('tk-thang','tk-nam');
-
-    // getSettings đồng thời chạy migrate schema ở Code.gs. Chờ xong rồi mới tải danh sách HS.
-    try {
-      const r = await callAPI('getSettings');
-      if(r.data && r.data.tuition_amount_default) document.getElementById('hp-def').value = r.data.tuition_amount_default;
-    } catch(e) { console.error(e); }
-
+    try { const cached=JSON.parse(localStorage.getItem(CONFIG_CACHE_KEY)||'null'); if(cached&&cached.data) applyBootstrap(cached.data,true); } catch(e){}
+    // Header/menu đã render sẵn; bootstrap và học sinh tải song song, không khóa toàn trang.
+    const bootstrapPromise=refreshBootstrap().catch(e=>console.error(e));
     loadHS();
-    updateDashboardStats();
+    bootstrapPromise.then(()=>{ if(!CURRENT_STUDENTS.length) loadHS(); });
+    const search=document.getElementById('search-hs'); let timer; if(search) search.addEventListener('input',()=>{ clearTimeout(timer); timer=setTimeout(filterStudentsClient,300); });
   }
 
-  function escapeHtml(value) { return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;'); }
-  function todayLocalISO() { const d = new Date(); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${day}`; }
-  function initDateSel(m,y) { const ms=document.getElementById(m); for(let i=1;i<=12;i++) ms.add(new Option("Tháng "+i,i)); ms.value=new Date().getMonth()+1; const ys=document.getElementById(y); const cy=new Date().getFullYear(); ys.add(new Option(cy,cy)); ys.add(new Option(cy-1,cy-1)); ys.add(new Option(cy+1,cy+1)); ys.value=cy; }
-  function updateLop(sk,sl) { const k=document.getElementById(sk).value; const l=document.getElementById(sl); l.innerHTML=`<option value="">-- Chọn --</option>`; if(!k) return; const kv=parseInt(k); if(kv>=6&&kv<=9) ['A','B','C'].forEach(x=>l.add(new Option("Lớp "+x,x))); else l.add(new Option("Lớp Chung","Chung")); }
-  
   function changeTab(id, btn) {
     document.querySelectorAll('.panel').forEach(function (panel) { panel.classList.remove('active'); });
     document.querySelectorAll('.tab').forEach(function (tab) { tab.classList.remove('active'); });
     document.getElementById(id).classList.add('active');
     btn.classList.add('active');
     
-    // Tự động load dữ liệu thống kê nếu chuyển sang tab Báo cáo
-    if (id === 'tk') {
-      loadStats();
+    if (!LOADED_TABS.has(id)) {
+      LOADED_TABS.add(id);
+      if (id === 'tk') loadStats();
+      if (id === 'st') loadClassManager();
     }
   }
 
@@ -548,27 +622,10 @@
   }
 
   // HỌC SINH
-  function loadHS() { 
-    loading(true); 
-    const term=document.getElementById('search-hs').value, g=document.getElementById('hs-khoi').value, c=document.getElementById('hs-lop').value; 
-    callAPI('getStudents', {term, grade: g, className: c}).then(r => { 
-      loading(false); CURRENT_STUDENTS=r.data; const tb=document.getElementById('list-hs'); 
-      if(!r.data.length) return tb.innerHTML='<tr><td colspan="7" style="text-align:center">Trống</td></tr>'; 
-      tb.innerHTML=r.data.map((s,i)=>`<tr>
-        <td data-label="STT">${i+1}</td>
-        <td data-label="Họ tên" style="font-weight:600">${escapeHtml(s.name)}</td>
-        <td data-label="Lớp"><span class="badge badge-success">K${s.grade}-${s.class}</span></td>
-        <td data-label="SĐT">${escapeHtml(s.parent_phone || '--')}</td>
-        <td data-label="Tên Zalo">${escapeHtml(s.zalo_name || '--')}</td>
-        <td data-label="Email">${escapeHtml(s.email||'--')}</td>
-        <td data-label="Thao tác" style="text-align:center">
-          <button class="btn-icon" style="background:#0EA5E9" onclick="openStudentReport('${s.student_id}')" title="Báo cáo nhanh cho phụ huynh"><i class="bi bi-file-earmark-text-fill"></i></button>
-          <button class="btn-icon edit" onclick="editHS('${s.student_id}')" title="Sửa"><i class="bi bi-pencil-fill"></i></button>
-          <button class="btn-icon delete" onclick="delHS('${s.student_id}')" title="Xóa"><i class="bi bi-trash-fill"></i></button>
-        </td>
-      </tr>`).join(''); 
-      updateDashboardStats();
-    }).catch(showError);
+  function loadHS() {
+    const term=document.getElementById('search-hs').value, g=document.getElementById('hs-khoi').value, c=document.getElementById('hs-lop').value;
+    document.getElementById('list-hs').innerHTML='<tr><td colspan="7"><div class="skeleton-line"></div></td></tr>';
+    callAPI('getStudents',{term,grade:g,className:c,class_id:classIdFromSelect('hs-lop')}).then(r=>{CURRENT_STUDENTS=r.data||[];renderStudents(CURRENT_STUDENTS);}).catch(showError);
   }
   function openModal() {
     document.getElementById('modal-hs').style.display='flex';
@@ -609,6 +666,7 @@
       name:document.getElementById('m-name').value,
       grade:document.getElementById('m-khoi').value,
       className:document.getElementById('m-lop').value,
+      class_id:classIdFromSelect('m-lop'),
       parent_phone:document.getElementById('m-phone').value,
       zalo_name:document.getElementById('m-zalo').value.trim(),
       enrollment_date:document.getElementById('m-enrollment-date').value || todayLocalISO(),
@@ -636,7 +694,7 @@
     if(!k || !l) return showToast("Chọn Khối/Lớp", 'error');
 
     loading(true);
-    callAPI('getStudentsByClass', {grade: k, className: l, date: document.getElementById('dd-date').value}).then(r => {
+    callAPI('getStudentsByClass', {grade: k, className: l, class_id: classIdFromSelect('dd-lop'), date: document.getElementById('dd-date').value}).then(r => {
       loading(false);
       const tb = document.getElementById('list-dd');
       if(!r.data.length) {
@@ -663,7 +721,7 @@
       if (saveWrap) saveWrap.style.display = 'flex';
     }).catch(e => { loading(false); showError(e); });
   }
-  function saveDD() { const trs = document.querySelectorAll('#list-dd tr'); const recs = []; const d = document.getElementById('dd-date').value; trs.forEach(tr => { const rd = tr.querySelector('input:checked'); if(rd) { recs.push({ student_id: tr.dataset.id, date: d, status: rd.value, grade: tr.dataset.g, class: tr.dataset.c }); } }); if(!recs.length) return showToast("Chưa chọn học sinh",'error'); loading(true); callAPI('saveAttendance', {records: recs}, 'POST').then(r => { loading(false); if(r.success){ showToast("Đã lưu điểm danh!"); loadDD(); } }).catch(showError); }
+  function saveDD() { const trs = document.querySelectorAll('#list-dd tr'); const recs = []; const d = document.getElementById('dd-date').value; trs.forEach(tr => { const rd = tr.querySelector('input:checked'); if(rd) { recs.push({ student_id: tr.dataset.id, date: d, status: rd.value, grade: tr.dataset.g, class: tr.dataset.c, class_id: classIdFromSelect('dd-lop') }); } }); if(!recs.length) return showToast("Chưa chọn học sinh",'error'); loading(true); callAPI('saveAttendance', {records: recs}, 'POST').then(r => { loading(false); if(r.success){ showToast("Đã lưu điểm danh!"); loadDD(); } }).catch(showError); }
 
   // HỌC PHÍ & ZALO
   async function loadHP() {
@@ -674,7 +732,7 @@
     const y = document.getElementById('hp-nam').value;
     loading(true);
     try {
-      const response = await callAPI('getPaymentStatus', {grade: k, className: l, term, month: m, year: y});
+      const response = await callAPI('getPaymentStatus', {grade: k, className: l, class_id: classIdFromSelect('hp-lop'), term, month: m, year: y});
       const students = response.data;
       if (!Array.isArray(students)) throw new Error('API không trả về danh sách hợp lệ');
       const tb = document.getElementById('list-hp'); PAYMENT_STUDENTS.clear();
@@ -756,20 +814,20 @@
 
       try {
         loading(true);
-        const response = await callAPI('sendBulkTuitionReminders', { grade, className, month, year }, 'POST');
+        const response = await callAPI('sendBulkTuitionReminders', { grade, className, class_id: classIdFromSelect('hp-lop'), month, year }, 'POST');
         const result = response.data;
         showToast(`Đã đưa ${result.queued} tin vào hàng đợi Zalo. Bỏ qua ${result.skipped} (đã đóng)${result.no_contact ? `; ${result.no_contact} HS chưa có SĐT/Tên Zalo` : ''}${result.no_fee ? `; ${result.no_fee} HS chưa có mức học phí` : ''}.`, 'success');
       } catch (error) { showToast('Lỗi: ' + error.message, 'error'); } finally { loading(false); }
   }
 
   // TÀI LIỆU & THỐNG KÊ
-  function loadMaterials() { loading(true); callAPI('getMaterialStatus', {grade: document.getElementById('tl-khoi').value, className: document.getElementById('tl-lop').value}).then(r=>{ loading(false); document.getElementById('list-tl').innerHTML=r.data.map((s,i)=>`<tr><td data-label="STT">${i+1}</td><td data-label="Họ tên" style="font-weight:600">${escapeHtml(s.name)}</td><td data-label="Lớp"><span class="badge badge-success">${s.class_info}</span></td>${[1,2,3,4,5,6].map(j=>`<td data-label="Đợt ${j}" style="text-align:center"><input type="checkbox" class="cb-material" style="width:20px;height:20px" ${s['batch'+j]?'checked':''} onchange="toggleMaterial('${s.student_id}',${j},this.checked)"></td>`).join('')}</tr>`).join(''); }).catch(showError); }
+  function loadMaterials() { loading(true); callAPI('getMaterialStatus', {grade: document.getElementById('tl-khoi').value, className: document.getElementById('tl-lop').value, class_id: classIdFromSelect('tl-lop')}).then(r=>{ loading(false); document.getElementById('list-tl').innerHTML=r.data.map((s,i)=>`<tr><td data-label="STT">${i+1}</td><td data-label="Họ tên" style="font-weight:600">${escapeHtml(s.name)}</td><td data-label="Lớp"><span class="badge badge-success">${s.class_info}</span></td>${[1,2,3,4,5,6].map(j=>`<td data-label="Đợt ${j}" style="text-align:center"><input type="checkbox" class="cb-material" style="width:20px;height:20px" ${s['batch'+j]?'checked':''} onchange="toggleMaterial('${s.student_id}',${j},this.checked)"></td>`).join('')}</tr>`).join(''); }).catch(showError); }
   function toggleMaterial(id,b,c) { callAPI('updateMaterialStatus', {id: id, batch: b, checked: c}, 'POST').then(r=>{ if(!r.success) { showToast(r.message, 'error'); loadMaterials(); } }); }
   
   function loadStats() { 
     loading(true); 
     const m = document.getElementById('tk-thang').value, y = document.getElementById('tk-nam').value, k = document.getElementById('tk-khoi').value, l = document.getElementById('tk-lop').value; 
-    Promise.all([ callAPI('getStatistics', {month: m, year: y, grade: k, className: l}), callAPI('getLessonReport', {month: m, year: y, grade: k, className: l}) ]).then(([res, lessonRes]) => { 
+    callAPI('getReportBundle', {month: m, year: y, grade: k, className: l, class_id: classIdFromSelect('tk-lop')}).then(bundleRes => { const res={data:bundleRes.data.statistics}; const lessonRes={data:bundleRes.data.lesson_report}; 
       loading(false); 
       const r = res.data; 
       
@@ -820,7 +878,7 @@
         if(lessonRes.data && lessonRes.data.length) tbLesson.innerHTML = lessonRes.data.map((item, i) => {
           const zaloName = item.zalo_name || '';
           const action = zaloName
-            ? `<button class="btn btn-primary" style="height:38px;padding:0 14px;margin:auto" onclick="sendLessonReport('${item.grade}','${item.class_code}')"><i class="bi bi-send-fill"></i> Nhắn</button>`
+            ? `<button class="btn btn-primary" style="height:38px;padding:0 14px;margin:auto" onclick="sendLessonReport('${item.grade}','${item.class_code}','${item.class_id||''}')"><i class="bi bi-send-fill"></i> Nhắn</button>`
             : '<span style="color:var(--text-muted);font-size:12px">Chưa cấu hình</span>';
           return `<tr><td data-label="STT">${i+1}</td><td data-label="Lớp" style="font-weight:700; color:var(--primary-dark)">${escapeHtml(item.class_name)}</td><td data-label="Số buổi" style="text-align:center; font-weight:700">${item.total_sessions}</td><td data-label="Chi tiết">${escapeHtml(item.dates_str)}</td><td data-label="Nhóm Zalo" style="font-size:13px">${zaloName ? escapeHtml(zaloName) : '--'}</td><td data-label="Gửi" style="text-align:center">${action}</td></tr>`;
         }).join(''); 
@@ -849,19 +907,19 @@
     if (!confirm(`Gửi nhắc học phí tháng ${month}/${year} cho các học sinh chưa đóng trong ${scope}?`)) return;
     try {
       loading(true);
-      const response = await callAPI('sendBulkTuitionReminders', { grade, className, month, year }, 'POST');
+      const response = await callAPI('sendBulkTuitionReminders', { grade, className, class_id: classIdFromSelect('tk-lop'), month, year }, 'POST');
       const result = response.data || {};
       showToast(`Đã xếp hàng ${result.queued || 0} tin nhắc học phí${result.no_contact ? `; ${result.no_contact} HS thiếu liên hệ` : ''}${result.no_fee ? `; ${result.no_fee} HS chưa có mức phí` : ''}.`);
     } catch (e) { showError(e); } finally { loading(false); }
   }
 
-  async function sendLessonReport(grade, className) {
+  async function sendLessonReport(grade, className, classId) {
     const month = Number(document.getElementById('tk-thang').value);
     const year = Number(document.getElementById('tk-nam').value);
     if (!confirm(`Nhắn số buổi học tháng ${month}/${year} cho nhóm Zalo lớp ${grade}${className}?`)) return;
     try {
       loading(true);
-      const response = await callAPI('sendClassLessonReport', { grade, className, month, year }, 'POST');
+      const response = await callAPI('sendClassLessonReport', { grade, className, class_id: classId || '', month, year }, 'POST');
       const result = response.data || {};
       if (result.duplicate) showToast('Tin của lớp này đã nằm trong hàng đợi, không tạo trùng.', 'error');
       else showToast(`Đã xếp hàng tin cho ${result.class_name || grade + className}: ${result.total_sessions || 0} buổi.`);
@@ -876,7 +934,7 @@
     if (!confirm(`Nhắn số buổi học tháng ${month}/${year} cho tất cả nhóm Zalo đang hiển thị trong báo cáo?`)) return;
     try {
       loading(true);
-      const response = await callAPI('sendBulkClassLessonReports', { month, year, grade, className }, 'POST');
+      const response = await callAPI('sendBulkClassLessonReports', { month, year, grade, className, class_id: classIdFromSelect('tk-lop') }, 'POST');
       const result = response.data || {};
       showToast(`Đã xếp hàng ${result.queued || 0}/${result.total || 0} lớp${result.duplicate ? `; ${result.duplicate} lớp đã có tin chờ` : ''}${result.skipped_no_zalo ? `; ${result.skipped_no_zalo} lớp chưa cấu hình Zalo` : ''}.`);
     } catch (e) { showError(e); } finally { loading(false); }
@@ -991,6 +1049,41 @@
     } catch(e) { showError(e); } finally { loading(false); }
   }
   
+  function filterStudentsClient() {
+    const term=(document.getElementById('search-hs').value||'').trim().toLowerCase();
+    const g=document.getElementById('hs-khoi').value, c=document.getElementById('hs-lop').value;
+    if(g || c) return; // đổi khối/lớp vẫn dùng server để không giữ dữ liệu thừa.
+    const rows=!term?CURRENT_STUDENTS:CURRENT_STUDENTS.filter(s=>[s.name,s.parent_phone,s.zalo_name,s.email].some(v=>String(v||'').toLowerCase().includes(term)));
+    renderStudents(rows);
+  }
+  function renderStudents(rows) {
+    const tb=document.getElementById('list-hs'); if(!rows.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center">Trống</td></tr>';return;}
+    tb.innerHTML=rows.map((s,i)=>`<tr><td data-label="STT">${i+1}</td><td data-label="Họ tên" style="font-weight:600">${escapeHtml(s.name)}</td><td data-label="Lớp"><span class="badge badge-success">${escapeHtml(s.class_name || ('K'+s.grade+'-'+s.class))}</span></td><td data-label="SĐT">${escapeHtml(s.parent_phone||'--')}</td><td data-label="Tên Zalo">${escapeHtml(s.zalo_name||'--')}</td><td data-label="Email">${escapeHtml(s.email||'--')}</td><td data-label="Thao tác" style="text-align:center"><button class="btn-icon" style="background:#0EA5E9" onclick="openStudentReport('${s.student_id}')" title="Báo cáo nhanh cho phụ huynh"><i class="bi bi-file-earmark-text-fill"></i></button><button class="btn-icon edit" onclick="editHS('${s.student_id}')" title="Sửa"><i class="bi bi-pencil-fill"></i></button><button class="btn-icon delete" onclick="delHS('${s.student_id}')" title="Xóa"><i class="bi bi-trash-fill"></i></button></td></tr>`).join('');
+  }
+
+  async function loadClassManager() {
+    try { const r=await callAPI('getClassConfig',{active_only:'false'}); ALL_CLASS_CONFIG=r.data||[]; CLASS_CONFIG=ALL_CLASS_CONFIG.filter(c=>c.active!==false); renderClassManager(); renderAllGradeOptions(); }
+    catch(e){showError(e);}
+  }
+  function renderClassManager() {
+    const tb=document.getElementById('class-config-list'); if(!tb)return;
+    if(!ALL_CLASS_CONFIG.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center">Chưa có lớp.</td></tr>';return;}
+    tb.innerHTML=ALL_CLASS_CONFIG.map(c=>`<tr><td>${escapeHtml(c.grade)}</td><td>${escapeHtml(c.class_code)}</td><td><b>${escapeHtml(c.class_name)}</b></td><td>${escapeHtml(c.zalo_group_name||'--')}</td><td>${escapeHtml(c.teacher_name||'--')}</td><td>${c.tuition_fee?Number(c.tuition_fee).toLocaleString('vi-VN')+' đ':'--'}</td><td>${escapeHtml([c.schedule,c.start_time].filter(Boolean).join(' ')||'--')}</td><td>${escapeHtml(c.school_year||'--')}</td><td><span class="${c.active?'class-status-on':'class-status-off'}">${c.active?'Đang dùng':'Ngừng'}</span></td><td><div class="class-actions"><button class="btn btn-warning btn-sm" onclick="editClass('${c.class_id}')">Sửa</button><button class="btn btn-info btn-sm" onclick="testClassZalo('${c.class_id}')">Kiểm tra Zalo</button><button class="btn ${c.active?'btn-danger':'btn-success'} btn-sm" onclick="toggleClassActive('${c.class_id}',${!c.active})">${c.active?'Ngừng':'Kích hoạt'}</button></div></td></tr>`).join('');
+  }
+  function openClassModal(c=null) {
+    document.getElementById('modal-class').style.display='flex'; document.getElementById('class-modal-title').innerText=c?'Sửa lớp':'Thêm lớp';
+    const set=(id,v='')=>document.getElementById(id).value=v??'';
+    set('c-class-id',c?.class_id||'');set('c-grade',c?.grade||'');set('c-code',c?.class_code||'');set('c-name',c?.class_name||'');set('c-zalo',c?.zalo_group_name||'');set('c-teacher',c?.teacher_name||'');set('c-fee',c?.tuition_fee||'');set('c-schedule',c?.schedule||'');set('c-start',c?.start_time||'');set('c-year',c?.school_year||`${new Date().getFullYear()}-${new Date().getFullYear()+1}`);set('c-order',c?.display_order||10);set('c-note',c?.note||'');
+    document.getElementById('c-grade').disabled=!!c; document.getElementById('c-code').disabled=!!c;
+  }
+  function closeClassModal(){document.getElementById('modal-class').style.display='none';}
+  function editClass(id){const c=ALL_CLASS_CONFIG.find(x=>String(x.class_id)===String(id));if(c)openClassModal(c);}
+  async function saveClassFromModal(){
+    try{loading(true);const id=document.getElementById('c-class-id').value;const data={class_id:id,grade:document.getElementById('c-grade').value,class_code:document.getElementById('c-code').value,class_name:document.getElementById('c-name').value,zalo_group_name:document.getElementById('c-zalo').value.trim(),teacher_name:document.getElementById('c-teacher').value,tuition_fee:document.getElementById('c-fee').value,schedule:document.getElementById('c-schedule').value,start_time:document.getElementById('c-start').value,school_year:document.getElementById('c-year').value,display_order:document.getElementById('c-order').value,note:document.getElementById('c-note').value,active:id?(ALL_CLASS_CONFIG.find(x=>x.class_id===id)?.active!==false):true};await callAPI('saveClassConfig',data,'POST');closeClassModal();showToast('Đã lưu cấu hình lớp.');await loadClassManager();await refreshBootstrap();}catch(e){showError(e);}finally{loading(false);}
+  }
+  async function toggleClassActive(id,active){try{await callAPI('setClassActive',{class_id:id,active},'POST');showToast(active?'Đã kích hoạt lớp.':'Đã ngừng sử dụng lớp.');await loadClassManager();await refreshBootstrap();}catch(e){showError(e);}}
+  async function testClassZalo(id){try{loading(true);const r=await callAPI('testZaloGroup',{class_id:id},'POST');showToast(r.data?.found?'Đã tìm thấy nhóm Zalo.':(r.data?.message||'Không tìm thấy nhóm Zalo.'),r.data?.found?'success':'error');}catch(e){showError(e);}finally{loading(false);}}
+
   function promoteYear() {
     const confirmCode = prompt("CẢNH BÁO: Nhập 'OK' để Lên lớp tự động (Chuyển khối 12 ra trường và tăng lớp cho các khối còn lại):");
     if (confirmCode === 'OK') {

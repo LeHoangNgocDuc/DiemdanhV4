@@ -1,0 +1,9 @@
+class_id,grade,class_code,class_name,zalo_group_name,teacher_name,tuition_fee,schedule,start_time,school_year,active,display_order,note
+K6_A,6,A,Toán 6A,An Phúc_2728_Toán 6A_NC,,,,,,TRUE,10,
+K6_B,6,B,Toán 6B,An Phúc_Toán 6B_2728,,,,,,TRUE,20,
+K7_A,7,A,Toán 7A,An Phúc_Toán 7A_2627_NC,,,,,,TRUE,30,
+K7_B,7,B,Toán 7B,An Phúc_Toán 7B_CB_2627,,,,,,TRUE,40,
+K8_A,8,A,Toán 8A,An Phúc_Toán 8A_NC_2728,,,,,,TRUE,50,
+K8_B,8,B,Toán 8B,An Phúc_Toán 8B_CB_27_28,,,,,,TRUE,60,
+K9_A,9,A,Toán 9A,An Phúc_Toán 9A_2627_NC,,,,,,TRUE,70,
+K9_B,9,B,Toán 9B,An Phúc_Toán 9B_CB_2728,,,,,,TRUE,80,

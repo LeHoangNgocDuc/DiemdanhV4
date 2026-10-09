@@ -56,10 +56,18 @@ GIỚI HẠN CẦN ĐỐI CHIẾU: tệp gốc chưa có bảng mức học phí
 Bản Sites hiện tại dùng dữ liệu mẫu riêng, có lưu trên máy chủ; chưa gọi Google Sheet/Zalo hiện tại.
 index.html dùng /api/center trên Sites. Không đặt token bí mật trong HTML hoặc localStorage.
 
+CHỖ GÁN LINK GOOGLE APPS SCRIPT (bổ sung 09/10/2026):
+- Mở đầu index.html, tìm “GÁN LINK GOOGLE APPS SCRIPT TẠI ĐÂY”.
+- Thay chuỗi ở khóa GOOGLE_APPS_SCRIPT_URL trong khối connection-config. Đã gán link /exec bạn cung cấp.
+- Máy chủ Sites đọc link này từ index.html khi kết nối thật được bật. Sau khi sửa mã nguồn cần build và triển khai lại Sites.
+- Giữ const API_URL = '/api/center'; đây là đường dẫn nội bộ, không phải chỗ dán link Google.
+- Nếu SHEETS_API_URL đã được đặt trên máy chủ, biến đó được ưu tiên. Thay/cập nhật biến đó nếu muốn dùng link trong index.html.
+- Việc gán link chưa bật LIVE_SHEETS_ENABLED, chưa gọi hoặc sửa Google Sheet thật.
+
 Sau khi xác nhận chuyển sang dữ liệu thật:
 - Trong Script Properties của Apps Script, đặt SITES_API_TOKEN bằng một chuỗi ngẫu nhiên bí mật.
 - Deploy Apps Script thành phiên bản mới; giữ deployment cũ để có thể đối chiếu/khôi phục mã. Không đổi Spreadsheet ID nếu tiếp tục dùng sheet hiện tại.
-- Cấu hình trên máy chủ Sites: SHEETS_API_URL là URL /exec mới; SHEETS_API_TOKEN khớp SITES_API_TOKEN; LIVE_SHEETS_ENABLED=true.
+- Cấu hình trên máy chủ Sites: SHEETS_API_TOKEN khớp SITES_API_TOKEN; LIVE_SHEETS_ENABLED=true. URL mặc định lấy từ GOOGLE_APPS_SCRIPT_URL trong index.html; có thể đặt SHEETS_API_URL để ghi đè URL này.
 - Apps Script API từ chối yêu cầu thiếu/sai token. Vì vậy phải cập nhật Sites và Apps Script đồng bộ trước khi sử dụng thật.
 - Chỉ cấp quyền người dùng thứ hai trong Sites khi chủ ứng dụng chọn đúng tài khoản. Bản hiện tại chỉ chủ ứng dụng truy cập được.
 

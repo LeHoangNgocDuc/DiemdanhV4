@@ -5,6 +5,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AN PHÚC EDUCATION | Hệ Thống Quản Lý</title>
+
+  <!-- =====================================================================
+       GÁN LINK GOOGLE APPS SCRIPT TẠI ĐÂY
+       Chỉ thay chuỗi sau GOOGLE_APPS_SCRIPT_URL bên dưới; giữ đuôi /exec.
+       Máy chủ Sites đọc link này khi LIVE_SHEETS_ENABLED=true và đã có token.
+       Nếu máy chủ đã đặt SHEETS_API_URL, giá trị đó được ưu tiên hơn link này.
+       Sửa link không tự bật kết nối dữ liệu thật. Không đặt token trong HTML.
+       ===================================================================== -->
+  <script type="application/json" id="connection-config">
+  {
+    "GOOGLE_APPS_SCRIPT_URL": "https://script.google.com/macros/s/AKfycbxMPG3AoOpZrb98kqGMBtCTYcQX6GI_ysZl5dyWupdmn-s1SvW1EixMkyWFPtVZrV9I8w/exec"
+  }
+  </script>
   
   <!-- Font Be Vietnam Pro & Bootstrap Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -501,7 +514,10 @@
   </div>
 </div>
 
-<script>const API_URL = '/api/center';
+<script>
+// URL Google nằm trong khối “GÁN LINK GOOGLE APPS SCRIPT TẠI ĐÂY” ở đầu file.
+// Đây là đường dẫn nội bộ của Sites; máy chủ giữ token và gọi URL Google.
+const API_URL = '/api/center';
 
 let PAYMENT_STUDENTS = new Map();
 

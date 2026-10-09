@@ -339,11 +339,19 @@
 
       <h3 class="section-title" style="color:#0F766E"><i class="bi bi-person-lines-fill"></i> 2. Báo cáo tình hình học sinh</h3>
       <div style="background:#F0FDFA;border:1px solid #99F6E4;padding:16px;border-radius:var(--radius-md);margin-bottom:16px;">
-        <div style="font-weight:700;margin-bottom:10px;">Chọn các tháng cần tổng hợp trong năm đang chọn:</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;align-items:center;margin-bottom:14px;">
+          <select id="sr-khoi" onchange="updateLop('sr-khoi','sr-lop'); clearStudentSituationReport();"><option value="">-- Khối --</option></select>
+          <select id="sr-lop" onchange="clearStudentSituationReport()"><option value="">-- Lớp --</option></select>
+          <div style="display:flex;position:relative;min-width:0;">
+            <input type="text" id="sr-search" placeholder="Tìm nhanh theo tên học sinh..." style="width:100%;padding-left:40px;" onkeydown="if(event.key==='Enter'){event.preventDefault();refreshStudentSituationReport();}">
+            <i class="bi bi-search" style="position:absolute;left:16px;top:14px;color:var(--text-muted)"></i>
+          </div>
+          <button class="btn btn-primary" onclick="refreshStudentSituationReport()"><i class="bi bi-search"></i> Tìm / Xem</button>
+        </div>
+        <div style="font-weight:700;margin-bottom:10px;">Chọn tháng cần tổng hợp trong năm đang chọn:</div>
         <div id="student-report-months" class="month-checks"></div>
-        <div class="mini-note" style="margin-top:8px;">Có mặt = đi học; P = vắng có phép; K = vắng không phép. Dữ liệu “Vắng” cũ được giữ riêng là “Vắng cũ”, không tự suy đoán thành P/K. Có thể chọn nhiều tháng để dồn học phí chưa đóng vào một tin nhắc.</div>
+        <div class="mini-note" style="margin-top:8px;">Để danh sách gọn và tải nhanh, hãy chọn Khối + Lớp hoặc nhập ít nhất 2 ký tự tên học sinh. Có mặt = đi học; P = vắng có phép; K = vắng không phép. Có thể chọn nhiều tháng để tổng hợp và dồn các tháng học phí chưa đóng vào một tin nhắc.</div>
         <div class="report-actions">
-          <button class="btn btn-primary" onclick="refreshStudentSituationReport()"><i class="bi bi-arrow-repeat"></i> Cập nhật báo cáo HS</button>
           <button class="btn btn-success" onclick="sendBulkStudentSituationReports()"><i class="bi bi-send-check-fill"></i> Nhắn báo cáo tình hình</button>
           <button class="btn btn-warning" onclick="sendBulkCombinedTuitionReminders()"><i class="bi bi-bell-fill"></i> Nhắc các tháng chưa đóng</button>
         </div>
@@ -351,7 +359,7 @@
       <div class="table-responsive" style="margin-bottom:32px">
         <table>
           <thead><tr><th>STT</th><th>Học sinh</th><th>Lớp</th><th style="text-align:center">Số buổi</th><th style="text-align:center">Có mặt</th><th style="text-align:center">P</th><th style="text-align:center">K</th><th style="text-align:center">Vắng cũ</th><th>Đã đóng</th><th>Chưa đóng</th><th style="text-align:center">Zalo</th></tr></thead>
-          <tbody id="list-student-situation"></tbody>
+          <tbody id="list-student-situation"><tr><td colspan="11" style="text-align:center;color:var(--text-muted)">Chọn lớp hoặc nhập tên học sinh rồi bấm <b>Tìm / Xem</b>.</td></tr></tbody>
         </table>
       </div>
 
@@ -387,9 +395,9 @@
         <table><thead><tr><th>STT</th><th>Họ tên</th><th>Lớp</th><th>SĐT Phụ huynh</th></tr></thead><tbody id="list-tk-2m"></tbody></table>
       </div>
 
-      <h3 class="section-title" style="color:var(--warning)"><i class="bi bi-person-dash-fill"></i> 7. Học sinh vắng K (không phép) từ 2 buổi liên tiếp</h3>
+      <h3 class="section-title" style="color:var(--warning)"><i class="bi bi-person-dash-fill"></i> 7. Học sinh đang vắng K (không phép) từ 2 buổi học liên tiếp gần nhất</h3>
       <div class="table-responsive">
-        <table><thead><tr><th>STT</th><th>Họ tên</th><th>Lớp</th><th>SĐT Phụ huynh</th><th>Số buổi K liên tiếp</th></tr></thead><tbody id="list-tk-absent"></tbody></table>
+        <table><thead><tr><th>STT</th><th>Họ tên</th><th>Lớp</th><th>SĐT Phụ huynh</th><th>Chuỗi K liên tiếp gần nhất</th></tr></thead><tbody id="list-tk-absent"></tbody></table>
       </div>
     </div>
 
@@ -439,7 +447,7 @@
   // ============================================
   // CẤU HÌNH API - LIÊN KẾT VỚI GOOGLE SHEET
   // ============================================
-  const API_URL = "https://script.google.com/macros/s/AKfycbzkjbbOhiLew8A6pmgtFK6n-emjUgGgZ1vsXTDipzXbfK3ielUYBa9I4hs7bdD4eAsy_Q/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbyv9YWb8LBlaYiRVZDaOh_pT6AgF6bQF-ZL4vFLPy8HXpFIGehbhu4xIeQUKho4B2ny0g/exec";
   
   let PAYMENT_STUDENTS = new Map(); 
   let CURRENT_STUDENTS = []; 
@@ -473,7 +481,7 @@
     const today = new Date();
     const yyyy = today.getFullYear(); const mm = String(today.getMonth()+1).padStart(2,'0'); const dd = String(today.getDate()).padStart(2,'0');
     document.getElementById('dd-date').value = `${yyyy}-${mm}-${dd}`;
-    ['dd-khoi','hp-khoi','m-khoi','tk-khoi','tl-khoi','hs-khoi'].forEach(id => { const el = document.getElementById(id); KHOI.forEach(k => el.add(new Option("Khối "+k, k))); });
+    ['dd-khoi','hp-khoi','m-khoi','tk-khoi','tl-khoi','hs-khoi','sr-khoi'].forEach(id => { const el = document.getElementById(id); KHOI.forEach(k => el.add(new Option("Khối "+k, k))); });
     initDateSel('hp-thang','hp-nam'); initDateSel('tk-thang','tk-nam'); initStudentReportMonths();
 
     // Nạp cấu hình + học sinh + dashboard trong MỘT request để trang mở nhanh hơn.
@@ -762,15 +770,40 @@
   }
 
   function studentReportParams(extra={}) {
-    return { year:Number(document.getElementById('tk-nam').value), months:getSelectedReportMonths().join(','), grade:document.getElementById('tk-khoi').value, className:document.getElementById('tk-lop').value, ...extra };
+    return {
+      year:Number(document.getElementById('tk-nam').value),
+      months:getSelectedReportMonths().join(','),
+      grade:document.getElementById('sr-khoi').value,
+      className:document.getElementById('sr-lop').value,
+      term:document.getElementById('sr-search').value.trim(),
+      ...extra
+    };
+  }
+
+  function clearStudentSituationReport() {
+    STUDENT_REPORT_ROWS.clear();
+    const tb = document.getElementById('list-student-situation');
+    if (tb) tb.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--text-muted)">Bộ lọc đã thay đổi. Bấm <b>Tìm / Xem</b> để tải đúng học sinh cần xem.</td></tr>';
+  }
+
+  function validateStudentReportScope(showMessage=true) {
+    const grade = document.getElementById('sr-khoi').value;
+    const className = document.getElementById('sr-lop').value;
+    const term = document.getElementById('sr-search').value.trim();
+    const okClass = !!(grade && className);
+    const okName = term.length >= 2;
+    if (!okClass && !okName && showMessage) showToast('Hãy chọn Khối + Lớp hoặc nhập ít nhất 2 ký tự tên học sinh.', 'error');
+    return okClass || okName;
   }
 
   async function refreshStudentSituationReport() {
+    if (!validateStudentReportScope()) return;
     try {
       loading(true);
       const r = await callAPI('getStudentSituationReport', studentReportParams());
       renderStudentSituationReport(r.data || []);
-      showToast('Đã cập nhật báo cáo tình hình học sinh.');
+      const count = Array.isArray(r.data) ? r.data.length : 0;
+      showToast(count ? `Đã tải ${count} học sinh phù hợp.` : 'Không tìm thấy học sinh phù hợp.', count ? 'success' : 'error');
     } catch(e) { showError(e); } finally { loading(false); }
   }
 
@@ -800,6 +833,7 @@
   }
 
   async function sendBulkStudentSituationReports() {
+    if (!validateStudentReportScope()) return;
     const months = getSelectedReportMonths();
     if (!confirm(`Gửi báo cáo tình hình học sinh cho các tháng ${months.join(', ')} tới phụ huynh trong phạm vi đang lọc?`)) return;
     try {
@@ -810,6 +844,7 @@
   }
 
   async function sendBulkCombinedTuitionReminders() {
+    if (!validateStudentReportScope()) return;
     const months = getSelectedReportMonths();
     if (!confirm(`Gửi tin nhắc GỘP các tháng chưa đóng trong ${months.join(', ')} cho các học sinh thuộc phạm vi đang lọc?`)) return;
     try {
@@ -826,8 +861,6 @@
       const bundle = await callAPI('getReportBundle', {month: m, year: y, months: getSelectedReportMonths().join(','), grade: k, className: l});
       const r = (bundle.data && bundle.data.statistics) || {};
       const lessonData = (bundle.data && bundle.data.lesson_report) || [];
-      const studentSituationData = (bundle.data && bundle.data.student_situation_report) || [];
-      renderStudentSituationReport(studentSituationData);
       const setSafeText = (id, value) => { const el=document.getElementById(id); if(el) el.innerText=value; };
       setSafeText('dash-total-hs', r.total_students || 0);
       setSafeText('report-revenue', Number(r.total_revenue || 0).toLocaleString('vi-VN') + ' đ');

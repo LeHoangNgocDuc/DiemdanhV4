@@ -4,10 +4,12 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AN PHÚC EDUCATION | Hệ Thống Quản Lý</title>
+  <title>AN PHÚC EDUCATION | Hệ Thống Quản Lý V4.2</title>
   
   <!-- Font Be Vietnam Pro & Bootstrap Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://script.google.com">
+  <link rel="dns-prefetch" href="//script.google.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -235,10 +237,10 @@
     <!-- PANEL HỌC SINH -->
     <div id="hs" class="panel active">
       <div class="toolbar">
-        <select id="hs-khoi" onchange="updateLop('hs-khoi','hs-lop')"><option value="">-- Tất cả Khối --</option></select>
-        <select id="hs-lop"><option value="">-- Tất cả Lớp --</option></select>
+        <select id="hs-khoi" onchange="updateLop('hs-khoi','hs-lop'); resetStudentPage(); loadHS();"><option value="">-- Tất cả Khối --</option></select>
+        <select id="hs-lop" onchange="resetStudentPage(); loadHS();"><option value="">-- Tất cả Lớp --</option></select>
         <div style="flex-grow:1; display:flex; position:relative;">
-          <input type="text" id="search-hs" placeholder="Tìm tên, SĐT, Tên Zalo, Email..." style="width:100%; padding-left:40px;">
+          <input type="text" id="search-hs" placeholder="Tìm tên, SĐT, Tên Zalo, Email..." style="width:100%; padding-left:40px;" oninput="scheduleStudentSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();resetStudentPage();loadHS();}">
           <i class="bi bi-search" style="position:absolute; left:16px; top:14px; color:var(--text-muted)"></i>
         </div>
         <button class="btn btn-primary" onclick="loadHS()">Tìm kiếm</button>
@@ -250,6 +252,7 @@
           <tbody id="list-hs"></tbody>
         </table>
       </div>
+      <div id="hs-pagination" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px;"></div>
     </div>
 
     <!-- PANEL ĐIỂM DANH -->
@@ -343,7 +346,7 @@
           <select id="sr-khoi" onchange="updateLop('sr-khoi','sr-lop'); clearStudentSituationReport();"><option value="">-- Khối --</option></select>
           <select id="sr-lop" onchange="clearStudentSituationReport()"><option value="">-- Lớp --</option></select>
           <div style="display:flex;position:relative;min-width:0;">
-            <input type="text" id="sr-search" placeholder="Tìm nhanh theo tên học sinh..." style="width:100%;padding-left:40px;" onkeydown="if(event.key==='Enter'){event.preventDefault();refreshStudentSituationReport();}">
+            <input type="text" id="sr-search" placeholder="Tìm nhanh theo tên học sinh..." style="width:100%;padding-left:40px;" oninput="scheduleStudentSituationSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();refreshStudentSituationReport();}">
             <i class="bi bi-search" style="position:absolute;left:16px;top:14px;color:var(--text-muted)"></i>
           </div>
           <button class="btn btn-primary" onclick="refreshStudentSituationReport()"><i class="bi bi-search"></i> Tìm / Xem</button>
@@ -405,9 +408,9 @@
     <div id="st" class="panel">
       <h3 class="section-title"><i class="bi bi-sliders"></i> Cài đặt Hệ thống</h3>
       <div style="background:#EFF6FF;border:1px solid #BFDBFE;padding:20px;border-radius:var(--radius-md);margin-bottom:20px;">
-        <h4 style="color:var(--primary-dark);margin-bottom:8px;"><i class="bi bi-database-check"></i> CẬP NHẬT CẤU TRÚC DỮ LIỆU V4</h4>
+        <h4 style="color:var(--primary-dark);margin-bottom:8px;"><i class="bi bi-database-check"></i> CẬP NHẬT CẤU TRÚC DỮ LIỆU V4.2</h4>
         <p style="color:var(--text-muted);margin-bottom:12px;">Chạy một lần sau khi thay Code.gs để bổ sung cột chống trùng Zalo và cấu trúc báo cáo mới.</p>
-        <button class="btn btn-primary" onclick="runSetupV4()"><i class="bi bi-tools"></i> Chạy setup V4</button>
+        <button class="btn btn-primary" onclick="runSetupV4()"><i class="bi bi-tools"></i> Chạy setup V4.2</button>
       </div>
       <div class="danger-zone" style="background:#FEF2F2; border:1px solid #FCA5A5; padding:20px; border-radius:var(--radius-md);">
         <h4 style="color:var(--danger); margin-bottom:8px; display:flex; align-items:center; gap:8px;"><i class="bi bi-cone-striped"></i> VÙNG NGUY HIỂM</h4>
@@ -447,15 +450,31 @@
   // ============================================
   // CẤU HÌNH API - LIÊN KẾT VỚI GOOGLE SHEET
   // ============================================
-  const API_URL = "https://script.google.com/macros/s/AKfycbyv9YWb8LBlaYiRVZDaOh_pT6AgF6bQF-ZL4vFLPy8HXpFIGehbhu4xIeQUKho4B2ny0g/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbyowvXKHzguu53eI9ucGoJMeZtZALwxKDCw23IkV0q8dkG1Y_saRet9uG4Kz0ET71CD7A/exec";
   
-  let PAYMENT_STUDENTS = new Map(); 
-  let CURRENT_STUDENTS = []; 
+  let PAYMENT_STUDENTS = new Map();
+  let CURRENT_STUDENTS = [];
   let STUDENT_REPORT_ROWS = new Map();
+  let STUDENT_PAGE = 1;
+  const STUDENT_PAGE_SIZE = 40;
+  let STUDENT_SEARCH_TIMER = null;
+  let STUDENT_REPORT_SEARCH_TIMER = null;
+  const CLIENT_GET_CACHE = new Map();
+  const TAB_LOADED = { hs:true, tk:false };
+
+  function clearClientApiCache() { CLIENT_GET_CACHE.clear(); }
+  function apiCacheKey(action, params) { return action + '|' + new URLSearchParams(params || {}).toString(); }
 
   async function callAPI(action, params = {}, method = 'GET') {
     let url = API_URL;
     const options = { method: method, redirect: 'follow' };
+    const cacheKey = method === 'GET' ? apiCacheKey(action, params) : '';
+    const now = Date.now();
+    if (cacheKey) {
+      const hit = CLIENT_GET_CACHE.get(cacheKey);
+      if (hit && hit.expires > now) return hit.value;
+      if (hit) CLIENT_GET_CACHE.delete(cacheKey);
+    }
 
     if (method === 'GET') {
       url += '?' + new URLSearchParams({ action: action, ...params }).toString();
@@ -464,15 +483,34 @@
       options.body = JSON.stringify({ action: action, ...params });
     }
 
-    const response = await fetch(url, options);
+    const controller = new AbortController();
+    options.signal = controller.signal;
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+    const started = performance.now();
+    let response;
+    try { response = await fetch(url, options); }
+    catch (e) {
+      if (e.name === 'AbortError') throw new Error('Máy chủ phản hồi quá lâu. Vui lòng thử lại.');
+      throw e;
+    } finally { clearTimeout(timeoutId); }
+
     const text = await response.text();
     let result;
-    try { result = JSON.parse(text); } 
+    try { result = JSON.parse(text); }
     catch (error) { throw new Error('API không trả JSON. HTTP ' + response.status + ': ' + text.slice(0, 100)); }
 
     if (!response.ok) throw new Error(result.message || 'HTTP ' + response.status);
     if (result.success === false) throw new Error(result.message || 'Thao tác thất bại');
-    return result; 
+
+    const totalMs = Math.round(performance.now() - started);
+    if ((result.meta?.server_ms || totalMs) > 800) console.info(`[V4.2] ${action}: server ${result.meta?.server_ms ?? '?'} ms, tổng ${totalMs} ms`);
+    if (method === 'GET') CLIENT_GET_CACHE.set(cacheKey, { value: result, expires: Date.now() + 12000 });
+    else {
+      clearClientApiCache();
+      TAB_LOADED.tk = false;
+      try { sessionStorage.removeItem('anphuc_v42_initial'); } catch(e) {}
+    }
+    return result;
   }
 
   const KHOI = [6, 7, 8, 9, 10, 11, 12];
@@ -484,16 +522,32 @@
     ['dd-khoi','hp-khoi','m-khoi','tk-khoi','tl-khoi','hs-khoi','sr-khoi'].forEach(id => { const el = document.getElementById(id); KHOI.forEach(k => el.add(new Option("Khối "+k, k))); });
     initDateSel('hp-thang','hp-nam'); initDateSel('tk-thang','tk-nam'); initStudentReportMonths();
 
-    // Nạp cấu hình + học sinh + dashboard trong MỘT request để trang mở nhanh hơn.
+    // Hiển thị snapshot của chính phiên trình duyệt trước (nếu có), sau đó vẫn gọi server
+    // để đồng bộ dữ liệu mới. Cách này làm reload trên Vercel gần như hiện giao diện ngay.
     try {
-      const r = await callAPI('getInitialData', {month: today.getMonth()+1, year: today.getFullYear()});
+      const warm = JSON.parse(sessionStorage.getItem('anphuc_v42_initial') || 'null');
+      if (warm && Date.now() - Number(warm.saved_at || 0) < 5*60*1000 && warm.data) {
+        const d = warm.data;
+        if(d.settings && d.settings.tuition_amount_default) document.getElementById('hp-def').value = d.settings.tuition_amount_default;
+        renderStudentPage(d.students_page || {items:d.students || [], total:(d.students||[]).length, page:1, page_size:STUDENT_PAGE_SIZE, total_pages:1});
+        const dash=d.dashboard || {};
+        document.getElementById('dash-total-hs').innerText=dash.total_students ?? 0;
+        document.getElementById('dash-paid').innerText=dash.paid_count ?? 0;
+        document.getElementById('dash-unpaid').innerText=dash.unpaid_count ?? 0;
+      }
+    } catch(e) {}
+
+    // Nạp cấu hình + 1 trang học sinh + dashboard trong MỘT request.
+    try {
+      const r = await callAPI('getInitialData', {month: today.getMonth()+1, year: today.getFullYear(), page:1, pageSize:STUDENT_PAGE_SIZE});
       const d = r.data || {};
       if(d.settings && d.settings.tuition_amount_default) document.getElementById('hp-def').value = d.settings.tuition_amount_default;
-      renderStudentList(d.students || []);
+      renderStudentPage(d.students_page || {items:d.students || [], total:(d.students||[]).length, page:1, page_size:STUDENT_PAGE_SIZE, total_pages:1});
       const dash = d.dashboard || {};
       document.getElementById('dash-total-hs').innerText = dash.total_students ?? 0;
       document.getElementById('dash-paid').innerText = dash.paid_count ?? 0;
       document.getElementById('dash-unpaid').innerText = dash.unpaid_count ?? 0;
+      try { sessionStorage.setItem('anphuc_v42_initial', JSON.stringify({saved_at:Date.now(), data:d})); } catch(e) {}
     } catch(e) {
       console.error(e);
       await Promise.all([loadHS(), updateDashboardStats()]);
@@ -525,11 +579,10 @@
     document.querySelectorAll('.tab').forEach(function (tab) { tab.classList.remove('active'); });
     document.getElementById(id).classList.add('active');
     btn.classList.add('active');
-    
-    // Tự động load dữ liệu thống kê nếu chuyển sang tab Báo cáo
-    if (id === 'tk') {
-      loadStats();
-    }
+
+    // Lazy-load: chỉ tải báo cáo lần đầu khi thật sự mở tab. Sau thao tác ghi dữ liệu,
+    // callAPI(POST) sẽ đánh dấu lại để lần mở sau tự refresh.
+    if (id === 'tk' && !TAB_LOADED.tk) loadStats();
   }
 
   function loading(s) { document.getElementById('loader').style.display=s?'block':'none'; }
@@ -545,13 +598,18 @@
       document.getElementById('dash-unpaid').innerText = r.data.unpaid_count;
     } catch(e) { console.error(e); }
   }
-  // HỌC SINH
-  function renderStudentList(data) {
-    CURRENT_STUDENTS = Array.isArray(data) ? data : [];
+  // HỌC SINH - V4.2: phân trang + debounce, không kéo toàn bộ danh sách về trình duyệt.
+  function renderStudentPage(pageData) {
+    const page = pageData || {};
+    CURRENT_STUDENTS = Array.isArray(page.items) ? page.items : [];
+    STUDENT_PAGE = Number(page.page || 1);
+    const pageSize = Number(page.page_size || STUDENT_PAGE_SIZE);
+    const total = Number(page.total || 0);
+    const totalPages = Math.max(1, Number(page.total_pages || 1));
     const tb=document.getElementById('list-hs');
-    if(!CURRENT_STUDENTS.length) { tb.innerHTML='<tr><td colspan="7" style="text-align:center">Trống</td></tr>'; return; }
-    tb.innerHTML=CURRENT_STUDENTS.map((s,i)=>`<tr>
-      <td data-label="STT">${i+1}</td>
+    if(!CURRENT_STUDENTS.length) tb.innerHTML='<tr><td colspan="7" style="text-align:center">Không có học sinh phù hợp.</td></tr>';
+    else tb.innerHTML=CURRENT_STUDENTS.map((s,i)=>`<tr>
+      <td data-label="STT">${(STUDENT_PAGE-1)*pageSize+i+1}</td>
       <td data-label="Họ tên" style="font-weight:600">${escapeHtml(s.name)}</td>
       <td data-label="Lớp"><span class="badge badge-success">K${escapeHtml(s.grade)}-${escapeHtml(s.class)}</span></td>
       <td data-label="SĐT">${escapeHtml(s.parent_phone || '--')}</td>
@@ -562,16 +620,34 @@
         <button class="btn-icon delete" onclick="delHS('${escapeJsSingle(s.student_id)}')" title="Xóa"><i class="bi bi-trash-fill"></i></button>
       </td>
     </tr>`).join('');
+
+    const pg = document.getElementById('hs-pagination');
+    if (pg) {
+      const from = total ? (STUDENT_PAGE-1)*pageSize+1 : 0;
+      const to = Math.min(total, STUDENT_PAGE*pageSize);
+      pg.innerHTML = `<div style="color:var(--text-muted);font-size:13px">Hiển thị <b>${from}-${to}</b> / ${total} học sinh</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="btn" style="height:38px;padding:0 14px;background:#F1F5F9" ${STUDENT_PAGE<=1?'disabled':''} onclick="loadHS(${STUDENT_PAGE-1})"><i class="bi bi-chevron-left"></i> Trước</button>
+          <span style="font-weight:600">Trang ${STUDENT_PAGE}/${totalPages}</span>
+          <button class="btn" style="height:38px;padding:0 14px;background:#F1F5F9" ${STUDENT_PAGE>=totalPages?'disabled':''} onclick="loadHS(${STUDENT_PAGE+1})">Sau <i class="bi bi-chevron-right"></i></button>
+        </div>`;
+    }
   }
 
-  async function loadHS() {
-    loading(true);
-    const term=document.getElementById('search-hs').value, g=document.getElementById('hs-khoi').value, c=document.getElementById('hs-lop').value;
+  function resetStudentPage() { STUDENT_PAGE = 1; }
+  function scheduleStudentSearch() {
+    clearTimeout(STUDENT_SEARCH_TIMER);
+    STUDENT_SEARCH_TIMER = setTimeout(() => { resetStudentPage(); loadHS(1, false); }, 350);
+  }
+
+  async function loadHS(page=1, showLoader=true) {
+    if (showLoader) loading(true);
+    const term=document.getElementById('search-hs').value.trim(), g=document.getElementById('hs-khoi').value, c=document.getElementById('hs-lop').value;
     try {
-      const r = await callAPI('getStudents', {term, grade: g, className: c});
-      renderStudentList(r.data || []);
+      const r = await callAPI('getStudentsPage', {term, grade:g, className:c, page, pageSize:STUDENT_PAGE_SIZE});
+      renderStudentPage(r.data || {});
     } catch(e) { showError(e); }
-    finally { loading(false); }
+    finally { if (showLoader) loading(false); }
   }
 
   function openModal() {
@@ -796,15 +872,25 @@
     return okClass || okName;
   }
 
-  async function refreshStudentSituationReport() {
+  function scheduleStudentSituationSearch() {
+    clearTimeout(STUDENT_REPORT_SEARCH_TIMER);
+    STUDENT_REPORT_SEARCH_TIMER = setTimeout(() => {
+      const term = document.getElementById('sr-search').value.trim();
+      const grade = document.getElementById('sr-khoi').value;
+      const cls = document.getElementById('sr-lop').value;
+      if (term.length >= 2 || (grade && cls)) refreshStudentSituationReport(false);
+    }, 420);
+  }
+
+  async function refreshStudentSituationReport(showLoader=true) {
     if (!validateStudentReportScope()) return;
     try {
-      loading(true);
+      if (showLoader) loading(true);
       const r = await callAPI('getStudentSituationReport', studentReportParams());
       renderStudentSituationReport(r.data || []);
       const count = Array.isArray(r.data) ? r.data.length : 0;
-      showToast(count ? `Đã tải ${count} học sinh phù hợp.` : 'Không tìm thấy học sinh phù hợp.', count ? 'success' : 'error');
-    } catch(e) { showError(e); } finally { loading(false); }
+      if (showLoader) showToast(count ? `Đã tải ${count} học sinh phù hợp.` : 'Không tìm thấy học sinh phù hợp.', count ? 'success' : 'error');
+    } catch(e) { showError(e); } finally { if (showLoader) loading(false); }
   }
 
   async function sendSituationReport(studentId) {
@@ -912,6 +998,7 @@
         }).join('');
         else tbLesson.innerHTML = '<tr><td colspan="6" style="text-align:center">Chưa có dữ liệu</td></tr>';
       }
+      TAB_LOADED.tk = true;
     } catch(e) { showError(e); }
     finally { loading(false); }
   }
@@ -1013,10 +1100,10 @@
 
   async function saveFeeSetting() { try { await callAPI('saveSettings', { tuition_amount_default: document.getElementById('hp-def').value }, 'POST'); showToast('Đã lưu mức học phí.'); } catch (error) { showError(error); } }
   async function runSetupV4() {
-    if (!confirm('Chạy setup V4 để bổ sung cấu trúc Sheet và khóa các tin Zalo trùng đang chờ?')) return;
+    if (!confirm('Chạy setup V4.2 để kiểm tra cấu trúc Sheet, cache dữ liệu và khóa các tin Zalo trùng đang chờ?')) return;
     try {
       loading(true);
-      const r = await callAPI('setupSystemV4', {}, 'POST');
+      const r = await callAPI('setupSystemV42', {}, 'POST');
       const x = r.data || {};
       showToast(`${x.message || 'Setup hoàn tất.'}${x.duplicate_queue_rows_marked ? ` Đã khóa ${x.duplicate_queue_rows_marked} dòng tin trùng.` : ''}${x.duplicate_zalo_triggers_removed ? ` Đã xóa ${x.duplicate_zalo_triggers_removed} trigger Zalo trùng.` : ''}`);
     } catch(e) { showError(e); } finally { loading(false); }

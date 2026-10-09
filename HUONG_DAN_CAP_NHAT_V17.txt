@@ -1,0 +1,92 @@
+AN PHÚC EDUCATION — BẢN BỔ SUNG V18
+Ngày hoàn thiện: 08/10/2026
+Các tên tệp V17 được giữ để thuận tiện cập nhật; nội dung đã nâng lên V18.
+
+1. NHỮNG PHẦN ĐÃ HOÀN THIỆN
+- Cấu hình lớp và tên nhóm Zalo đọc từ sheet ClassConfig. Sửa trực tiếp trên sheet có hiệu lực ở lần tải dữ liệu tiếp theo.
+- Mục Báo cáo có bảng từng học sinh: số buổi lớp học tháng xem, tiền đã đóng, tổng tiền còn thiếu và danh sách tháng/số tiền còn thiếu.
+- Ô “Công nợ từ tháng” xác định mốc bắt đầu; mốc kết thúc là tháng hiện tại theo giờ Việt Nam. Bao gồm tháng đang học.
+- Báo cáo nhanh cho từng học sinh cho phép chọn nhiều tháng, xem có mặt, vắng có phép, vắng không phép, vắng chưa phân loại, số tiền và ngày đóng.
+- Học phí tìm theo tên có dấu/không dấu, điện thoại, tên Zalo; tìm toàn trung tâm khi không chọn lớp.
+- Thu tiền hỗ trợ khoản đóng một phần và đóng bổ sung, chống hai tài khoản cùng ghi thêm một khoản từ dữ liệu cũ.
+- Điểm danh/cấu hình lớp/hồ sơ có kiểm tra phiên bản để tránh ghi đè thay đổi của người khác.
+- Thông báo thể hiện đúng trạng thái: Chờ gửi / Đang xử lý / Đã xác nhận gửi / Gửi thất bại / Cần đối chiếu.
+
+2. SETUP TRONG GOOGLE SHEET
+Khi cập nhật hệ thống thật đã được xác nhận:
+1) Mở Google Sheet hiện tại, tạo một bản sao để đối chiếu dữ liệu và công thức trước/sau.
+2) Extensions > Apps Script. Thay mã bằng nội dung code_v17.gs trong bộ cập nhật.
+3) Chọn hàm setup và bấm Run. Có thể dùng tên seup; hai hàm tương đương.
+4) Cấp quyền Google nếu được hỏi; đây là thao tác của chủ Google Sheet.
+5) Tải lại Google Sheet. Menu “An Phúc • Quản lý học sinh” xuất hiện.
+
+setup chỉ tạo sheet còn thiếu và thêm tiêu đề cột còn thiếu vào cuối sheet.
+Không xóa dòng, không xóa sheet, không xóa/gán lại student_id, không sắp xếp lại dòng hay cột cũ.
+Không ghi lại toàn bộ vùng dữ liệu cũ; công thức và các cột tự thêm được giữ.
+Không điền lại enrollment_date hay class_id trong dòng lịch sử. Dữ liệu cũ được nối với ClassConfig khi đọc dựa vào grade/class.
+Chạy setup lần hai không tạo thêm bản sao dữ liệu. setup không tạo trigger và không gửi tin Zalo.
+
+3. CẤU HÌNH LỚP / NHÓM ZALO
+Các cột chính trong ClassConfig:
+class_id | grade | class_code | class_name | zalo_group_name | teacher_name | tuition_fee | schedule | start_time | school_year | active | display_order | note | updated_at | row_version
+
+- class_id là khóa ổn định. Giữ nguyên khối/mã lớp đã có dữ liệu; tạo một lớp mới nếu cần đổi khóa nghiệp vụ.
+- zalo_group_name là tên chính xác của nhóm Zalo cần gửi. Để trống thì hệ thống trả ZALO_GROUP_NOT_CONFIGURED, không chuyển sang nhóm khác.
+- Có thể chạy importClassConfigSeed sau setup để điền 8 tên nhóm từ file ClassConfig_V16_seed.csv vào những ô zalo_group_name còn trống. Hàm này không ghi đè tên nhóm đã cấu hình.
+- Với lớp khác hoặc class_id khác file seed, điền tên nhóm trực tiếp trong ClassConfig hoặc qua Cài đặt > Quản lý lớp học.
+- active = FALSE: ngừng sử dụng lớp, vẫn giữ toàn bộ dữ liệu lịch sử.
+- tuition_fee để trống: dùng mức chung; giá trị 0: lớp miễn học phí.
+- Tin số buổi lớp gửi vào nhóm đã cấu hình. Báo cáo học sinh, điểm danh, nhắc học phí và biên nhận gửi riêng cho liên hệ phụ huynh đã lưu.
+
+4. CÁCH TÍNH BÁO CÁO VÀ CÔNG NỢ
+- Số buổi lớp = số ngày học khác nhau trong ClassSessions và Attendance; ngày trùng chỉ tính một lần.
+- Nếu học sinh chuyển lớp, có điểm danh lịch sử thì báo cáo dùng lớp ghi trong điểm danh của tháng đó.
+- Số có mặt/vắng tính theo ngày; dữ liệu cũ Absent được giữ “Chưa phân loại”. Không sửa dữ liệu cũ thành vắng không phép.
+- Đã đóng = tổng amount của mọi dòng Tuition đúng student_id, tháng và năm. Không xóa dòng cũ hoặc tự gộp giao dịch.
+- Mức phải đóng ưu tiên: custom_fee học sinh > tuition_fee lớp > tuition_amount_default trong Settings. Mức 0 hợp lệ; để trống mới chuyển sang tầng tiếp theo.
+- Còn thiếu của tháng = max(mức phải đóng - tổng đã đóng, 0).
+- Tổng chưa đóng = cộng tiền còn thiếu từng tháng từ tháng giáo viên chọn đến tháng hiện tại. Có liệt kê từng tháng và số tiền còn thiếu.
+- Không tính nợ các tháng trước tháng nhập học. Nếu thiếu enrollment_date, dùng created_at khi có; báo cáo nêu rõ mốc thay thế này.
+- Không chọn tháng báo cáo trong tương lai.
+- Nếu chưa có mức phí ở cả ba tầng, báo “Chưa xác định” và các tháng chưa đủ cấu hình. Không coi 0 đồng là đã hoàn tất.
+
+GIỚI HẠN CẦN ĐỐI CHIẾU: tệp gốc chưa có bảng mức học phí lịch sử theo tháng. Phần phải đóng/công nợ đang dùng mức phí hiện cấu hình. Các khoản đã đóng vẫn lấy số tiền lịch sử thực tế. Nếu mức phí từng thay đổi, giáo viên cần đối chiếu trước khi gửi kết luận công nợ cũ; hệ thống không tự suy đoán mức phí quá khứ. Tháng nghỉ không thu phí cũng cần được đối chiếu theo quy định của lớp.
+
+5. KẾT NỐI HỆ THỐNG THẬT
+Bản Sites hiện tại dùng dữ liệu mẫu riêng, có lưu trên máy chủ; chưa gọi Google Sheet/Zalo hiện tại.
+index.html dùng /api/center trên Sites. Không đặt token bí mật trong HTML hoặc localStorage.
+
+Sau khi xác nhận chuyển sang dữ liệu thật:
+- Trong Script Properties của Apps Script, đặt SITES_API_TOKEN bằng một chuỗi ngẫu nhiên bí mật.
+- Deploy Apps Script thành phiên bản mới; giữ deployment cũ để có thể đối chiếu/khôi phục mã. Không đổi Spreadsheet ID nếu tiếp tục dùng sheet hiện tại.
+- Cấu hình trên máy chủ Sites: SHEETS_API_URL là URL /exec mới; SHEETS_API_TOKEN khớp SITES_API_TOKEN; LIVE_SHEETS_ENABLED=true.
+- Apps Script API từ chối yêu cầu thiếu/sai token. Vì vậy phải cập nhật Sites và Apps Script đồng bộ trước khi sử dụng thật.
+- Chỉ cấp quyền người dùng thứ hai trong Sites khi chủ ứng dụng chọn đúng tài khoản. Bản hiện tại chỉ chủ ứng dụng truy cập được.
+
+6. ZALO GATEWAY
+- Dùng api_zalo_v17.py đã cập nhật. Chỉ khởi động Chrome khi chạy tệp, không khởi động khi import để kiểm thử.
+- Đặt biến môi trường ZALO_GATEWAY_TOKEN trên máy chạy gateway. Trong Apps Script đặt ZALO_GATEWAY_TOKEN cùng giá trị.
+- Giữ ZALO_GATEWAY_URL phù hợp gateway hiện dùng.
+- Gateway mặc định lắng nghe 127.0.0.1. Nếu cấu hình mạng hiện tại cần địa chỉ khác, đặt ZALO_GATEWAY_HOST tương ứng.
+- Giữ một tiến trình gateway cho một Chrome profile. Không chạy nhiều Chrome cùng dùng ZaloBotProfile.
+- Gateway lưu biên nhận tại zalo_receipts.sqlite3; giữ tệp này khi cập nhật để chống gửi trùng sau khởi động lại. Không xóa khi còn yêu cầu chưa rõ kết quả.
+- “Kiểm tra Zalo” chỉ tìm/xác nhận tên, không gửi tin.
+- Bật gửi thật bằng Script Property ZALO_SENDING_ENABLED=true sau khi kiểm tra tên nhóm/liên hệ và môi trường thật.
+- Nếu chưa bật, processZaloQueue trả paused và không gửi tin. setup không thay đổi cờ này.
+- Không tự thử lại tin SENT_UNCONFIRMED hoặc RESULT_UNKNOWN; đối chiếu trong Zalo trước. Các tin này hiển thị “Cần đối chiếu”.
+- Có thể giữ trigger processZaloQueue cũ. Mỗi lần xử lý có token claim và ghi kết quả chỉ khi còn sở hữu token.
+
+7. KẾT QUẢ KIỂM THỬ
+14 kiểm thử nghiệp vụ/SQLite và 5 kiểm thử biên nhận gateway đã vượt qua.
+Đã kiểm tra: setup giữ ô/công thức/ID/thứ tự cột, chạy lặp; lớp không có nhóm; thay nhóm trên sheet; học phí 3 tầng và 0 đồng; tìm không dấu; số buổi không trùng; phân loại vắng; công nợ qua năm/đóng một phần/trước nhập học; hai tài khoản cùng thu; không xóa hồ sơ; quyền API; trạng thái Zalo chưa rõ; báo cáo sau chuyển lớp.
+Mã Python đã kiểm tra cú pháp. Mã web đã build thành công.
+Các kiểm thử Google Sheet/Apps Script và giao diện Zalo thật chưa thực hiện. Bảo toàn dữ liệu đã được kiểm thử trên mô hình bảng, chưa đối chiếu từng ô trong Google Sheet thực tế.
+Kiểm tra trình duyệt trực quan tự động chưa khả dụng trong phiên làm việc này.
+
+8. TỆP TRONG BỘ CẬP NHẬT
+- index.html: giao diện tương thích máy chủ Sites, giữ bố cục quản lý quen thuộc.
+- code_v17.gs: Apps Script V18, có setup/seup/onOpen/importClassConfigSeed.
+- api_zalo_v17.py: gateway có xác thực và biên nhận bền vững.
+- ClassConfig_V16_seed.csv: dữ liệu nhóm lớp cũ được giữ nguyên.
+- HUONG_DAN_CAP_NHAT_V17.txt: hướng dẫn này.
+

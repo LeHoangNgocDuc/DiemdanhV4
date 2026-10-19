@@ -4,7 +4,7 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AN PHÚC EDUCATION | Hệ Thống Quản Lý V4.17</title>
+  <title>AN PHÚC EDUCATION | Hệ Thống Quản Lý V4.18</title>
   
   <!-- Font Be Vietnam Pro & Bootstrap Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -353,7 +353,7 @@
   
 
     /* ============================================================
-       V4.17 - PARENT PORTAL MOBILE-FIRST / MODERN EDUTECH
+       V4.18 - PARENT PORTAL MOBILE-FIRST / MODERN EDUTECH
        ============================================================ */
     .public-shell{background:linear-gradient(180deg,#EAF3FF 0,#F8FAFC 52%,#FFFFFF 100%);padding:18px 14px 32px}
     .public-wrap{max-width:1320px;margin:0 auto}
@@ -798,11 +798,11 @@
 
     <!-- PANEL CÀI ĐẶT -->
     <div id="st" class="panel">
-      <h3 class="section-title"><i class="bi bi-sliders"></i> Cài đặt Hệ thống V4.17</h3>
+      <h3 class="section-title"><i class="bi bi-sliders"></i> Cài đặt Hệ thống V4.18</h3>
       <div style="background:#EFF6FF;border:1px solid #BFDBFE;padding:20px;border-radius:var(--radius-md);margin-bottom:20px;">
-        <h4 style="color:var(--primary-dark);margin-bottom:8px;"><i class="bi bi-database-check"></i> CẬP NHẬT CẤU TRÚC & BẢO MẬT V4.17</h4>
+        <h4 style="color:var(--primary-dark);margin-bottom:8px;"><i class="bi bi-database-check"></i> CẬP NHẬT CẤU TRÚC & BẢO MẬT V4.18</h4>
         <p style="color:var(--text-muted);margin-bottom:12px;">Chạy một lần để giữ toàn bộ bảo mật V4.8 và bổ sung nhập dữ liệu Kiểm tra trực tiếp từ Excel, liên kết bài kiểm tra và thông báo đăng ký về Zalo Trung tâm.</p>
-        <button class="btn btn-primary" onclick="runSetupV4()"><i class="bi bi-tools"></i> Chạy setup V4.17</button>
+        <button class="btn btn-primary" onclick="runSetupV4()"><i class="bi bi-tools"></i> Chạy setup V4.18</button>
       </div>
 
 
@@ -858,14 +858,14 @@
           <h4 style="margin:0;color:#B91C1C"><i class="bi bi-send-check-fill"></i> Chẩn đoán Zalo Gateway</h4>
           <button class="btn" style="background:#FEE2E2;color:#991B1B" onclick="loadZaloDiagnostics()"><i class="bi bi-activity"></i> Kiểm tra</button>
         </div>
-        <div class="mini-note" style="margin-top:8px">Ảnh lỗi HTTP 401 cho thấy khóa bảo mật giữa Apps Script và Python đang không khớp. V4.17 có thể kiểm tra fingerprint và đồng bộ lại khóa mà không làm mất tin đang chờ.</div>
+        <div class="mini-note" style="margin-top:8px">V4.18 dùng kết nối Zalo đơn giản: Apps Script gửi JSON trực tiếp qua Ngrok đến một file <b>zalo_server.py</b>. Không còn API key/fingerprint ở Gateway nên tránh lỗi 401 do lệch khóa.</div>
         <div class="schedule-editor-grid" style="margin-top:10px">
           <input id="zalo-gateway-url-admin" type="url" placeholder="https://...ngrok-free.dev">
           <div id="zalo-diag-box" class="mini-note" style="padding:12px;background:#fff;border:1px solid var(--border);border-radius:9px">Chưa kiểm tra Gateway.</div>
         </div>
         <div class="report-actions">
           <button class="btn btn-primary" onclick="saveZaloGatewayUrlAdmin()"><i class="bi bi-link-45deg"></i> Lưu Gateway URL</button>
-          <button class="btn btn-danger" onclick="syncZaloSecurityAdmin()"><i class="bi bi-shield-lock"></i> Đồng bộ khóa Zalo V4.17</button>
+          <button class="btn" style="background:#EEF2FF;color:#3730A3" onclick="loadZaloDiagnostics()"><i class="bi bi-arrow-clockwise"></i> Kiểm tra lại Gateway</button>
           <button class="btn btn-success" onclick="pushWaitingZaloAdmin()"><i class="bi bi-send"></i> Gửi lại tin đang chờ</button>
         </div>
       </div>
@@ -946,9 +946,9 @@
   // ============================================
   // CẤU HÌNH API - LIÊN KẾT VỚI GOOGLE SHEET
   // ============================================
-  const API_URL = "https://script.google.com/macros/s/AKfycbzkk7glamK5enh5GxzFPv2oVHEgVKJloDMeCpzu_4ylDy1-YGycGjTmpvopqCwcZW0lSw/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbycN_S3MvbPGCvR7kXsEXqKBiouAFEQ3TFWBXOONA5jqup1Z0rQTzIq9AP2393jD1r6ug/exec";
   const CENTER_INFO = {
-    address: '30/11A Phước Tường, Phước Long, Nam Nha Trang',
+    address: '30/11D Phước Tường, Phước Long, Nam Nha Trang',
     phone: '0972466347',
     zalo: '0972466347',
     maps_url: 'https://www.google.com/maps/search/?api=1&query=30%2F11D%20Ph%C6%B0%E1%BB%9Bc%20T%C6%B0%E1%BB%9Dng%2C%20Ph%C6%B0%E1%BB%9Bc%20Long%2C%20Nam%20Nha%20Trang'
@@ -973,7 +973,7 @@
   const PUBLIC_GET_ACTIONS = new Set(['validateAdminSession','getPublicBootstrap','getPublicSchedule','getPublicExams','getPublicSystemStatus','publicPing','publicFindStudentByName']);
   const EXAM_STUDENT_URL = 'https://anphuceducation.netlify.app/student';
   const PUBLIC_POST_ACTIONS = new Set(['adminLogin','publicVerifyStudentPhone','submitRegistration']);
-  const EXPECTED_BACKEND_VERSION='V4.17';
+  const EXPECTED_BACKEND_VERSION='V4.18';
   const PUBLIC_API_STATE={status:'unknown',version:'',message:''};
   let CHAT_SEND_BUSY=false;
 
@@ -1011,7 +1011,7 @@
   async function checkPublicBackend_(showOk=false){
     try{
       const r=await rawPublicPing_(); const v=String(r?.data?.version||r?.meta?.version||''); PUBLIC_API_STATE.version=v;
-      if(v!==EXPECTED_BACKEND_VERSION){setPublicApiStatus_('warn',`⚠️ Giao diện ${EXPECTED_BACKEND_VERSION} đang kết nối Backend <b>${escapeHtml(v||'không xác định')}</b>. Hãy Deploy <b>New Version</b> của Code.gs V4.17 rồi tải lại trang.`);return false;}
+      if(v!==EXPECTED_BACKEND_VERSION){setPublicApiStatus_('warn',`⚠️ Giao diện ${EXPECTED_BACKEND_VERSION} đang kết nối Backend <b>${escapeHtml(v||'không xác định')}</b>. Hãy Deploy <b>New Version</b> của Code.gs V4.18 rồi tải lại trang.`);return false;}
       if(showOk)setPublicApiStatus_('ok',`✅ Backend ${escapeHtml(v)} đang hoạt động bình thường.`); else {const el=document.getElementById('public-api-status');if(el)el.style.display='none';}
       PUBLIC_API_STATE.status='ok';return true;
     }catch(e){setPublicApiStatus_('error',`❌ Không kết nối được máy chủ Google Apps Script. Hãy kiểm tra <b>Deploy → Manage deployments → Execute as Me → Who has access: Anyone</b> và bảo đảm API_URL đang dùng đúng link <b>/exec</b>.`);return false;}
@@ -1030,11 +1030,11 @@
     else{options.headers={'Content-Type':'text/plain;charset=utf-8'};options.body=JSON.stringify({action,...payload});}
 
     const controller=new AbortController();options.signal=controller.signal;const timeoutId=setTimeout(()=>controller.abort(),isPublic?20000:30000);const started=performance.now();let response;
-    try{response=await fetch(url,options);}catch(e){if(e.name==='AbortError'){if(isPublic&&action!=='publicPing'){await checkPublicBackend_(false);if(PUBLIC_API_STATE.status==='ok')throw new Error('Backend đang kết nối nhưng tác vụ dữ liệu phản hồi quá chậm. Hãy chạy setupSystemV417() một lần rồi Deploy New Version.');}throw new Error('Không kết nối được máy chủ. Vui lòng kiểm tra trạng thái Backend ở đầu Cổng phụ huynh.');}throw e;}finally{clearTimeout(timeoutId);}
+    try{response=await fetch(url,options);}catch(e){if(e.name==='AbortError'){if(isPublic&&action!=='publicPing'){await checkPublicBackend_(false);if(PUBLIC_API_STATE.status==='ok')throw new Error('Backend đang kết nối nhưng tác vụ dữ liệu phản hồi quá chậm. Hãy chạy setupSystemV418() một lần rồi Deploy New Version.');}throw new Error('Không kết nối được máy chủ. Vui lòng kiểm tra trạng thái Backend ở đầu Cổng phụ huynh.');}throw e;}finally{clearTimeout(timeoutId);}
     const text=await response.text();let result;try{result=JSON.parse(text);}catch(e){throw new Error('API không trả JSON. HTTP '+response.status+': '+text.slice(0,100));}
     if(!response.ok)throw new Error(result.message||'HTTP '+response.status);
     if(result.success===false){ if(/UNAUTHORIZED|Phiên đăng nhập/i.test(result.message||'')) logoutAdmin(false); throw new Error(result.message||'Thao tác thất bại'); }
-    const totalMs=Math.round(performance.now()-started);if((result.meta?.server_ms||totalMs)>800)console.info(`[V4.17] ${action}: server ${result.meta?.server_ms??'?'} ms, tổng ${totalMs} ms`);
+    const totalMs=Math.round(performance.now()-started);if((result.meta?.server_ms||totalMs)>800)console.info(`[V4.18] ${action}: server ${result.meta?.server_ms??'?'} ms, tổng ${totalMs} ms`);
     if(method==='GET')CLIENT_GET_CACHE.set(cacheKey,{value:result,expires:Date.now()+12000});
     else{clearClientApiCache();TAB_LOADED.tk=false;try{sessionStorage.removeItem('anphuc_v48_initial');}catch(e){}const qActions=new Set(['saveAttendance','sendTuitionMessage','sendBulkTuitionReminders','sendClassLessonReport','sendBulkClassLessonReports','sendStudentSituationReport','sendBulkStudentSituationReports','sendMultiMonthTuitionReminder','sendBulkMultiMonthTuitionReminders','saveScores','saveAndSendHomework','processZaloQueue','submitRegistration']);if(qActions.has(action)&&isAdminAuthenticated())setTimeout(refreshZaloQueueStatus,250);}
     return result;
@@ -1439,7 +1439,7 @@
   }
 
 
-  // V4.17 - QUẢN LÝ ĐỀ TRỰC TIẾP
+  // V4.18 - QUẢN LÝ ĐỀ TRỰC TIẾP
   let EXAM_ADMIN_ROWS=[];
   function updateExamAdminForm(){
     const periodic=document.getElementById('exam-admin-type')?.value==='periodic';
@@ -1473,12 +1473,17 @@
   }
   async function deleteExamAdminRow(i){const x=EXAM_ADMIN_ROWS[i];if(!x||!confirm('Xóa mục đề này khỏi Google Sheet?'))return;try{await callAPI('deleteExamEntry',{type:document.getElementById('exam-admin-type').value,row_no:x._row},'POST');EXAM_CLIENT_CACHE.clear();await loadExamAdminRows();showToast('Đã xóa.');}catch(e){showError(e);}}
 
-  // V4.17 - CHẨN ĐOÁN / ĐỒNG BỘ ZALO GATEWAY
+  // V4.18 - CHẨN ĐOÁN ZALO GATEWAY ĐƠN GIẢN
   async function loadZaloDiagnostics(){
-    const box=document.getElementById('zalo-diag-box');try{const r=await callAPI('getZaloDiagnostics',{},'GET'),x=r.data||{};const url=document.getElementById('zalo-gateway-url-admin');if(url)url.value=x.gateway_url||'';if(box)box.innerHTML=`Gateway: <b>${escapeHtml(x.gateway_reachable?'Kết nối được':'Chưa kết nối')}</b><br>Backend key: <code>${escapeHtml(x.key_fingerprint||'')}</code> · Python key: <code>${escapeHtml(x.gateway_key_fingerprint||'chưa đọc được')}</code><br>Khớp khóa: <b style="color:${x.key_match===false?'#B91C1C':'#15803D'}">${x.key_match===false?'KHÔNG':'Có/Chưa xác định'}</b><br>${escapeHtml(x.message||'')}`;}catch(e){if(box)box.textContent=e.message;}
+    const box=document.getElementById('zalo-diag-box');
+    try{
+      const r=await callAPI('getZaloDiagnostics',{},'GET'),x=r.data||{};
+      const url=document.getElementById('zalo-gateway-url-admin');if(url)url.value=x.gateway_url||'';
+      if(box)box.innerHTML=`Gateway: <b style="color:${x.gateway_reachable?'#15803D':'#B91C1C'}">${escapeHtml(x.gateway_reachable?'Kết nối được':'Chưa kết nối')}</b><br>Phiên bản Python: <b>${escapeHtml(x.gateway_version||'chưa xác định')}</b> · Chrome/Zalo: <b style="color:${x.browser_alive?'#15803D':'#B45309'}">${x.browser_alive?'Sẵn sàng':'Chưa sẵn sàng'}</b><br>${escapeHtml(x.message||'')}`;
+    }catch(e){if(box)box.textContent=e.message;}
   }
   async function saveZaloGatewayUrlAdmin(){const gateway_url=document.getElementById('zalo-gateway-url-admin')?.value.trim()||'';try{await callAPI('saveZaloGatewayConfig',{gateway_url},'POST');showToast('Đã lưu Gateway URL.');await loadZaloDiagnostics();}catch(e){showError(e);}}
-  async function syncZaloSecurityAdmin(){if(!confirm('Đồng bộ lại khóa bảo mật Zalo theo bộ V4.17? Sau đó cần thay zalo_server.py và khoi_dong.bat V4.17 và khởi động lại Gateway.'))return;try{const r=await callAPI('resetZaloSecurityV417',{},'POST');showToast('Đã đồng bộ khóa trên Apps Script. Hãy khởi động lại zalo_server.py và khoi_dong.bat V4.17.');await loadZaloDiagnostics();}catch(e){showError(e);}}
+  async function syncZaloSecurityAdmin(){await loadZaloDiagnostics();}
   async function pushWaitingZaloAdmin(){try{loading(true);const r=await callAPI('processZaloQueue',{},'POST'),x=r.data||{};showToast(`Đã xử lý ${x.processed||0} tin; gửi ${x.sent||0}; còn chờ ${x.waiting_server||0}.`);await loadZaloDiagnostics();}catch(e){showError(e);}finally{loading(false);}}
 
   // HỌC LIỆU SỐ / BÀI TẬP
@@ -2136,7 +2141,7 @@
       const r=await callAPI('getSecurityStatus');const x=r.data||{};const box=document.getElementById('security-status-box');
       if(box)box.innerHTML=`<b>Phiên bản:</b> ${escapeHtml(x.version||'V4.8')} &nbsp;|&nbsp; <b>Phiên đăng nhập:</b> ${Number(x.session_hours||6)} giờ<br>`+
         `<b>Mật khẩu mặc định:</b> ${x.default_password_in_use?'<span style="color:var(--danger);font-weight:700">ĐANG DÙNG - nên đổi ngay</span>':'<span style="color:var(--success);font-weight:700">Đã đổi</span>'}<br>`+
-        `<b>API key Zalo:</b> ${x.gateway_api_key_configured?'✅':'❌'} &nbsp; <b>Wake key:</b> ${x.wake_key_configured?'✅':'❌'} &nbsp; <b>Gateway URL:</b> ${x.gateway_url_configured?'✅':'⚠️ chưa cấu hình'}`;
+        `<b>Kết nối Zalo:</b> Simple JSON POST &nbsp; <b>Wake key:</b> ${x.wake_key_configured?'✅':'❌'} &nbsp; <b>Gateway URL:</b> ${x.gateway_url_configured?'✅':'⚠️ chưa cấu hình'}`;
     }catch(e){console.warn(e);}
   }
   async function loadSecurityLogsAdmin(){
@@ -2153,10 +2158,10 @@
   }
 
   async function runSetupV4() {
-    if (!confirm('Chạy setup V4.17 Security để bổ sung lớp bảo mật và giữ nguyên dữ liệu hiện có?')) return;
+    if (!confirm('Chạy setup V4.18 Security để bổ sung lớp bảo mật và giữ nguyên dữ liệu hiện có?')) return;
     try {
       loading(true);
-      const r = await callAPI('setupSystemV417', {}, 'POST');
+      const r = await callAPI('setupSystemV418', {}, 'POST');
       const x = r.data || {};
       showToast(`${x.message || 'Setup hoàn tất.'}${x.duplicate_queue_rows_marked ? ` Đã khóa ${x.duplicate_queue_rows_marked} dòng tin trùng.` : ''}${x.duplicate_zalo_triggers_removed ? ` Đã xóa ${x.duplicate_zalo_triggers_removed} trigger Zalo trùng.` : ''}`);
     } catch(e) { showError(e); } finally { loading(false); }

@@ -4,13 +4,10 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>An Phúc Education | Cổng thông tin phụ huynh</title>
-  <meta name="theme-color" content="#0a2343">
-  <meta name="description" content="Cổng thông tin phụ huynh Trung tâm Toán An Phúc: tra cứu kết quả học tập, xem lịch học, làm bài kiểm tra và đăng ký học trực tuyến.">
+  <title>AN PHÚC EDUCATION | Hệ Thống Quản Lý V4.14</title>
   
   <!-- Font Be Vietnam Pro & Bootstrap Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://script.google.com">
   <link rel="dns-prefetch" href="//script.google.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -353,148 +350,57 @@
     .status-new { background:#FEF3C7; color:#92400E; }
     .status-approved { background:#DCFCE7; color:#166534; }
     @media(max-width:768px){ .public-shell{padding:10px 8px 24px}.chat-body{min-height:390px;max-height:62vh}.chat-bubble{max-width:94%}.chat-input-row{padding:10px}.assistant-head{padding:16px}.public-login-btn{height:38px;padding:0 12px} }
+  
 
-    /* =======================================================================
-       V5 | PHỤ HUYNH FIRST - hiện đại, ưu tiên tốc độ và màn hình nhỏ
-       ======================================================================= */
-    html { scroll-behavior:smooth; }
-    body { font-optical-sizing:auto; }
-    :focus-visible { outline:3px solid #f59e0b!important; outline-offset:3px; }
-    .visually-hidden { position:absolute!important;clip:rect(0,0,0,0);clip-path:inset(50%);height:1px;width:1px;overflow:hidden;white-space:nowrap; }
-    .public-shell { padding:26px 18px 58px; min-height:100svh; background:radial-gradient(circle at 8% 0%,#d6eeff 0,transparent 30%),radial-gradient(circle at 96% 8%,#e0f4ef 0,transparent 28%),linear-gradient(180deg,#f2f8ff 0%,#f8fbff 60%,#fff 100%); }
-    .public-wrap { max-width:1160px;margin:auto; }
-    .public-header { padding:18px 26px;margin-bottom:20px;box-shadow:0 10px 32px rgba(6,35,74,.15);border:1px solid rgba(255,255,255,.25);border-radius:21px;background:linear-gradient(115deg,#071b36 0%,#0c3c64 69%,#0d6b91 100%);position:relative;overflow:hidden; }
-    .public-header::after { content:'';position:absolute;right:-80px;top:-120px;width:280px;height:280px;border:1px solid rgba(255,255,255,.1);border-radius:50%;pointer-events:none; }
-    .public-header .logo-box { width:60px;height:60px;padding:4px;border-radius:17px;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.13); }
-    .public-header .logo-box img { object-fit:contain; }
-    .public-header .brand-title { letter-spacing:-.025em;font-size:20px;line-height:1.3; }
-    .public-header .brand-slogan { color:#bde9ff;letter-spacing:.015em; }
-    .public-header-actions { display:flex;gap:10px;align-items:center;background:transparent;border:0;padding:0;z-index:1; }
-    .portal-header-call { min-height:42px;display:inline-flex;align-items:center;gap:9px;color:#0a3250;background:#d3f5e9;padding:0 15px;border-radius:11px;text-decoration:none;font-weight:750;font-size:13px;white-space:nowrap; }
-    .portal-header-call:hover { background:#b9f4de; }
-    .public-header .public-login-btn { min-height:42px;height:auto;padding:0 15px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:white;border-radius:11px;font-size:13px;white-space:nowrap; }
-    .public-header .public-login-btn:hover { background:rgba(255,255,255,.18); }
-    .public-shell .assistant-card { border:1px solid #e4edf6;border-radius:24px;background:#fff;box-shadow:0 20px 75px rgba(15,53,93,.09);overflow:clip; }
-    .public-shell .assistant-head { position:relative;overflow:hidden;padding:38px 36px 22px;background:linear-gradient(125deg,#f3f9ff 0%,#e5f4ff 62%,#e6f8f0 100%);border-bottom:0; }
-    .public-shell .assistant-head::before { content:'';position:absolute;right:-40px;top:-75px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(21,147,203,.15) 0,rgba(21,147,203,0) 68%);pointer-events:none; }
-    .portal-eyebrow { display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:.13em;color:#0a6a8c;margin-bottom:12px; }
-    .public-shell .assistant-head h2 { font-size:clamp(27px,3.7vw,43px);line-height:1.22;letter-spacing:-.047em;font-weight:800;color:#0b2b4b;margin:0;position:relative; }
-    .public-shell .assistant-head h2 span { color:#0877aa; }
-    .public-shell .assistant-head p { max-width:700px;line-height:1.85;font-size:14px;color:#506784;margin:14px 0 0; }
-    .hero-points { display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-top:18px; }
-    .hero-points span { display:inline-flex;gap:7px;align-items:center;padding:7px 10px;border-radius:8px;background:rgba(255,255,255,.75);border:1px solid #cfe5f2;font-size:11px;font-weight:700;color:#27506d; }
-    .hero-points i { color:#079b90;font-size:13px; }
-    .public-shell .center-contact-strip { margin-top:23px;gap:12px 18px;border-top:1px solid #cce0ef;padding:15px 0 0;font-size:12px;color:#34546c; }
-    .public-shell .center-contact-strip span { line-height:1.5; }
-    .public-shell .center-contact-strip i { color:#0782a9; }
-    .public-shell .center-contact-strip a { color:#065c86;text-decoration:underline;text-underline-offset:3px; }
-    .portal-services-heading { display:flex;align-items:end;justify-content:space-between;gap:14px;padding:26px 30px 3px; }
-    .portal-kicker { font-size:10px;font-weight:800;letter-spacing:.13em;color:#1786ad; }
-    .portal-services-heading h3 { font-size:19px;margin:5px 0 0;color:#123450;letter-spacing:-.025em;font-weight:800; }
-    .portal-service-note { font-size:11px;color:#8495a5;white-space:nowrap; }
-    .public-shell .parent-service-tabs { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:stretch;padding:18px 30px 28px;border:0;background:#fff;position:static;overflow:visible; }
-    .public-shell .parent-service-tab { width:100%;min-width:0;min-height:118px;display:flex;gap:10px;align-items:flex-start;justify-content:flex-start;text-align:left;flex-wrap:nowrap;position:relative;padding:16px 13px;border:1px solid #dce8f3;border-radius:16px;background:#fbfdff;color:#174361;box-shadow:none;white-space:normal;transition:transform .16s ease,box-shadow .16s ease,background .16s ease,border .16s ease; }
-    .public-shell .parent-service-tab:hover { transform:translateY(-2px);box-shadow:0 10px 22px rgba(11,67,108,.1);background:#f3faff;border-color:#79bdde; }
-    .public-shell .parent-service-tab.active { background:linear-gradient(143deg,#0c669b,#083f76);border-color:#0b6091;color:#fff;box-shadow:0 10px 24px rgba(8,78,138,.2);transform:none; }
-    .public-shell .service-glyph {flex:0 0 36px;display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:#e5f4fd;font-size:20px;line-height:1;}
-    .public-shell .parent-service-tab.active .service-glyph { background:rgba(255,255,255,.15); }
-    .public-header .logo-box {color:#0a476f;font-size:21px;font-weight:900;}
-    .public-shell .parent-service-tab > i:first-child { flex:0 0 36px;display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:#e5f4fd;color:#0a7ea6;font-size:18px; }
-    .public-shell .parent-service-tab.active > i:first-child { background:rgba(255,255,255,.16);color:#fff; }
-    .public-shell .service-text { display:flex;flex-direction:column;gap:7px;padding-top:2px;min-width:0; }
-    .public-shell .service-text strong { font-size:12.5px;line-height:1.4;letter-spacing:-.025em; }
-    .public-shell .service-text small { font-size:10px;line-height:1.55;color:#728a9b;font-weight:500; }
-    .public-shell .parent-service-tab.active .service-text small { color:#ceeaff; }
-    .public-shell .service-arrow { position:absolute;bottom:11px;right:12px;font-size:12px;opacity:.45; }
-    .portal-workspace-label { padding:15px 31px;background:#f4f9fe;border-top:1px solid #e4edf7;border-bottom:1px solid #e4edf7;display:flex;align-items:center;justify-content:space-between;gap:12px;color:#2b607e;font-weight:800;font-size:12px; }
-    .portal-workspace-label .bi-circle-fill { font-size:7px;color:#21bba8;margin-right:5px; }
-    .portal-live-note { font-size:9px;letter-spacing:.16em;color:#96a9bc; }
-    .public-shell .chat-body.parent-service-content { display:block;min-height:270px;max-height:none;overflow:visible;background:linear-gradient(180deg,#f8fbff,#fff);padding:27px 30px 30px; }
-    .public-shell .parent-module-card { border:1px solid #e0eaf4;border-radius:17px;padding:23px;box-shadow:0 5px 24px rgba(31,75,109,.035); }
-    .public-shell .parent-module-title h3 { font-size:19px;color:#113b5a;line-height:1.5; }
-    .public-shell .parent-module-title p { font-size:12px;line-height:1.8; }
-    .public-shell .parent-module-badge { background:#def9f0;color:#0c836b; }
-    .public-shell .portal-grade-btn { min-width:0;border-radius:11px;flex:1; }
-    .public-shell .portal-grade-btn.active { background:#0b6091;border-color:#0b6091; }
-    .public-shell .portal-empty-state { padding:38px 20px;border:1px dashed #a4c9e3;border-radius:13px;background:#f7fbfe;line-height:1.8; }
-    .public-shell .portal-empty-state i { color:#0d94ba; }
-    .public-shell .chat-input-row { display:flex;align-items:center;position:relative;padding:15px 30px 24px;gap:10px;background:#fff;border-top:1px solid #e7eef6; }
-    .public-shell .chat-input-leading { color:#90a8ba;position:absolute;left:46px;font-size:20px;pointer-events:none; }
-    .public-shell .chat-input-row input { height:52px;border-radius:12px;padding:0 14px 0 45px;border-color:#d5e4f0;background:#f9fcff;font-size:13px; }
-    .public-shell .chat-input-row input:focus { background:#fff;border-color:#2294be;box-shadow:0 0 0 3px rgba(40,147,196,.12); }
-    .public-shell .chat-input-row button { height:52px;border-radius:12px;background:#0b6698;min-width:100px;justify-content:center; }
-    .public-shell .chat-input-row button:hover { background:#064873; }
-    .public-shell .chat-row.bot .chat-bubble { border-radius:14px 14px 14px 3px;background:#f5faff;color:#263e52;border-color:#dce9f4; }
-    .public-shell .chat-row.user .chat-bubble { border-radius:14px 14px 3px 14px;background:#0c6695; }
-    .public-shell .chat-bubble { word-break:break-word;overflow-wrap:anywhere;max-width:100%; }
-    .public-shell .chat-card { border-radius:14px;border-color:#deebf4; }
-    .public-shell .portal-subtab { border-radius:10px; }
-    .public-shell .portal-subtab.active { background:#0b6091;border-color:#0b6091; }
-    .public-shell input, .public-shell select { max-width:100%; }
-    .public-shell .exam-catalog-title { gap:12px; }
-    .portal-loading i { animation:portal-rotate 1.5s linear infinite; }
-    @keyframes portal-rotate { to { transform:rotate(360deg); } }
-    @media(max-width:1000px) {
-      .public-shell .parent-service-tabs { grid-template-columns:repeat(2,minmax(0,1fr)); }
-      .public-shell .parent-service-tab { min-height:96px; }
-      .public-shell .service-text strong { font-size:14px; }
-      .public-shell .service-text small { font-size:11px; }
+    /* ============================================================
+       V4.14 - PARENT PORTAL MOBILE-FIRST / MODERN EDUTECH
+       ============================================================ */
+    .public-shell{background:linear-gradient(180deg,#EAF3FF 0,#F8FAFC 52%,#FFFFFF 100%);padding:18px 14px 32px}
+    .public-wrap{max-width:1320px;margin:0 auto}
+    .public-header{margin-bottom:18px}
+    .parent-portal-v414{display:grid;grid-template-columns:360px minmax(0,1fr);gap:24px;align-items:stretch}
+    .parent-brand-panel{display:flex;flex-direction:column;gap:14px}
+    .parent-brand-hero{padding:26px;border-radius:24px;color:#fff;background:linear-gradient(135deg,#0f4c81,#2563eb);box-shadow:0 20px 45px rgba(15,76,129,.22);position:relative;overflow:hidden}
+    .parent-brand-hero:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:rgba(255,255,255,.10);right:-75px;top:-70px}
+    .parent-brand-icon{width:54px;height:54px;border-radius:16px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:27px;margin-bottom:18px;backdrop-filter:blur(8px)}
+    .parent-brand-kicker{font-size:12px;font-weight:800;letter-spacing:1.2px;color:#BFDBFE}
+    .parent-brand-hero h2{font-size:25px;line-height:1.25;margin:6px 0 8px}
+    .parent-brand-hero p{margin:0;color:#DBEAFE;font-size:13.5px;line-height:1.65}
+    .parent-slogan{margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.22);font-weight:700;font-size:13px}
+    .parent-hub-title{font-weight:800;color:#334155;font-size:13px;margin:2px 2px -2px}
+    .parent-quick-hub{display:flex;flex-direction:column;gap:9px}
+    .parent-hub-action{width:100%;display:grid;grid-template-columns:46px 1fr 20px;gap:11px;align-items:center;text-align:left;border:1px solid #DCE7F5;background:#fff;border-radius:16px;padding:11px 12px;font-family:inherit;color:#1E293B;cursor:pointer;box-shadow:0 5px 18px rgba(15,76,129,.05);transition:.18s ease}
+    .parent-hub-action:hover,.parent-hub-action.active{transform:translateY(-1px);border-color:#93C5FD;box-shadow:0 10px 22px rgba(37,99,235,.10)}
+    .parent-hub-action b{display:block;font-size:13.5px}.parent-hub-action small{display:block;color:#64748B;font-size:11.5px;margin-top:2px}.parent-hub-action>i{color:#94A3B8}
+    .hub-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:18px}.hub-icon.blue{background:#DBEAFE;color:#2563EB}.hub-icon.teal{background:#CCFBF1;color:#0F766E}.hub-icon.amber{background:#FEF3C7;color:#B45309}.hub-icon.purple{background:#EDE9FE;color:#7C3AED}
+    .parent-contact-card{background:#fff;border:1px solid #DCE7F5;border-radius:18px;padding:15px;display:grid;gap:9px;box-shadow:0 5px 18px rgba(15,76,129,.05);font-size:12.5px;color:#475569}.parent-contact-card>div{display:flex;gap:8px;align-items:flex-start}.parent-contact-card i{color:#2563EB;margin-top:2px}.parent-contact-card a{color:#1D4ED8;text-decoration:none;font-weight:700}.parent-map-link{display:inline-flex!important;gap:7px;align-items:center;justify-content:center;margin-top:3px;padding:9px 12px;border-radius:11px;background:#EFF6FF;color:#1D4ED8!important}
+    .parent-chat-app{min-width:0;background:#fff;border:1px solid #DCE7F5;border-radius:24px;box-shadow:0 18px 45px rgba(15,76,129,.10);overflow:hidden;display:flex;flex-direction:column;min-height:690px}
+    .parent-chat-toolbar{height:72px;padding:0 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #E2E8F0;background:linear-gradient(180deg,#FFFFFF,#F8FBFF)}
+    .assistant-avatar{width:43px;height:43px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2563EB,#4F46E5);color:#fff;font-size:20px;box-shadow:0 8px 18px rgba(37,99,235,.22)}
+    .assistant-title{display:flex;flex-direction:column;min-width:0}.assistant-title b{font-size:15px;color:#0F172A}.assistant-title span{font-size:11.5px;color:#64748B}.assistant-title span i{font-size:7px;color:#16A34A;margin-right:5px}
+    .mobile-exam-btn{margin-left:auto;border:1px solid #DDD6FE;background:#F5F3FF;color:#6D28D9;border-radius:999px;padding:8px 11px;font-family:inherit;font-weight:750;font-size:12px;cursor:pointer;display:none}
+    .public-api-status{margin:9px 14px 0;padding:8px 11px;border-radius:10px;font-size:12px}
+    .chat-body.parent-service-content{flex:1;min-height:0;max-height:none;overflow-y:auto;padding:20px;background:linear-gradient(180deg,#F8FBFF,#FFFFFF);scroll-behavior:smooth}
+    .chat-row{display:flex;width:100%;margin:4px 0 10px}.chat-row.user{justify-content:flex-end}.chat-bubble{max-width:min(760px,88%);padding:12px 14px;border-radius:17px;line-height:1.55;box-shadow:0 3px 12px rgba(15,23,42,.05)}.chat-row.bot .chat-bubble{background:#fff;border:1px solid #E2E8F0;border-top-left-radius:6px}.chat-row.user .chat-bubble{background:linear-gradient(135deg,#2563EB,#4F46E5);color:#fff;border-top-right-radius:6px}
+    .typing-bubble{display:inline-flex!important;align-items:center;gap:5px;min-width:62px}.typing-dot{width:7px;height:7px;border-radius:50%;background:#94A3B8;animation:typingPulse 1s infinite ease-in-out}.typing-dot:nth-child(2){animation-delay:.15s}.typing-dot:nth-child(3){animation-delay:.3s}@keyframes typingPulse{0%,60%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-4px);opacity:1}}
+    .parent-chat-dock{border-top:1px solid #E2E8F0;background:#fff;position:relative;z-index:10}
+    .quick-reply-strip{display:flex;gap:8px;padding:10px 14px 4px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch}.quick-reply-strip::-webkit-scrollbar{display:none}.quick-reply-strip button{flex:0 0 auto;border:1px solid #BFDBFE;background:#F8FBFF;color:#1D4ED8;border-radius:999px;padding:9px 12px;font-family:inherit;font-size:12px;font-weight:750;cursor:pointer}.quick-reply-strip button:hover{background:#EFF6FF}
+    .chat-input-row{display:flex;gap:9px;padding:9px 14px 14px;border-top:0;background:#fff}.chat-input-row input{flex:1;min-width:0;border-radius:14px}.parent-send-btn{border-radius:14px;min-width:94px;justify-content:center}
+    .parent-welcome-card{max-width:680px;margin:16px auto;padding:24px;border:1px solid #DBEAFE;border-radius:20px;background:linear-gradient(135deg,#FFFFFF,#F0F7FF);text-align:center}.parent-welcome-card .welcome-icon{width:62px;height:62px;border-radius:20px;margin:0 auto 13px;background:#DBEAFE;color:#2563EB;display:flex;align-items:center;justify-content:center;font-size:28px}.parent-welcome-card h3{margin:0;color:#0F4C81;font-size:20px}.parent-welcome-card p{color:#64748B;font-size:13px;line-height:1.65;margin:8px auto 0;max-width:520px}
+    .student-report-card{background:#fff;border:1px solid #DCE7F5;border-radius:20px;overflow:hidden;box-shadow:0 12px 28px rgba(15,76,129,.08);margin-top:8px}.student-report-head{padding:18px;background:linear-gradient(135deg,#EFF6FF,#F0FDFA);display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.student-report-head h3{margin:0;color:#0F4C81;font-size:20px}.student-report-meta{font-size:12px;color:#64748B;margin-top:4px}.student-class-badge{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;background:#2563EB;color:#fff;font-weight:800;font-size:12px}.student-report-section{padding:15px 18px;border-top:1px solid #EEF2F7}.student-section-title{display:flex;align-items:center;gap:7px;font-weight:800;color:#334155;font-size:13px;margin-bottom:10px}.student-section-title i{color:#2563EB}.student-schedule-card{background:#F8FBFF;border:1px solid #DBEAFE;border-radius:13px;padding:11px 13px;margin-bottom:8px}.student-schedule-row{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:12.5px;margin:4px 0}.student-schedule-row b{color:#0F4C81}
+    .student-mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.student-mini-stat{padding:12px;border-radius:13px;border:1px solid transparent}.student-mini-stat span{display:block;font-size:11px;color:#64748B}.student-mini-stat strong{display:block;font-size:20px;margin-top:3px}.student-mini-stat.blue{background:#EFF6FF;border-color:#DBEAFE;color:#1D4ED8}.student-mini-stat.warn{background:#FFF7ED;border-color:#FED7AA;color:#C2410C}.student-mini-stat.purple{background:#F5F3FF;border-color:#DDD6FE;color:#6D28D9}
+    .score-table{width:100%;border-collapse:collapse;font-size:12px}.score-table th{background:#F8FAFC;text-transform:none;font-size:11px;padding:9px}.score-table td{padding:9px;height:auto}.score-chip{display:inline-flex;align-items:center;justify-content:center;min-width:44px;padding:5px 8px;border-radius:999px;font-weight:800}.score-high{background:#DCFCE7;color:#16A34A}.score-mid{background:#DBEAFE;color:#2563EB}.score-low{background:#FFEDD5;color:#D97706}
+    .tuition-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tuition-panel{border-radius:13px;padding:11px;border:1px solid #E2E8F0;background:#F8FAFC}.tuition-panel h4{margin:0 0 7px;font-size:12.5px}.tuition-item{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-top:1px dashed #E2E8F0;font-size:11.5px}.tuition-item:first-of-type{border-top:0}.tuition-paid h4{color:#166534}.tuition-unpaid h4{color:#B45309}.tuition-ok{color:#16A34A}.tuition-reminder{display:inline-flex;padding:4px 7px;border-radius:999px;background:#FEF3C7;color:#92400E;font-weight:750}
+    .schedule-public-shell{background:#fff;border:1px solid #DCE7F5;border-radius:18px;padding:16px}.schedule-grade-pills{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px}.schedule-grade-pills button{border:1px solid #BFDBFE;background:#EFF6FF;color:#1D4ED8;border-radius:999px;padding:8px 12px;font-family:inherit;font-weight:750;cursor:pointer}.schedule-grade-pills button.active{background:#2563EB;color:#fff;border-color:#2563EB}.schedule-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.schedule-class-card{border:1px solid #E2E8F0;border-radius:15px;padding:13px;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.04)}.schedule-class-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px}.schedule-class-head b{color:#0F4C81}.status-open{background:#DCFCE7;color:#166534}.status-full{background:#E2E8F0;color:#475569}.schedule-status-badge{padding:5px 7px;border-radius:999px;font-size:10.5px;font-weight:800}.schedule-line{font-size:12px;color:#475569;margin:5px 0}.schedule-line i{color:#2563EB;width:18px;display:inline-block}
+    .registration-card{background:#fff;border:1px solid #DCE7F5;border-radius:18px;padding:18px}.registration-guide{background:#F8FBFF;border-left:4px solid #2563EB;border-radius:11px;padding:12px 13px;color:#475569;font-size:12.5px;line-height:1.65;margin-bottom:13px}.registration-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.registration-form-grid .full{grid-column:1/-1}.honeypot-field{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+    .login-modal-card{max-width:430px!important;text-align:center;padding:30px!important}.login-shield{width:62px;height:62px;border-radius:20px;margin:0 auto 12px;background:linear-gradient(135deg,#DBEAFE,#EDE9FE);color:#2563EB;display:flex;align-items:center;justify-content:center;font-size:28px}.login-modal-card h3{margin:0;color:#0F4C81;font-size:21px}.login-subtitle{color:#64748B;font-size:12px;line-height:1.55;margin:7px 0 20px}.login-modal-card .row{text-align:left}.login-field{height:48px;border:1px solid #E2E8F0;border-radius:11px;display:flex;align-items:center;background:#fff}.login-field>i{width:42px;color:#94A3B8}.login-field input{border:0!important;box-shadow:none!important;width:100%;height:46px;padding-left:0}.login-actions{display:flex;justify-content:flex-end;gap:9px}.login-cancel{background:#F1F5F9;color:#334155}.login-security-note{margin-top:15px;padding:10px;border-radius:10px;background:#F8FAFC;color:#64748B;font-size:11px;text-align:left}
+    @media(max-width:992px){.parent-portal-v414{grid-template-columns:310px minmax(0,1fr);gap:16px}.parent-brand-hero{padding:21px}.parent-chat-app{min-height:660px}}
+    @media(max-width:768px){
+      .public-shell{padding:8px 0 0;background:#fff}.public-wrap{max-width:none}.public-header{margin:0 8px 8px;border-radius:14px;padding:12px}.public-header .logo-box{width:48px;height:48px}.public-header .brand-title{font-size:13px}.public-header .brand-slogan{font-size:11px}.public-login-btn{height:38px;padding:0 10px;font-size:12px}
+      .parent-portal-v414{display:block}.parent-brand-panel{display:none}.parent-chat-app{height:calc(100dvh - 90px);min-height:560px;border-radius:0;border-left:0;border-right:0;border-bottom:0;box-shadow:none}.parent-chat-toolbar{height:60px;padding:0 12px;position:sticky;top:0;z-index:12}.mobile-exam-btn{display:inline-flex;align-items:center;gap:5px}.chat-body.parent-service-content{padding:12px 10px 14px;min-height:0;max-height:none}.parent-chat-dock{position:sticky;bottom:0}.quick-reply-strip{padding:8px 10px 4px}.quick-reply-strip button{font-size:12px;padding:9px 11px}.chat-input-row{padding:7px 10px 10px}.parent-send-btn{min-width:50px;width:50px;padding:0}.parent-send-btn span{display:none}.chat-bubble{max-width:94%}.student-report-head{padding:14px}.student-report-section{padding:13px}.student-mini-stats{gap:6px}.student-mini-stat{padding:10px 8px}.student-mini-stat strong{font-size:17px}.tuition-grid{grid-template-columns:1fr}.registration-form-grid{grid-template-columns:1fr}.registration-form-grid .full{grid-column:auto}.schedule-card-grid{grid-template-columns:1fr}
+      #parent-portal input,#parent-portal select,#parent-portal textarea,#parent-portal button{font-size:16px!important}.parent-chat-toolbar button{font-size:13px!important}.quick-reply-strip button{font-size:13px!important}
     }
-    @media(max-width:640px) {
-      .public-shell { padding:9px 8px 32px; }
-      .public-header { padding:14px 13px;gap:12px;border-radius:15px;margin-bottom:10px;align-items:flex-start; }
-      .public-header .header-left { gap:10px; }
-      .public-header .logo-box { width:43px;height:43px;border-radius:11px; }
-      .public-header .brand-title { font-size:12px;line-height:1.4;letter-spacing:-.02em; }
-      .public-header .brand-slogan { font-size:10px;margin-top:3px; }
-      .public-header .header-right { align-self:stretch;justify-content:flex-end;width:100%; }
-      .public-header .public-login-btn,.portal-header-call { min-height:36px;font-size:11px;padding:0 10px; }
-      .public-shell .assistant-card { border-radius:16px; }
-      .public-shell .assistant-head { padding:24px 18px 18px; }
-      .portal-eyebrow { font-size:9px;margin-bottom:10px; }
-      .public-shell .assistant-head h2 { font-size:29px;line-height:1.27; }
-      .public-shell .assistant-head p { font-size:12px;line-height:1.8; }
-      .hero-points { gap:6px;margin-top:15px; }
-      .hero-points span { font-size:10px;padding:6px 8px; }
-      .public-shell .center-contact-strip { gap:7px 11px;margin-top:16px;font-size:10.5px; }
-      .portal-services-heading { padding:23px 16px 1px; }
-      .portal-services-heading h3 { font-size:17px; }
-      .portal-service-note,.portal-live-note { display:none; }
-      .public-shell .parent-service-tabs { grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:14px 13px 20px; }
-      .public-shell .parent-service-tab { min-height:120px;border-radius:12px;flex-direction:column;align-items:flex-start;gap:8px;padding:12px; }
-      .public-shell .parent-service-tab > i:first-child { width:33px;height:33px;flex-basis:33px;font-size:17px;border-radius:9px; }
-      .public-shell .service-text { gap:4px; }
-      .public-shell .service-text strong { font-size:12px; }
-      .public-shell .service-text small { font-size:9.5px;line-height:1.5; }
-      .public-shell .service-arrow { bottom:10px;right:9px; }
-      .portal-workspace-label { padding:12px 16px;font-size:11px; }
-      .public-shell .chat-body.parent-service-content { min-height:230px;padding:14px 12px 20px; }
-      .public-shell .parent-module-card { padding:15px 12px;border-radius:13px; }
-      .public-shell .parent-module-title h3 { font-size:16px; }
-      .public-shell .portal-grade-row { grid-template-columns:repeat(4,minmax(0,1fr));gap:6px; }
-      .public-shell .portal-grade-btn { height:38px;font-size:11px; }
-      .public-shell .portal-subtabs { display:grid;grid-template-columns:1fr 1fr;gap:6px; }
-      .public-shell .portal-subtab { font-size:11px;padding:10px 6px; }
-      .public-shell .chat-input-row { padding:12px;gap:6px;position:static; }
-      .public-shell .chat-input-leading { left:25px;font-size:16px; }
-      .public-shell .chat-input-row input { height:48px;padding-left:34px;font-size:12px; }
-      .public-shell .chat-input-row button { height:48px;min-width:56px;padding:0 11px; }
-      .public-shell .chat-input-row button span { display:inline; }
-      .public-shell .chat-bubble { max-width:100%;font-size:12.5px; }
-      .public-shell .table-responsive { overflow:auto; }
-      .public-shell .table-responsive table { min-width:0; }
-      .public-shell .table-responsive td { padding:9px 11px 9px 43%;font-size:12px;text-align:right; }
-      .public-shell .table-responsive td::before { left:11px;width:37%;font-size:11px; }
-    }
-    @media (max-width:360px) {
-      .public-header .brand-title { font-size:11px; }
-      .public-shell .assistant-head h2 { font-size:25px; }
-      .public-shell .parent-service-tab { min-height:129px; }
-      .public-shell .portal-grade-row { grid-template-columns:repeat(3,minmax(0,1fr)); }
-    }
-    @media (prefers-reduced-motion:reduce) {
-      html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
-    }
+
   </style>
 </head>
 <body>
@@ -507,45 +413,63 @@
   <div class="public-wrap">
     <header class="app-header public-header">
       <div class="header-left">
-        <div class="logo-box"><img src="https://drive.google.com/thumbnail?id=1FNKbFgs2_2WOkb7hItnGW-uldrRQEFxM&sz=w200" alt="Logo An Phúc Education" loading="lazy" onerror="this.hidden=true;this.parentNode.insertAdjacentText('beforeend','AP')"></div>
+        <div class="logo-box"><img src="https://drive.google.com/thumbnail?id=1FNKbFgs2_2WOkb7hItnGW-uldrRQEFxM&sz=w200" alt="Logo"></div>
         <div>
           <h1 class="brand-title">TRUNG TÂM TOÁN AN PHÚC EDUCATION</h1>
           <p class="brand-slogan">"Vững kiến thức - Chắc tương lai"</p>
         </div>
       </div>
-      <div class="header-right public-header-actions">
-        <a class="portal-header-call" href="tel:0972466347" aria-label="Gọi cho Trung tâm"><i class="bi bi-telephone-outbound"></i><span>Gọi Trung tâm</span></a>
-        <button class="public-login-btn" type="button" onclick="openLoginModal()"><i class="bi bi-person-lock"></i> Giáo viên</button>
+      <div class="header-right" style="background:transparent;border:0;padding:0;">
+        <button class="public-login-btn" onclick="openLoginModal()"><i class="bi bi-person-lock"></i> Đăng nhập Giáo viên</button>
       </div>
     </header>
 
-    <section class="assistant-card">
-      <div class="assistant-head">
-        <div class="portal-eyebrow"><i class="bi bi-stars"></i> ĐỒNG HÀNH CÙNG PHỤ HUYNH</div>
-        <h2>Học tập rõ ràng.<br><span>Tương lai vững vàng.</span></h2>
-        <p>Thời khóa biểu, kết quả học tập, bài kiểm tra và đăng ký lớp học — tất cả trong một nơi, dễ xem trên điện thoại.</p>
-        <div class="hero-points"><span><i class="bi bi-lightning-charge-fill"></i> Tra cứu nhanh</span><span><i class="bi bi-shield-check"></i> Thông tin có xác thực</span><span><i class="bi bi-phone"></i> Thân thiện di động</span></div>
-        <div class="center-contact-strip">
-          <span><i class="bi bi-geo-alt-fill"></i> 30/11D Phước Tường, Phước Long, Nam Nha Trang</span>
-          <span><i class="bi bi-telephone-fill"></i> Điện thoại/Zalo: <a href="tel:0972466347">0972466347</a></span>
-          <a href="https://www.google.com/maps/search/?api=1&amp;query=30%2F11D%20Ph%C6%B0%E1%BB%9Bc%20T%C6%B0%E1%BB%9Dng%2C%20Ph%C6%B0%E1%BB%9Bc%20Long%2C%20Nam%20Nha%20Trang" target="_blank" rel="noopener noreferrer"><i class="bi bi-map-fill"></i> Mở Google Maps</a>
+    <section id="parent-portal" class="parent-portal-v414">
+      <aside class="parent-brand-panel">
+        <div class="parent-brand-hero">
+          <div class="parent-brand-icon"><i class="bi bi-mortarboard-fill"></i></div>
+          <div class="parent-brand-kicker">AN PHÚC EDUCATION</div>
+          <h2>Đồng hành cùng phụ huynh</h2>
+          <p>Tra cứu nhanh, xem lịch học và kết nối với Trung tâm trong một giao diện an toàn, dễ sử dụng.</p>
+          <div class="parent-slogan">“Vững kiến thức - Chắc tương lai”</div>
         </div>
-      </div>
-      <div class="portal-services-heading"><div><span class="portal-kicker">DỊCH VỤ TRỰC TUYẾN</span><h3>Hôm nay phụ huynh cần gì?</h3></div><span class="portal-service-note"><i class="bi bi-hand-index-thumb"></i> Chạm để chọn</span></div>
-      <nav class="parent-service-tabs" aria-label="Chức năng phụ huynh">
-        <button type="button" aria-pressed="true" class="parent-service-tab active" data-parent-service="exam" onclick="selectParentService('exam')"><span class="service-glyph" aria-hidden="true">📘</span><span class="service-text"><strong>Kiểm tra trực tuyến</strong><small>Ôn tập, luyện đề</small></span><span class="service-arrow" aria-hidden="true">↗</span></button>
-        <button type="button" aria-pressed="false" class="parent-service-tab" data-parent-service="lookup" onclick="selectParentService('lookup')"><span class="service-glyph" aria-hidden="true">📈</span><span class="service-text"><strong>Kết quả học tập</strong><small>Điểm số, chuyên cần, học phí</small></span><span class="service-arrow" aria-hidden="true">↗</span></button>
-        <button type="button" aria-pressed="false" class="parent-service-tab" data-parent-service="schedule" onclick="selectParentService('schedule')"><span class="service-glyph" aria-hidden="true">🗓️</span><span class="service-text"><strong>Thời khóa biểu</strong><small>Lớp học, giờ và phòng học</small></span><span class="service-arrow" aria-hidden="true">↗</span></button>
-        <button type="button" aria-pressed="false" class="parent-service-tab" data-parent-service="registration" onclick="selectParentService('registration')"><span class="service-glyph" aria-hidden="true">✍️</span><span class="service-text"><strong>Đăng ký học</strong><small>Để lại thông tin tư vấn</small></span><span class="service-arrow" aria-hidden="true">↗</span></button>
-      </nav>
-      <div class="portal-workspace-label"><span><i class="bi bi-circle-fill"></i> Nội dung dành cho phụ huynh</span><span class="portal-live-note">AN PHÚC EDUCATION</span></div>
-      <section id="chat-body" class="chat-body parent-service-content" aria-label="Nội dung chức năng đang chọn"></section>
-      <form class="chat-input-row" onsubmit="event.preventDefault();sendChatMessage();">
-        <label class="visually-hidden" for="chat-input">Nhập câu hỏi hoặc thông tin tra cứu</label>
-        <i class="bi bi-chat-left-dots chat-input-leading" aria-hidden="true"></i>
-        <input id="chat-input" type="text" maxlength="600" autocomplete="off" placeholder="Hỏi Trung tâm, ví dụ: lịch học khối 8...">
-        <button class="btn btn-primary" type="submit"><i class="bi bi-send-fill"></i><span>Gửi</span></button>
-      </form>
+
+        <div class="parent-hub-title">Chọn nhanh</div>
+        <div class="parent-quick-hub">
+          <button class="parent-hub-action" data-parent-service="lookup" onclick="selectParentService('lookup')"><span class="hub-icon blue"><i class="bi bi-search"></i></span><span><b>Tra cứu học tập & Học phí</b><small>Xác thực SĐT trước khi xem</small></span><i class="bi bi-chevron-right"></i></button>
+          <button class="parent-hub-action" data-parent-service="schedule" onclick="selectParentService('schedule')"><span class="hub-icon teal"><i class="bi bi-calendar3"></i></span><span><b>Xem Thời khóa biểu</b><small>Lịch tất cả lớp theo khối</small></span><i class="bi bi-chevron-right"></i></button>
+          <button class="parent-hub-action" data-parent-service="registration" onclick="selectParentService('registration')"><span class="hub-icon amber"><i class="bi bi-clipboard2-check"></i></span><span><b>Đăng ký học mới</b><small>Gửi thông tin để được tư vấn</small></span><i class="bi bi-chevron-right"></i></button>
+          <button class="parent-hub-action" data-parent-service="exam" onclick="selectParentService('exam')"><span class="hub-icon purple"><i class="bi bi-pencil-square"></i></span><span><b>Kiểm tra trực tuyến</b><small>Kho mã đề theo khối</small></span><i class="bi bi-chevron-right"></i></button>
+        </div>
+
+        <div class="parent-contact-card">
+          <div><i class="bi bi-geo-alt-fill"></i><span>30/11D Phước Tường, Phước Long, Nam Nha Trang</span></div>
+          <div><i class="bi bi-telephone-fill"></i><a href="tel:0972466347">0972466347</a></div>
+          <div><i class="bi bi-chat-dots-fill"></i><span>Zalo: 0972466347</span></div>
+          <a class="parent-map-link" href="https://www.google.com/maps/search/?api=1&amp;query=30%2F11D%20Ph%C6%B0%E1%BB%9Bc%20T%C6%B0%E1%BB%9Dng%2C%20Ph%C6%B0%E1%BB%9Bc%20Long%2C%20Nam%20Nha%20Trang" target="_blank" rel="noopener noreferrer"><i class="bi bi-map"></i> Mở Google Maps</a>
+        </div>
+      </aside>
+
+      <main class="parent-chat-app">
+        <div class="parent-chat-toolbar">
+          <div class="assistant-avatar"><i class="bi bi-stars"></i></div>
+          <div class="assistant-title"><b>Trợ lý An Phúc</b><span><i class="bi bi-circle-fill"></i> Sẵn sàng hỗ trợ</span></div>
+          <button class="mobile-exam-btn" onclick="selectParentService('exam')"><i class="bi bi-pencil-square"></i> Kiểm tra</button>
+        </div>
+        <div id="public-api-status" class="public-api-status" style="display:none"></div>
+        <div id="chat-body" class="chat-body parent-service-content" aria-live="polite"></div>
+        <div class="parent-chat-dock">
+          <div class="quick-reply-strip" aria-label="Chọn nhanh">
+            <button onclick="selectParentService('lookup')"><i class="bi bi-search"></i> Tra cứu học tập & Học phí</button>
+            <button onclick="selectParentService('schedule')"><i class="bi bi-calendar3"></i> Xem Thời khóa biểu</button>
+            <button onclick="selectParentService('registration')"><i class="bi bi-clipboard2-check"></i> Đăng ký học mới</button>
+          </div>
+          <form id="parent-chat-form" class="chat-input-row" onsubmit="event.preventDefault();sendChatMessage();">
+            <input id="chat-input" type="text" autocomplete="off" placeholder="Nhập tên học sinh hoặc câu hỏi dành cho Trung tâm...">
+            <button class="btn btn-primary parent-send-btn" type="submit" aria-label="Gửi"><i class="bi bi-send-fill"></i><span>Gửi</span></button>
+          </form>
+        </div>
+      </main>
     </section>
   </div>
 </div>
@@ -555,7 +479,7 @@
   <header class="app-header">
     <div class="header-left">
       <div class="logo-box">
-        <img src="https://drive.google.com/thumbnail?id=1FNKbFgs2_2WOkb7hItnGW-uldrRQEFxM&sz=w200" alt="Logo An Phúc Education" loading="lazy" onerror="this.hidden=true;this.parentNode.insertAdjacentText('beforeend','AP')">
+        <img src="https://drive.google.com/thumbnail?id=1FNKbFgs2_2WOkb7hItnGW-uldrRQEFxM&sz=w200" alt="Logo">
       </div>
       <div>
         <h1 class="brand-title">HỆ THỐNG QUẢN LÝ TRUNG TÂM TOÁN AN PHÚC</h1>
@@ -874,11 +798,11 @@
 
     <!-- PANEL CÀI ĐẶT -->
     <div id="st" class="panel">
-      <h3 class="section-title"><i class="bi bi-sliders"></i> Cài đặt Hệ thống V4.11</h3>
+      <h3 class="section-title"><i class="bi bi-sliders"></i> Cài đặt Hệ thống V4.14</h3>
       <div style="background:#EFF6FF;border:1px solid #BFDBFE;padding:20px;border-radius:var(--radius-md);margin-bottom:20px;">
-        <h4 style="color:var(--primary-dark);margin-bottom:8px;"><i class="bi bi-database-check"></i> CẬP NHẬT CẤU TRÚC & BẢO MẬT V4.11</h4>
+        <h4 style="color:var(--primary-dark);margin-bottom:8px;"><i class="bi bi-database-check"></i> CẬP NHẬT CẤU TRÚC & BẢO MẬT V4.14</h4>
         <p style="color:var(--text-muted);margin-bottom:12px;">Chạy một lần để giữ toàn bộ bảo mật V4.8 và bổ sung nhập dữ liệu Kiểm tra trực tiếp từ Excel, liên kết bài kiểm tra và thông báo đăng ký về Zalo Trung tâm.</p>
-        <button class="btn btn-primary" onclick="runSetupV4()"><i class="bi bi-tools"></i> Chạy setup V4.11</button>
+        <button class="btn btn-primary" onclick="runSetupV4()"><i class="bi bi-tools"></i> Chạy setup V4.14</button>
       </div>
 
 
@@ -900,6 +824,7 @@
         <div class="report-actions">
           <button class="btn btn-primary" onclick="document.getElementById('exam-import-file').click()"><i class="bi bi-upload"></i> Nhập Excel vào Google Sheet</button>
           <button class="btn btn-success" onclick="saveExamSettingsAdmin()"><i class="bi bi-link-45deg"></i> Lưu link trang kiểm tra</button>
+          <button class="btn btn-primary" onclick="checkPublicBackend_(true)"><i class="bi bi-activity"></i> Kiểm tra Backend công khai</button>
         </div>
         <div class="mini-note"><b>Cột code</b> có thể là mã đề (VD: D6C1B1) hoặc một URL https:// đầy đủ. Nếu là URL, học sinh bấm sẽ mở trực tiếp URL đó.</div>
       </div>
@@ -918,7 +843,7 @@
         <div style="margin-top:16px;font-weight:700">Đổi mật khẩu quản trị</div>
         <div class="schedule-editor-grid" style="margin-top:8px">
           <input id="sec-current-pass" type="password" autocomplete="current-password" placeholder="Mật khẩu hiện tại">
-          <input id="sec-new-pass" type="password" autocomplete="new-password" placeholder="Mật khẩu mới (từ 12 ký tự)">
+          <input id="sec-new-pass" type="password" autocomplete="new-password" placeholder="Mật khẩu mới (>=10 ký tự)">
           <input id="sec-new-pass2" type="password" autocomplete="new-password" placeholder="Nhập lại mật khẩu mới">
         </div>
         <div class="mini-note" style="margin-top:6px">Mật khẩu mới cần có chữ hoa, chữ thường, số và ký tự đặc biệt. Sau khi đổi, mọi phiên đăng nhập cũ sẽ bị vô hiệu.</div>
@@ -938,14 +863,16 @@
 
 <!-- MODAL ĐĂNG NHẬP GIÁO VIÊN -->
 <div id="modal-login" class="modal">
-  <div class="modal-box" style="max-width:420px">
-    <h3 style="margin-bottom:8px;color:#0F4C81"><i class="bi bi-shield-lock-fill"></i> Đăng nhập Giáo viên</h3>
-    <p class="mini-note" style="margin-bottom:18px">Phiên đăng nhập được xác thực tại Google Apps Script, không chỉ ẩn/hiện giao diện trên trình duyệt.</p>
+  <div class="modal-box login-modal-card">
+    <div class="login-shield"><i class="bi bi-shield-lock-fill"></i></div>
+    <h3>Đăng nhập Giáo viên</h3>
+    <p class="login-subtitle">Xác thực được thực hiện tại máy chủ. Phiên đăng nhập quản trị có thời hạn 12 giờ.</p>
     <form onsubmit="event.preventDefault();loginAdmin()">
-      <div class="row"><label>Tài khoản</label><input id="login-user" type="text" value="admin" autocomplete="username" style="width:100%" required></div>
-      <div class="row"><label>Mật khẩu</label><input id="login-pass" type="password" autocomplete="current-password" style="width:100%" required></div>
-      <div style="display:flex;justify-content:flex-end;gap:9px"><button type="button" class="btn" style="background:#F1F5F9" onclick="closeLoginModal()">Hủy</button><button type="submit" class="btn btn-primary">Đăng nhập</button></div>
+      <div class="row"><label for="login-user">Tài khoản</label><div class="login-field"><i class="bi bi-person"></i><input id="login-user" type="text" value="admin" autocomplete="username" required></div></div>
+      <div class="row"><label for="login-pass">Mật khẩu</label><div class="login-field"><i class="bi bi-key"></i><input id="login-pass" type="password" autocomplete="current-password" required></div></div>
+      <div class="login-actions"><button type="button" class="btn login-cancel" onclick="closeLoginModal()">Hủy</button><button type="submit" class="btn btn-primary"><i class="bi bi-box-arrow-in-right"></i> Đăng nhập</button></div>
     </form>
+    <div class="login-security-note"><i class="bi bi-info-circle"></i> API quản trị sẽ từ chối mọi yêu cầu không có token hợp lệ.</div>
   </div>
 </div>
 
@@ -978,7 +905,7 @@
   // ============================================
   // CẤU HÌNH API - LIÊN KẾT VỚI GOOGLE SHEET
   // ============================================
-  const API_URL = "https://script.google.com/macros/s/AKfycbwU6HmNvxO-gWHbA3rO7XOoh-F-SqWVMhCpMx6MOHNLIaqCDxyRK4xIVvS7BMX7XnsH/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbzkY16XBJNGKpS_Qo7tFIuIK92Tl3ZqkpfOgA9sBZBzexErTeYCfd7F_Q4kIGEwCSfO8w/exec";
   const CENTER_INFO = {
     address: '30/11D Phước Tường, Phước Long, Nam Nha Trang',
     phone: '0972466347',
@@ -1002,85 +929,74 @@
   let EXAM_STATE = { grade:'', type:'regular', launchBase:'' };
   const CLIENT_GET_CACHE = new Map();
   const TAB_LOADED = { hs:true, tk:false, ds:false, tl:false, st:false };
-  const PUBLIC_GET_ACTIONS = new Set(['validateAdminSession','getPublicSchedule','getPublicRegistrationInfo','getPublicExams','findParentStudentCandidates']);
-  const PUBLIC_POST_ACTIONS = new Set(['adminLogin','verifyParentStudent','submitRegistration']);
+  const PUBLIC_GET_ACTIONS = new Set(['validateAdminSession','getPublicBootstrap','getPublicSchedule','getPublicExams','getPublicSystemStatus','publicPing','publicFindStudentByName']);
+  const EXAM_STUDENT_URL = 'https://anphuceducation.netlify.app/student';
+  const PUBLIC_POST_ACTIONS = new Set(['adminLogin','publicVerifyStudentPhone','submitRegistration']);
+  const EXPECTED_BACKEND_VERSION='V4.14';
+  const PUBLIC_API_STATE={status:'unknown',version:'',message:''};
+  let CHAT_SEND_BUSY=false;
 
   function getAdminToken(){ try{return sessionStorage.getItem('ap_admin_token')||'';}catch(e){return'';} }
   function isAdminAuthenticated(){ try{return sessionStorage.getItem('ap_admin_auth')==='1' && !!getAdminToken();}catch(e){return false;} }
-  const CLIENT_ID_FALLBACK='browser_'+(window.crypto?.randomUUID?.()||Math.random().toString(36).slice(2));
   function getSecurityClientId(){
     try{
       let id=localStorage.getItem('ap48_client_id');
       if(!id){id=(window.crypto?.randomUUID?.()||('c_'+Date.now()+'_'+Math.random().toString(36).slice(2)));localStorage.setItem('ap48_client_id',id);}
       return id;
-    }catch(e){return CLIENT_ID_FALLBACK;}
+    }catch(e){return 'browser_'+Math.random().toString(36).slice(2);}
   }
   function clearClientApiCache(){ CLIENT_GET_CACHE.clear(); }
   function apiCacheKey(action,params){ return action+'|'+new URLSearchParams(params||{}).toString(); }
 
-  const CLIENT_INFLIGHT_GET = new Map();
-  // Mã quản trị KHÔNG được đặt vào URL (tránh access log, proxy logs, history).
+  function setPublicApiStatus_(kind,message){
+    const el=document.getElementById('public-api-status'); if(!el)return;
+    PUBLIC_API_STATE.status=kind; PUBLIC_API_STATE.message=message||'';
+    el.style.display='block';
+    el.style.borderColor=kind==='ok'?'#BBF7D0':kind==='warn'?'#FDE68A':'#FECACA';
+    el.style.background=kind==='ok'?'#F0FDF4':kind==='warn'?'#FFFBEB':'#FEF2F2';
+    el.style.color=kind==='ok'?'#166534':kind==='warn'?'#92400E':'#991B1B';
+    el.innerHTML=message;
+  }
+  async function rawPublicPing_(timeoutMs=7000){
+    const controller=new AbortController(),tid=setTimeout(()=>controller.abort(),timeoutMs);
+    try{
+      const u=API_URL+'?'+new URLSearchParams({action:'publicPing',_t:Date.now()}).toString();
+      const res=await fetch(u,{method:'GET',redirect:'follow',signal:controller.signal});
+      const txt=await res.text(); let j; try{j=JSON.parse(txt);}catch(e){throw new Error('Backend không trả JSON');}
+      if(!j||j.success===false)throw new Error(j?.message||'Backend lỗi');
+      return j;
+    } finally {clearTimeout(tid);}
+  }
+  async function checkPublicBackend_(showOk=false){
+    try{
+      const r=await rawPublicPing_(); const v=String(r?.data?.version||r?.meta?.version||''); PUBLIC_API_STATE.version=v;
+      if(v!==EXPECTED_BACKEND_VERSION){setPublicApiStatus_('warn',`⚠️ Giao diện ${EXPECTED_BACKEND_VERSION} đang kết nối Backend <b>${escapeHtml(v||'không xác định')}</b>. Hãy Deploy <b>New Version</b> của Code.gs V4.14 rồi tải lại trang.`);return false;}
+      if(showOk)setPublicApiStatus_('ok',`✅ Backend ${escapeHtml(v)} đang hoạt động bình thường.`); else {const el=document.getElementById('public-api-status');if(el)el.style.display='none';}
+      PUBLIC_API_STATE.status='ok';return true;
+    }catch(e){setPublicApiStatus_('error',`❌ Không kết nối được máy chủ Google Apps Script. Hãy kiểm tra <b>Deploy → Manage deployments → Execute as Me → Who has access: Anyone</b> và bảo đảm API_URL đang dùng đúng link <b>/exec</b>.`);return false;}
+  }
+
   async function callAPI(action, params = {}, method = 'GET') {
-    const payload={...(params||{})};
+    let url=API_URL; const options={method,redirect:'follow'}; const payload={...(params||{})};
     payload._client_id=getSecurityClientId();
-    const publicRead=PUBLIC_GET_ACTIONS.has(action);
-    const publicWrite=PUBLIC_POST_ACTIONS.has(action);
-    const privateRead=method==='GET'&&!publicRead;
-    const sessionCheck=action==='validateAdminSession';
-    const privateParentLookup=action==='findParentStudentCandidates'&&method==='GET';
-    // Không thay đổi contract chức năng: GET công khai vẫn GET; đọc bảo vệ chuyển POST.
-    const wireMethod=(privateRead||sessionCheck||privateParentLookup)?'POST':method;
-    const isPublic=(publicRead&&method==='GET')||(publicWrite&&method==='POST')||sessionCheck;
-    if(!isPublic){const token=getAdminToken();if(token)payload._auth_token=token;}
-    if(sessionCheck){const token=getAdminToken();if(token)payload._auth_token=token;}
-    // Mã tra cứu phụ huynh dùng một lần, không cache lại token sau khi xác thực.
-    const cacheable=method==='GET'&&!sessionCheck&&action!=='findParentStudentCandidates';
-    const key=cacheable?apiCacheKey(action,payload):'';
-    const now=Date.now();
-    if(key){
-      const hit=CLIENT_GET_CACHE.get(key);
-      if(hit&&hit.expires>now)return hit.value;
-      if(hit)CLIENT_GET_CACHE.delete(key);
-      if(CLIENT_INFLIGHT_GET.has(key))return CLIENT_INFLIGHT_GET.get(key);
-    }
-    const operation=(async()=>{
-      let url=API_URL;
-      const options={method:wireMethod,redirect:'follow',cache:'no-store',referrerPolicy:'no-referrer'};
-      if(wireMethod==='GET')url+='?'+new URLSearchParams({action,...payload}).toString();
-      else{
-        // text/plain giúp GAS nhận POST trực tiếp, không phát sinh preflight CORS.
-        options.headers={'Content-Type':'text/plain;charset=utf-8'};
-        options.body=JSON.stringify({action,...payload});
-      }
-      const controller=new AbortController(); options.signal=controller.signal;
-      const timeoutId=setTimeout(()=>controller.abort(),25000);
-      const started=performance.now(); let response;
-      try{response=await fetch(url,options);}
-      catch(e){if(e.name==='AbortError')throw new Error('Kết nối đang chậm. Vui lòng thử lại sau.');throw new Error('Không kết nối được tới hệ thống. Vui lòng kiểm tra mạng và thử lại.');}
-      finally{clearTimeout(timeoutId);}
-      if(!response.ok)throw new Error('Máy chủ tạm thời không sẵn sàng (HTTP '+response.status+').');
-      const text=await response.text(); let result;
-      try{result=JSON.parse(text);}catch(e){throw new Error('Phản hồi máy chủ không hợp lệ. Vui lòng thử lại.');}
-      if(result.success===false){
-        if(/Phiên đăng nhập/i.test(result.message||'')) logoutAdmin(false);
-        throw new Error(result.message||'Thao tác thất bại');
-      }
-      const totalMs=Math.round(performance.now()-started);
-      if(totalMs>1200)console.info('[API] '+action+': '+totalMs+' ms');
-      if(cacheable){
-        // Tránh lưu hàng trăm bộ lọc cũ trong bộ nhớ của điện thoại.
-        if(CLIENT_GET_CACHE.size>=80)CLIENT_GET_CACHE.delete(CLIENT_GET_CACHE.keys().next().value);
-        CLIENT_GET_CACHE.set(key,{value:result,expires:Date.now()+(publicRead?20000:10000)});
-      }else if(!privateRead&&!sessionCheck&&method==='POST'){
-        clearClientApiCache(); TAB_LOADED.tk=false;
-        try{sessionStorage.removeItem('anphuc_v48_initial');}catch(e){}
-        const qActions=new Set(['saveAttendance','sendTuitionMessage','sendBulkTuitionReminders','sendClassLessonReport','sendBulkClassLessonReports','sendStudentSituationReport','sendBulkStudentSituationReports','sendMultiMonthTuitionReminder','sendBulkMultiMonthTuitionReminders','saveScores','saveAndSendHomework','processZaloQueue','submitRegistration']);
-        if(qActions.has(action)&&isAdminAuthenticated())setTimeout(refreshZaloQueueStatus,350);
-      }
-      return result;
-    })();
-    if(key){CLIENT_INFLIGHT_GET.set(key,operation);try{return await operation;}finally{CLIENT_INFLIGHT_GET.delete(key);}}
-    return operation;
+    const isPublic=(method==='GET'&&PUBLIC_GET_ACTIONS.has(action))||(method==='POST'&&PUBLIC_POST_ACTIONS.has(action));
+    if(!isPublic){ const token=getAdminToken(); if(token) payload._auth_token=token; }
+    else if(action==='validateAdminSession'){ const token=getAdminToken(); if(token) payload._auth_token=token; }
+
+    const cacheKey=method==='GET'?apiCacheKey(action,payload):'',now=Date.now();
+    if(cacheKey){const hit=CLIENT_GET_CACHE.get(cacheKey);if(hit&&hit.expires>now)return hit.value;if(hit)CLIENT_GET_CACHE.delete(cacheKey);}
+    if(method==='GET') url+='?'+new URLSearchParams({action,...payload}).toString();
+    else{options.headers={'Content-Type':'text/plain;charset=utf-8'};options.body=JSON.stringify({action,...payload});}
+
+    const controller=new AbortController();options.signal=controller.signal;const timeoutId=setTimeout(()=>controller.abort(),isPublic?20000:30000);const started=performance.now();let response;
+    try{response=await fetch(url,options);}catch(e){if(e.name==='AbortError'){if(isPublic&&action!=='publicPing'){await checkPublicBackend_(false);if(PUBLIC_API_STATE.status==='ok')throw new Error('Backend đang kết nối nhưng tác vụ dữ liệu phản hồi quá chậm. Hãy chạy setupSystemV414() một lần rồi Deploy New Version.');}throw new Error('Không kết nối được máy chủ. Vui lòng kiểm tra trạng thái Backend ở đầu Cổng phụ huynh.');}throw e;}finally{clearTimeout(timeoutId);}
+    const text=await response.text();let result;try{result=JSON.parse(text);}catch(e){throw new Error('API không trả JSON. HTTP '+response.status+': '+text.slice(0,100));}
+    if(!response.ok)throw new Error(result.message||'HTTP '+response.status);
+    if(result.success===false){ if(/UNAUTHORIZED|Phiên đăng nhập/i.test(result.message||'')) logoutAdmin(false); throw new Error(result.message||'Thao tác thất bại'); }
+    const totalMs=Math.round(performance.now()-started);if((result.meta?.server_ms||totalMs)>800)console.info(`[V4.14] ${action}: server ${result.meta?.server_ms??'?'} ms, tổng ${totalMs} ms`);
+    if(method==='GET')CLIENT_GET_CACHE.set(cacheKey,{value:result,expires:Date.now()+12000});
+    else{clearClientApiCache();TAB_LOADED.tk=false;try{sessionStorage.removeItem('anphuc_v48_initial');}catch(e){}const qActions=new Set(['saveAttendance','sendTuitionMessage','sendBulkTuitionReminders','sendClassLessonReport','sendBulkClassLessonReports','sendStudentSituationReport','sendBulkStudentSituationReports','sendMultiMonthTuitionReminder','sendBulkMultiMonthTuitionReminders','saveScores','saveAndSendHomework','processZaloQueue','submitRegistration']);if(qActions.has(action)&&isAdminAuthenticated())setTimeout(refreshZaloQueueStatus,250);}
+    return result;
   }
 
   const KHOI = [6, 7, 8, 9, 10, 11, 12];
@@ -1114,7 +1030,11 @@
     document.getElementById('public-app').style.display='none';document.getElementById('admin-app').style.display='flex';
     const nameEl=document.getElementById('admin-display-name');if(nameEl)nameEl.innerText=username||'admin';initAdminControls();
     const today=new Date();
-    try{const r=await callAPI('getInitialData',{month:today.getMonth()+1,year:today.getFullYear(),page:1,pageSize:STUDENT_PAGE_SIZE});renderInitialData(r.data||{});}catch(e){console.error(e);showError(e);}
+    try{
+      const warm=JSON.parse(sessionStorage.getItem('anphuc_v48_initial')||'null');
+      if(warm&&Date.now()-Number(warm.saved_at||0)<5*60*1000&&warm.data)renderInitialData(warm.data);
+    }catch(e){}
+    try{const r=await callAPI('getInitialData',{month:today.getMonth()+1,year:today.getFullYear(),page:1,pageSize:STUDENT_PAGE_SIZE});const d=r.data||{};renderInitialData(d);try{sessionStorage.setItem('anphuc_v48_initial',JSON.stringify({saved_at:Date.now(),data:d}));}catch(e){}}catch(e){console.error(e);showError(e);}
     refreshZaloQueueStatus();
   }
 
@@ -1133,7 +1053,7 @@
   function previewPublicPortal(){window.open(location.origin+location.pathname,'_blank','noopener');}
 
   function escapeHtml(value) { return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;'); }
-  function escapeJsSingle(value) { return String(value ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/[\r\n\u2028\u2029]+/g, ' ').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function escapeJsSingle(value) { return String(value ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/[\r\n]+/g, ' '); }
   function todayLocalISO() { const d = new Date(); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${day}`; }
   function initDateSel(m,y) { const ms=document.getElementById(m); for(let i=1;i<=12;i++) ms.add(new Option("Tháng "+i,i)); ms.value=new Date().getMonth()+1; const ys=document.getElementById(y); const cy=new Date().getFullYear(); ys.add(new Option(cy,cy)); ys.add(new Option(cy-1,cy-1)); ys.add(new Option(cy+1,cy+1)); ys.value=cy; }
   function initStudentReportMonths() {
@@ -1159,7 +1079,7 @@
     btn.classList.add('active');
 
     if (id === 'tk' && !TAB_LOADED.tk) { TAB_LOADED.tk = true; loadStats(); }
-    if (id === 'ds' && !TAB_LOADED.ds) { TAB_LOADED.ds = true; }
+    if (id === 'ds' && !TAB_LOADED.ds) { TAB_LOADED.ds = true; if(isAdminAuthenticated()) setTimeout(()=>ensureXlsxLib().catch(e=>console.warn('SheetJS lazy-load',e)),0); }
     if (id === 'tl' && !TAB_LOADED.tl) { TAB_LOADED.tl = true; loadSchedulesAdmin(); }
     if (id === 'st' && !TAB_LOADED.st) { TAB_LOADED.st = true; loadRegistrationsAdmin(); loadRegistrationSettingsAdmin(); loadSecurityAdmin(); }
   }
@@ -1589,83 +1509,161 @@
     try { loading(true); const r=await callAPI('wakeupZaloQueue',{rounds:3},'POST'); const x=r.data||{}; showToast(`Đã xử lý ${x.processed||0} tin; còn chờ ${x.queue?.waiting||0}.`); await refreshZaloQueueStatus(); } catch(e){showError(e);} finally{loading(false);}  }
 
   // PUBLIC CHATBOT V4.6
-  let CURRENT_PARENT_SERVICE='exam';
-  function initPublicChat(){ const body=document.getElementById('chat-body'); if(!body)return; selectParentService('exam',false); }
+  let CURRENT_PARENT_SERVICE='home';
+  const PUBLIC_BOOTSTRAP_KEY='ap_public_bootstrap_v414';
+  const PUBLIC_BOOTSTRAP_TTL=5*60*1000;
+  let PUBLIC_BOOTSTRAP=null;
+  let PUBLIC_BOOTSTRAP_PROMISE=null;
+  function renderParentWelcome_(){
+    activateParentTab_('home');updateParentChatFormVisibility_('home');resetChatState();
+    setParentWorkspaceHtml_(`<div class="parent-welcome-card"><div class="welcome-icon"><i class="bi bi-stars"></i></div><h3>Xin chào Quý phụ huynh</h3><p>Trợ lý An Phúc hỗ trợ tra cứu kết quả học tập & học phí, xem thời khóa biểu, đăng ký học mới và truy cập kho kiểm tra trực tuyến. Vui lòng chọn chức năng ở bên trái hoặc các nút nhanh phía dưới.</p></div>`);
+  }
+
+  function initPublicChat(){
+    const body=document.getElementById('chat-body');if(!body)return;
+    renderParentWelcome_();
+    loadPublicBootstrap_(false).catch(()=>{});
+    setTimeout(()=>checkPublicBackend_(false),180);
+  }
   function addChatBubble(text,who='bot',html=false){const body=document.getElementById('chat-body'),row=document.createElement('div');row.className='chat-row '+who;const bubble=document.createElement('div');bubble.className='chat-bubble';if(html)bubble.innerHTML=text;else bubble.textContent=text;row.appendChild(bubble);body.appendChild(row);body.scrollTop=body.scrollHeight;return bubble;}
   function setParentWorkspaceHtml_(html){const body=document.getElementById('chat-body');if(!body)return;body.innerHTML=html;body.scrollTop=0;}
   function clearParentWorkspace_(){const body=document.getElementById('chat-body');if(body){body.innerHTML='';body.scrollTop=0;}}
-  function activateParentTab_(service){CURRENT_PARENT_SERVICE=service;document.querySelectorAll('.parent-service-tab').forEach(btn=>{const active=btn.dataset.parentService===service;btn.classList.toggle('active',active);btn.setAttribute('aria-pressed',String(active));});}
+  function activateParentTab_(service){
+    CURRENT_PARENT_SERVICE=service;
+    document.querySelectorAll('[data-parent-service]').forEach(btn=>btn.classList.toggle('active',btn.dataset.parentService===service));
+  }
+  function updateParentChatFormVisibility_(service){
+    const form=document.getElementById('parent-chat-form');
+    if(form)form.style.display=service==='exam'?'none':'flex';
+  }
   function selectParentService(service,fromUser=true){
-    service=['exam','lookup','schedule','registration'].includes(service)?service:'exam';
-    EXAM_REQUEST_SEQ++; activateParentTab_(service);clearParentWorkspace_();resetChatState();
+    service=['home','exam','lookup','schedule','registration'].includes(service)?service:'home';
+    activateParentTab_(service);updateParentChatFormVisibility_(service);clearParentWorkspace_();resetChatState();
     const input=document.getElementById('chat-input');
-    if(input){input.placeholder=service==='lookup'?'Nhập tên học sinh hoặc hỏi nhanh...':service==='schedule'?'Ví dụ: lịch học khối 8...':service==='registration'?'Hỏi về đăng ký, học phí, xếp lớp...':'Ví dụ: kiểm tra khối 8, thi thử khối 9...';}
-    if(service==='exam')showExamPortal(false);
+    if(input){input.placeholder=service==='lookup'?'Nhập tên học sinh hoặc một phần họ tên...':service==='schedule'?'Hỏi nhanh về lịch học...':service==='registration'?'Hỏi về đăng ký học...':'Nhập câu hỏi dành cho Trung tâm...';}
+    if(service==='home')renderParentWelcome_();
+    else if(service==='exam')showExamPortal(false);
     else if(service==='lookup')startParentLookup();
     else if(service==='schedule')showScheduleChoices();
     else if(service==='registration')showRegistrationGuide();
   }
-  function ensureParentService_(service){if(CURRENT_PARENT_SERVICE!==service){activateParentTab_(service);clearParentWorkspace_();resetChatState();}}
-  function resetChatState(){CHAT_STATE={mode:null,candidate:null};const input=document.getElementById('chat-input');if(input){input.type='text';input.inputMode='text';input.value='';}}
+  function ensureParentService_(service){
+    if(CURRENT_PARENT_SERVICE!==service){activateParentTab_(service);updateParentChatFormVisibility_(service);clearParentWorkspace_();resetChatState();}
+    else updateParentChatFormVisibility_(service);
+  }
+  function resetChatState(){CHAT_STATE={mode:null,candidate:null};}
   function normalizeChatText(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').replace(/\s+/g,' ').trim().toLowerCase();}
-  function startParentLookup(){ensureParentService_('lookup');CHAT_STATE={mode:'lookup_name',candidate:null};addChatBubble('Quý phụ huynh nhập tên hoặc một phần họ tên học sinh (ít nhất 2 ký tự). Có thể viết hoa/thường tùy ý và có dấu hoặc không dấu. Ví dụ: “Ngọc Đức”, “ngoc duc” hoặc chỉ “Đức”.');document.getElementById('chat-input')?.focus();}
-  function chooseParentCandidate(token,name,classInfo){CHAT_STATE={mode:'lookup_phone',candidate:{lookup_token:token,name,class_info:classInfo}};addChatBubble(`Đã chọn ${name} (${classInfo}). Quý phụ huynh vui lòng nhập Số điện thoại đã đăng ký với Trung tâm để xác nhận.`);const input=document.getElementById('chat-input');if(input){input.type='tel';input.inputMode='tel';input.autocomplete='off';input.placeholder='Nhập số điện thoại đã đăng ký';input.focus();}}
-  async function handleParentName(name){try{const r=await callAPI('findParentStudentCandidates',{student_name:name},'GET');if(CURRENT_PARENT_SERVICE!=='lookup'||CHAT_STATE.mode!=='lookup_name')return;const rows=Array.isArray(r.data)?r.data:[];if(!rows.length){addChatBubble('Chưa tìm thấy học sinh phù hợp. Quý phụ huynh có thể thử nhập tên ngắn hơn, ví dụ chỉ tên hoặc tên đệm + tên. Hệ thống không phân biệt chữ hoa/thường và có dấu/không dấu.');return;}if(rows.length===1){const x=rows[0];chooseParentCandidate(x.lookup_token,x.name,x.class_info);return;}const html='<b>Tìm thấy nhiều học sinh phù hợp. Vui lòng chọn đúng tên và lớp:</b><div class="chat-quick" style="padding:10px 0 0">'+rows.map(x=>`<button onclick="chooseParentCandidate('${escapeJsSingle(x.lookup_token)}','${escapeJsSingle(x.name)}','${escapeJsSingle(x.class_info)}')">${escapeHtml(x.name)} - ${escapeHtml(x.class_info)}</button>`).join('')+'</div><div class="mini-note" style="margin-top:8px">Nếu chưa thấy đúng học sinh, hãy nhập thêm một phần họ hoặc tên đệm để thu hẹp kết quả.</div>';addChatBubble(html,'bot',true);CHAT_STATE.mode='choose_candidate';}catch(e){addChatBubble(e.message||'Không thể tìm học sinh lúc này.');}}
-  function currentSchoolYearStart(){const n=new Date();return n.getMonth()+1>=9?n.getFullYear():n.getFullYear()-1;}
-  async function handleParentPhone(phone){const c=CHAT_STATE.candidate;if(!c)return startParentLookup();try{const r=await callAPI('verifyParentStudent',{lookup_token:c.lookup_token,parent_phone:phone,school_year_start:currentSchoolYearStart()},'POST');if(CURRENT_PARENT_SERVICE!=='lookup')return;renderVerifiedParentCard(r.data||{});resetChatState();}catch(e){if(CURRENT_PARENT_SERVICE==='lookup')addChatBubble(e.message||'Số điện thoại không khớp.');}}
-  function renderVerifiedParentCard(s){
-    const schedule=(s.schedule||[]).length?(s.schedule||[]).map(x=>{
-      const ss=Array.isArray(x.sessions)&&x.sessions.length?x.sessions:[{day:x.days_time||'',start_time:x.start_time||'',end_time:x.end_time||''}];
-      const details=ss.map((b,i)=>`<div style="margin:4px 0"><b>Buổi ${i+1}:</b> ${escapeHtml(b.day||'--')} · ⏰ ${escapeHtml(b.start_time||'--')}${b.end_time?' – '+escapeHtml(b.end_time):''}</div>`).join('');
-      return `<div class="chat-metric"><b>${escapeHtml(x.class_info||'Lịch học')}</b>${details}<div class="mini-note">📚 ${ss.length} buổi/tuần · 1 giờ 30 phút/buổi</div><div>GV: ${escapeHtml(x.teacher||'--')} | Phòng: ${escapeHtml(x.room||'--')}</div><div>${escapeHtml(x.status||'')}</div></div>`;
-    }).join(''):'<div class="chat-metric">Chưa cập nhật thời khóa biểu.</div>';
-    const months=(s.attendance_months||[]).length?`<div class="table-responsive" style="margin-top:8px"><table><thead><tr><th>Tháng</th><th>Số buổi</th><th>Vắng</th><th>P</th><th>K</th></tr></thead><tbody>${s.attendance_months.map(x=>`<tr><td>${x.month}/${x.year}</td><td>${x.total_sessions}</td><td>${x.absent}</td><td>${x.permitted}</td><td>${x.unexcused}</td></tr>`).join('')}</tbody></table></div>`:'Chưa có dữ liệu chuyên cần.';
-    const scores=(s.scores||[]).length?`<div class="table-responsive"><table><thead><tr><th>Ngày</th><th>Bài kiểm tra</th><th>Điểm</th><th>Nhận xét</th></tr></thead><tbody>${s.scores.map(x=>`<tr><td>${formatDateVN(x.test_date)}</td><td>${escapeHtml(x.test_type_label)} - ${escapeHtml(x.test_title||'')}</td><td><b>${escapeHtml(x.score)}/10</b></td><td>${escapeHtml(x.comment||'--')}</td></tr>`).join('')}</tbody></table></div>`:'Chưa có điểm.';
-    const t=s.tuition||{},paid=(t.paid||[]).map(x=>`${escapeHtml(x.label||'')}: ${Number(x.amount||0).toLocaleString('vi-VN')}đ (${escapeHtml(x.paid_at||'')})`).join('<br>')||'Chưa ghi nhận',unpaid=(t.unpaid||[]).map(x=>escapeHtml(x.label||'')).join(', ')||'Không có';
-    addChatBubble(`<div class="chat-card"><h3>${escapeHtml(s.name)} - ${escapeHtml(s.class_info)} | Năm học ${escapeHtml(s.school_year||'')}</h3><b>📅 Lịch học hiện tại</b><div class="chat-grid" style="margin-top:7px">${schedule}</div><div style="margin-top:13px"><b>🗓️ Chuyên cần theo tháng</b>${months}</div><div style="margin-top:13px"><b>📊 Điểm số & nhận xét</b>${scores}</div><div class="chat-grid" style="margin-top:13px"><div class="chat-metric"><b>💳 Đã đóng học phí</b><br>${paid}</div><div class="chat-metric"><b>⏳ Chưa đóng</b><br>${unpaid}<br><b>${Number(t.unpaid_total||0).toLocaleString('vi-VN')} đ</b></div></div></div>`,'bot',true);
+  async function loadPublicBootstrap_(force=false){
+    if(!force&&PUBLIC_BOOTSTRAP)return PUBLIC_BOOTSTRAP;
+    if(!force&&PUBLIC_BOOTSTRAP_PROMISE)return PUBLIC_BOOTSTRAP_PROMISE;
+    if(!force){
+      try{const warm=JSON.parse(sessionStorage.getItem(PUBLIC_BOOTSTRAP_KEY)||'null');if(warm&&Date.now()-Number(warm.saved_at||0)<PUBLIC_BOOTSTRAP_TTL&&warm.data){PUBLIC_BOOTSTRAP=warm.data;return PUBLIC_BOOTSTRAP;}}catch(e){}
+    }
+    PUBLIC_BOOTSTRAP_PROMISE=(async()=>{
+      const r=await callAPI('getPublicBootstrap',{},'GET');PUBLIC_BOOTSTRAP=r.data||{};
+      try{sessionStorage.setItem(PUBLIC_BOOTSTRAP_KEY,JSON.stringify({saved_at:Date.now(),data:PUBLIC_BOOTSTRAP}));}catch(e){}
+      return PUBLIC_BOOTSTRAP;
+    })();
+    try{return await PUBLIC_BOOTSTRAP_PROMISE;}finally{PUBLIC_BOOTSTRAP_PROMISE=null;}
   }
 
-  function showScheduleChoices(){ensureParentService_('schedule');resetChatState();CHAT_STATE.mode='schedule';addChatBubble('Quý phụ huynh vui lòng chọn <b>một khối</b>. Hệ thống sẽ hiển thị thời khóa biểu của tất cả các lớp thuộc khối đó:','bot',true);addChatBubble(`<div class="chat-quick" style="padding:0">${KHOI.map(k=>`<button onclick="loadPublicSchedule('${k}')">Khối ${k}</button>`).join('')}</div>`,'bot',true);}
-  async function loadPublicSchedule(grade=''){
-    if(!String(grade||'').trim()){showScheduleChoices();return;}
+  function showTypingIndicator_(){
+    const body=document.getElementById('chat-body');if(!body)return null;
+    const row=document.createElement('div');row.className='chat-row bot typing-row';
+    row.innerHTML='<div class="chat-bubble typing-bubble"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';
+    body.appendChild(row);body.scrollTop=body.scrollHeight;return row;
+  }
+  function hideTypingIndicator_(row){if(row&&row.parentNode)row.remove();}
+  async function withTyping_(fn){const row=showTypingIndicator_(),started=Date.now();try{return await fn();}finally{const wait=Math.max(0,300-(Date.now()-started));if(wait)await new Promise(r=>setTimeout(r,wait));hideTypingIndicator_(row);}}
+
+  function startParentLookup(){
+    ensureParentService_('lookup');CHAT_STATE={mode:'lookup_name',candidate:null};
+    addChatBubble('Quý phụ huynh nhập tên hoặc một phần họ tên học sinh (ít nhất 2 ký tự). Hệ thống không phân biệt chữ hoa/thường và có dấu/không dấu.');
+    document.getElementById('chat-input')?.focus();
+  }
+  function chooseParentCandidate(studentId,name,classInfo,maskedPhone){
+    CHAT_STATE={mode:'lookup_phone',candidate:{student_id:studentId,name,class_info:classInfo,masked_phone:maskedPhone}};
+    addChatBubble(`Đã chọn ${name} (${classInfo})${maskedPhone?` · SĐT hồ sơ: ${maskedPhone}`:''}. Quý phụ huynh vui lòng nhập đủ 10 số điện thoại đã đăng ký để xác nhận.`);
+    document.getElementById('chat-input')?.focus();
+  }
+  async function handleParentName(name){
     try{
-      const r=await callAPI('getPublicSchedule',{grade},'GET');if(CURRENT_PARENT_SERVICE!=='schedule')return;const rows=Array.isArray(r.data)?r.data:[];
-      if(!rows.length){addChatBubble(`Hiện Trung tâm chưa cập nhật thời khóa biểu cho Khối ${escapeHtml(grade)}.`,'bot',true);resetChatState();return;}
-      const html=`<div class="chat-card"><h3>📅 Thời khóa biểu Khối ${escapeHtml(grade)}</h3><div class="mini-note" style="margin-bottom:9px">Hiển thị tất cả các lớp thuộc Khối ${escapeHtml(grade)}. <b>Mỗi buổi học: 1 giờ 30 phút.</b></div><div class="table-responsive"><table><thead><tr><th>Lớp</th><th>Buổi học</th><th>Thứ</th><th>Thời gian</th><th>GV / Phòng</th><th>Tình trạng</th></tr></thead><tbody>${rows.map(x=>{
-        const ss=Array.isArray(x.sessions)&&x.sessions.length?x.sessions:[{day:x.days_time||'',start_time:x.start_time||'',end_time:x.end_time||''}];
-        return ss.map((b,i)=>`<tr><td><b>${i===0?escapeHtml(x.class_info):''}</b>${i===0?`<div class="mini-note">${ss.length} buổi/tuần</div>`:''}</td><td><b>Buổi ${i+1}</b></td><td>${escapeHtml(b.day||'--')}</td><td><b>${escapeHtml(b.start_time||'--')}${b.end_time?' – '+escapeHtml(b.end_time):''}</b><br><span class="mini-note">1 giờ 30 phút</span></td><td>${escapeHtml(x.teacher||'--')} / ${escapeHtml(x.room||'--')}</td><td>${escapeHtml(x.status||'')}</td></tr>`).join('');
-      }).join('')}</tbody></table></div></div>`;
-      addChatBubble(html,'bot',true);resetChatState();
-    }catch(e){addChatBubble(e.message||'Không tải được lịch học.');}
+      const r=await withTyping_(()=>callAPI('publicFindStudentByName',{student_name:name},'GET'));
+      const rows=Array.isArray(r.data)?r.data:[];
+      if(!rows.length){addChatBubble('Chưa tìm thấy học sinh phù hợp. Quý phụ huynh có thể nhập ngắn hơn hoặc thêm họ/tên đệm để tìm chính xác hơn.');return;}
+      if(rows.length===1){const x=rows[0];chooseParentCandidate(x.student_id,x.name,x.class_info,x.masked_phone||'');return;}
+      const html='<b>Tìm thấy nhiều học sinh phù hợp. Vui lòng chọn đúng tên và lớp:</b><div class="chat-quick" style="padding:10px 0 0">'+rows.map(x=>`<button onclick="chooseParentCandidate('${escapeJsSingle(x.student_id)}','${escapeJsSingle(x.name)}','${escapeJsSingle(x.class_info)}','${escapeJsSingle(x.masked_phone||'')}')"><b>${escapeHtml(x.name)}</b> · ${escapeHtml(x.class_info)}${x.masked_phone?` · ${escapeHtml(x.masked_phone)}`:''}</button>`).join('')+'</div>';
+      addChatBubble(html,'bot',true);CHAT_STATE.mode='choose_candidate';
+    }catch(e){addChatBubble(escapeHtml(e.message||'Không thể tìm học sinh lúc này.'),'bot',true);}
+  }
+  function currentSchoolYearStart(){const n=new Date();return n.getMonth()+1>=9?n.getFullYear():n.getFullYear()-1;}
+  async function handleParentPhone(phone){
+    const c=CHAT_STATE.candidate;if(!c)return startParentLookup();
+    try{
+      const r=await withTyping_(()=>callAPI('publicVerifyStudentPhone',{student_id:c.student_id,parent_phone:phone,school_year_start:currentSchoolYearStart()},'POST'));
+      renderVerifiedParentCard(r.data||{});resetChatState();
+    }catch(e){addChatBubble(escapeHtml(e.message||'Số điện thoại không khớp.'),'bot',true);}
+  }
+  function renderVerifiedParentCard(s){
+    const att=s.attendance||{},scores=Array.isArray(s.scores)?s.scores:[],scoreSummary=s.score_summary||{};
+    const latest=scoreSummary.latest||scores[0]||null;
+    const avg=scoreSummary.average!==null&&scoreSummary.average!==undefined?Number(scoreSummary.average):null;
+    const scoreMetric=avg!==null&&!Number.isNaN(avg)?avg.toFixed(avg%1?2:1):(latest&&latest.score!==''?String(latest.score):'--');
+    const scheduleHtml=(s.schedule||[]).length?(s.schedule||[]).map(x=>{
+      const sessions=Array.isArray(x.sessions)?x.sessions:[];
+      return `<div class="student-schedule-card"><div class="student-schedule-row"><b>${escapeHtml(x.class_info||s.class_info||'Lịch học')}</b><span>${sessions.length||x.sessions_per_week||0} buổi/tuần · 1 giờ 30 phút/buổi</span></div>${sessions.map((b,i)=>`<div class="student-schedule-row"><span><i class="bi bi-calendar-event"></i> Buổi ${i+1}: <b>${escapeHtml(b.day||'--')}</b></span><span><i class="bi bi-clock"></i> ${escapeHtml(b.start_time||'--')}${b.end_time?' – '+escapeHtml(b.end_time):''}</span></div>`).join('')}<div class="student-schedule-row"><span>GV: ${escapeHtml(x.teacher||'--')}</span><span>Phòng: ${escapeHtml(x.room||'--')}</span></div></div>`;
+    }).join(''):'<div class="mini-note">Chưa cập nhật thời khóa biểu của lớp.</div>';
+    const scoreRows=scores.length?scores.slice(0,12).map(x=>{const n=Number(x.score),cls=Number.isFinite(n)?(n>=8?'score-high':n>=6.5?'score-mid':'score-low'):'score-mid';return `<tr><td>${escapeHtml(formatDateVN(x.test_date))}</td><td><b>${escapeHtml(x.test_title||x.test_type_label||'Bài kiểm tra')}</b><div class="mini-note">${escapeHtml(x.test_type_label||'')}</div></td><td><span class="score-chip ${cls}">${escapeHtml(x.score??'--')}</span></td><td>${escapeHtml(x.comment||'--')}</td></tr>`;}).join(''):'<tr><td colspan="4" style="text-align:center;color:#64748B">Chưa có điểm kiểm tra.</td></tr>';
+    const paid=Array.isArray(s.tuition?.paid)?s.tuition.paid:[],unpaid=Array.isArray(s.tuition?.unpaid)?s.tuition.unpaid:[];
+    const paidHtml=paid.length?paid.map(x=>`<div class="tuition-item"><span><i class="bi bi-check-circle-fill tuition-ok"></i> ${escapeHtml(x.label||x.key||'')}</span><span><b>${Number(x.amount||0).toLocaleString('vi-VN')}đ</b><br><span class="mini-note">${escapeHtml(String(x.paid_at||'').split(' ')[0]||'')}</span></span></div>`).join(''):'<div class="mini-note">Chưa có tháng đã đóng trong năm học đang xem.</div>';
+    const unpaidHtml=unpaid.length?unpaid.map(x=>`<div class="tuition-item"><span><span class="tuition-reminder">Chưa đóng</span> ${escapeHtml(x.label||x.key||'')}</span><b>${Number(x.amount||0).toLocaleString('vi-VN')}đ</b></div>`).join(''):'<div class="mini-note tuition-ok"><i class="bi bi-check-circle-fill"></i> Không có tháng chưa đóng.</div>';
+    const html=`<div class="student-report-card">
+      <div class="student-report-head"><div><h3>${escapeHtml(s.name||'Học sinh')}</h3><div class="student-report-meta">Ngày nhập học: ${escapeHtml(formatDateVN(s.enrollment_date||''))} · Năm học ${escapeHtml(s.school_year||'')}</div></div><span class="student-class-badge">${escapeHtml(s.class_info||'')}</span></div>
+      <div class="student-report-section"><div class="student-section-title"><i class="bi bi-calendar-week"></i> Lịch học hiện tại</div>${scheduleHtml}</div>
+      <div class="student-report-section"><div class="student-mini-stats"><div class="student-mini-stat blue"><span>Tổng số buổi</span><strong>${Number(att.total_sessions||0)}</strong></div><div class="student-mini-stat warn"><span>Số buổi vắng</span><strong>${Number(att.total_absent||0)}</strong></div><div class="student-mini-stat purple"><span>${avg!==null?'Điểm trung bình':'Điểm mới nhất'}</span><strong>${escapeHtml(scoreMetric)}</strong></div></div></div>
+      <div class="student-report-section"><div class="student-section-title"><i class="bi bi-graph-up-arrow"></i> Bảng điểm & Nhận xét</div><div class="table-responsive"><table class="score-table"><thead><tr><th>Ngày</th><th>Bài kiểm tra</th><th>Điểm</th><th>Nhận xét</th></tr></thead><tbody>${scoreRows}</tbody></table></div></div>
+      <div class="student-report-section"><div class="student-section-title"><i class="bi bi-wallet2"></i> Học phí</div><div class="tuition-grid"><div class="tuition-panel tuition-paid"><h4><i class="bi bi-check-circle-fill"></i> Đã đóng</h4>${paidHtml}</div><div class="tuition-panel tuition-unpaid"><h4><i class="bi bi-bell"></i> Chưa đóng</h4>${unpaidHtml}</div></div></div>
+    </div>`;
+    addChatBubble(html,'bot',true);
+  }
+
+  async function showScheduleChoices(){
+    ensureParentService_('schedule');resetChatState();CHAT_STATE.mode='schedule';
+    setParentWorkspaceHtml_(`<div class="schedule-public-shell"><div class="parent-module-title"><div><h3><i class="bi bi-calendar3"></i> Thời khóa biểu Trung tâm</h3><p>Chọn khối để xem tất cả các lớp. Mỗi buổi học kéo dài 1 giờ 30 phút.</p></div></div><div class="schedule-grade-pills">${KHOI.map(k=>`<button data-schedule-grade="${k}" onclick="loadPublicSchedule('${k}')">Khối ${k}</button>`).join('')}</div><div id="public-schedule-results" class="portal-empty-state"><i class="bi bi-hand-index-thumb"></i>Chọn một khối để xem lịch học.</div></div>`);
+    loadPublicBootstrap_(false).catch(()=>{});
+  }
+  async function loadPublicSchedule(grade=''){
+    grade=String(grade||'').trim();if(!KHOI.map(String).includes(grade))return showScheduleChoices();
+    document.querySelectorAll('[data-schedule-grade]').forEach(b=>b.classList.toggle('active',b.dataset.scheduleGrade===grade));
+    try{
+      const boot=await withTyping_(()=>loadPublicBootstrap_(false));
+      let rows=(Array.isArray(boot?.schedules)?boot.schedules:[]).filter(x=>String(x.grade)===grade);
+      if(!rows.length){const r=await callAPI('getPublicSchedule',{grade},'GET');rows=Array.isArray(r.data)?r.data:[];}
+      const target=document.getElementById('public-schedule-results');if(!target)return;
+      if(!rows.length){target.className='portal-empty-state';target.innerHTML=`<i class="bi bi-calendar-x"></i>Hiện chưa cập nhật thời khóa biểu Khối ${escapeHtml(grade)}.`;return;}
+      target.className='schedule-card-grid';
+      target.innerHTML=rows.map(x=>{const sessions=Array.isArray(x.sessions)?x.sessions:[];const open=/đang nhận|dang nhan/i.test(String(x.status||''));return `<article class="schedule-class-card"><div class="schedule-class-head"><b>${escapeHtml(x.class_info||`K${x.grade}-${x.class}`)}</b><span class="schedule-status-badge ${open?'status-open':'status-full'}">${escapeHtml(x.status||'Đã cập nhật')}</span></div>${sessions.map((b,i)=>`<div class="schedule-line"><i class="bi bi-calendar-event"></i><b>Buổi ${i+1}:</b> ${escapeHtml(b.day||'--')} · ${escapeHtml(b.start_time||'--')}${b.end_time?' – '+escapeHtml(b.end_time):''}</div>`).join('')}<div class="schedule-line"><i class="bi bi-hourglass-split"></i>${sessions.length||x.sessions_per_week||0} buổi/tuần · 1 giờ 30 phút/buổi</div><div class="schedule-line"><i class="bi bi-person-video3"></i>GV: ${escapeHtml(x.teacher||'--')} · Phòng: ${escapeHtml(x.room||'--')}</div></article>`;}).join('');
+    }catch(e){const target=document.getElementById('public-schedule-results');if(target){target.className='portal-empty-state';target.innerHTML=`<i class="bi bi-exclamation-triangle"></i>${escapeHtml(e.message||'Không tải được lịch học.')}`;}}
   }
 
 
   async function showRegistrationGuide(){
     ensureParentService_('registration');resetChatState();
     try{
-      const r=await callAPI('getPublicRegistrationInfo',{},'GET');if(CURRENT_PARENT_SERVICE!=='registration')return;const x=r.data||{},guide=x.guide_text||'Quý phụ huynh vui lòng để lại thông tin. Trung tâm sẽ liên hệ tư vấn sớm nhất.';
-      setParentWorkspaceHtml_(`<div class="parent-module-card"><div class="parent-module-title"><div><h3><i class="bi bi-clipboard2-check"></i> Thông tin đăng ký học</h3><p>${escapeHtml(guide).replace(/\\n/g,'<br>')}</p></div></div>
-        <div class="schedule-editor-grid" style="margin-top:12px">
-          <input id="pub-reg-name" type="text" placeholder="Họ tên học sinh (*)">
-          <select id="pub-reg-grade"><option value="">-- Khối muốn đăng ký (*) --</option>${KHOI.map(k=>`<option value="${k}">Khối ${k}</option>`).join('')}</select>
-          <input id="pub-reg-phone" type="tel" placeholder="SĐT phụ huynh / Zalo (*)">
-          <input id="pub-reg-note" type="text" placeholder="Học lực / Nguyện vọng: Cơ bản, Nâng cao...">
-        </div>
-        <div class="report-actions"><button class="btn btn-success" onclick="submitPublicRegistration()"><i class="bi bi-send-check"></i> Gửi đăng ký</button></div>
-        <div class="mini-note">Sau khi gửi, hồ sơ được lưu tại Trung tâm và thông báo được đưa vào hàng đợi Zalo để giáo viên liên hệ.</div>
-      </div>`);
+      const boot=await withTyping_(()=>loadPublicBootstrap_(false));
+      const guide=boot?.registration_guide_text||'Quý phụ huynh vui lòng để lại thông tin. Trung tâm sẽ liên hệ tư vấn sớm nhất.';
+      setParentWorkspaceHtml_(`<div class="registration-card"><div class="parent-module-title"><div><h3><i class="bi bi-clipboard2-check"></i> Đăng ký học mới</h3><p>Điền thông tin ngắn gọn, Trung tâm sẽ chủ động liên hệ qua Zalo/SĐT.</p></div></div><div class="registration-guide">${escapeHtml(guide).replace(/\n/g,'<br>')}</div><div class="registration-form-grid"><input id="pub-reg-name" type="text" placeholder="Họ tên học sinh (*)"><select id="pub-reg-grade"><option value="">-- Khối muốn đăng ký (*) --</option>${KHOI.map(k=>`<option value="${k}">Khối ${k}</option>`).join('')}</select><input id="pub-reg-phone" type="tel" inputmode="numeric" placeholder="SĐT phụ huynh / Zalo (*)"><input id="pub-reg-note" type="text" placeholder="Học lực / Nguyện vọng"><input id="pub-reg-website" class="honeypot-field" type="text" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="btn btn-success full" onclick="submitPublicRegistration()"><i class="bi bi-send-check"></i> Gửi đăng ký</button></div><div class="mini-note" style="margin-top:10px">Hồ sơ được lưu tại Trung tâm và thông báo được đưa vào hàng đợi Zalo để giáo viên liên hệ.</div></div>`);
     }catch(e){setParentWorkspaceHtml_(`<div class="portal-empty-state"><i class="bi bi-exclamation-triangle"></i>${escapeHtml(e.message||'Không tải được thông tin đăng ký.')}</div>`);}
   }
 
   async function submitPublicRegistration(){
-    const student_name=document.getElementById('pub-reg-name')?.value.trim()||'',grade=document.getElementById('pub-reg-grade')?.value||'',parent_phone=document.getElementById('pub-reg-phone')?.value.trim()||'',note=document.getElementById('pub-reg-note')?.value.trim()||'';
+    const student_name=document.getElementById('pub-reg-name')?.value.trim()||'',grade=document.getElementById('pub-reg-grade')?.value||'',parent_phone=document.getElementById('pub-reg-phone')?.value.trim()||'',note=document.getElementById('pub-reg-note')?.value.trim()||'',website=document.getElementById('pub-reg-website')?.value||'';
     if(!student_name||!grade||!parent_phone)return showToast('Vui lòng nhập Họ tên, Khối và SĐT phụ huynh.','error');
     try{
-      loading(true);
-      const r=await callAPI('submitRegistration',{student_name,grade,parent_phone,note},'POST'),x=r.data||{};
-      setParentWorkspaceHtml_(`<div class="parent-module-card"><div class="portal-empty-state"><i class="bi bi-check-circle-fill" style="color:var(--success)"></i><b>Đã gửi đăng ký thành công</b><div>Trung tâm đã nhận hồ sơ của <b>${escapeHtml(student_name)}</b> - Khối ${escapeHtml(grade)}.</div><div class="mini-note" style="margin-top:8px">Mã đăng ký: ${escapeHtml(x.reg_id||'--')}. Giáo viên sẽ liên hệ qua Zalo/SĐT ${escapeHtml(parent_phone)} sớm nhất.</div></div></div>`);
+      const r=await withTyping_(()=>callAPI('submitRegistration',{student_name,grade,parent_phone,note,website},'POST')),x=r.data||{};
+      setParentWorkspaceHtml_(`<div class="registration-card"><div class="portal-empty-state"><i class="bi bi-check-circle-fill" style="color:var(--success)"></i><b>Đã gửi đăng ký thành công</b><div>Trung tâm đã nhận hồ sơ của <b>${escapeHtml(student_name)}</b> - Khối ${escapeHtml(grade)}.</div><div class="mini-note" style="margin-top:8px">Mã đăng ký: ${escapeHtml(x.reg_id||'--')}. Giáo viên sẽ liên hệ qua Zalo/SĐT ${escapeHtml(parent_phone)} sớm nhất.</div></div></div>`);
       showToast(x.duplicate?'Đăng ký này vừa được gửi trước đó.':'Đã gửi đăng ký đến Trung tâm.');
-    }catch(e){showError(e);}finally{loading(false);}
+    }catch(e){showError(e);}
   }
 
   function showExamPortal(resetState=true){
@@ -1676,7 +1674,7 @@
     const type=String(EXAM_STATE.type||'regular');
     const grades=KHOI.map(k=>`<button class="portal-grade-btn ${grade===String(k)?'active':''}" data-exam-grade="${k}" onclick="loadPublicExams('${k}','${escapeJsSingle(type)}')">Khối ${k}</button>`).join('');
     setParentWorkspaceHtml_(`<div class="parent-module-card exam-portal-shell exam-block">
-      <div class="parent-module-title"><div><h3><i class="bi bi-pencil-square"></i> Kiểm tra trực tuyến</h3><p>Kho bài kiểm tra của Trung tâm: Thường xuyên, Định kỳ và Cuối cấp. Chọn khối để xem nội dung.</p></div><span class="parent-module-badge"><i class="bi bi-lightning-charge-fill"></i> Tải theo nhu cầu</span></div>
+      <div class="parent-module-title"><div><h3><i class="bi bi-pencil-square"></i> Kiểm tra trực tuyến</h3><p>Kho bài kiểm tra của Trung tâm: Thường xuyên, Định kỳ và Cuối cấp. Chọn khối để xem nội dung.</p><div class="mini-note" style="margin-top:6px;color:#0F766E;font-weight:600"><i class="bi bi-clipboard-check"></i> Bấm vào mã đề: hệ thống tự sao chép mã và mở trang làm bài. Học sinh chỉ cần dán mã để bắt đầu.</div></div><span class="parent-module-badge"><i class="bi bi-lightning-charge-fill"></i> Tải theo nhu cầu</span></div>
       <div class="portal-grade-row">${grades}</div>
       <div class="portal-subtabs">
         <button class="portal-subtab ${type==='regular'?'active':''}" onclick="changeExamType_('regular')">Thường xuyên</button>
@@ -1695,28 +1693,23 @@
     document.querySelectorAll('.portal-subtab').forEach((b,i)=>b.classList.toggle('active',(i===0&&EXAM_STATE.type==='regular')||(i===1&&EXAM_STATE.type==='periodic')));
   }
 
-  let EXAM_REQUEST_SEQ=0;
   function examCacheKey_(grade,type){return String(grade)+'|'+String(type);}
   async function loadPublicExams(grade,type='regular',showHeader=false,force=false){
     grade=String(grade||'').trim(); type=String(type||'regular').toLowerCase();
     ensureParentService_('exam');
     if(!KHOI.map(String).includes(grade)) return showExamPortal(false);
     EXAM_STATE.grade=grade; EXAM_STATE.type=type; CHAT_STATE.mode='exam';
-    const requestId=++EXAM_REQUEST_SEQ;
     updateExamPortalControls_();
     const key=examCacheKey_(grade,type), now=Date.now(); let data=null;
     const hit=EXAM_CLIENT_CACHE.get(key);
     if(!force&&hit&&hit.expires>now) data=hit.data;
     try{
       if(!data){
-        const waiting=document.getElementById('exam-portal-results');if(waiting)waiting.innerHTML='<div class="portal-empty-state portal-loading"><i class="bi bi-hourglass-split"></i>Đang tải bộ đề khối '+escapeHtml(grade)+'...</div>';
         const r=await callAPI('getPublicExams',{grade,type},'GET'); data=r.data||{};
         EXAM_CLIENT_CACHE.set(key,{data,expires:Date.now()+5*60*1000});
       }
-      if(requestId!==EXAM_REQUEST_SEQ||CURRENT_PARENT_SERVICE!=='exam')return;
-      EXAM_STATE.launchBase=String(data.launch_base||EXAM_STATE.launchBase||'');
       renderExamCatalog(data,showHeader);
-    }catch(e){if(requestId!==EXAM_REQUEST_SEQ||CURRENT_PARENT_SERVICE!=='exam')return;const t=document.getElementById('exam-portal-results');if(t)t.innerHTML=`<div class="portal-empty-state"><i class="bi bi-exclamation-triangle"></i>${escapeHtml(e.message||'Không tải được kho bài kiểm tra lúc này.')}</div>`;else addChatBubble(e.message||'Không tải được kho bài kiểm tra lúc này.');}
+    }catch(e){const t=document.getElementById('exam-portal-results');if(t)t.innerHTML=`<div class="portal-empty-state"><i class="bi bi-exclamation-triangle"></i>${escapeHtml(e.message||'Không tải được kho bài kiểm tra lúc này.')}</div>`;else addChatBubble(e.message||'Không tải được kho bài kiểm tra lúc này.');}
   }
 
   function renderExamCatalog(data,showHeader=false){
@@ -1738,22 +1731,46 @@
 
   function examItemHtml_(title,codes){
     const arr=Array.isArray(codes)?codes:[];
-    const chips=arr.length?`<div class="exam-codes">${arr.map(c=>{const direct=/^https?:\/\//i.test(String(c||''));return `<button class="exam-code-btn" onclick="launchExamCode('${escapeJsSingle(c)}')">${direct?'🔗 Làm bài':'📝 '+escapeHtml(c)}</button>`;}).join('')}</div>`:'<div class="exam-empty">Chưa có mã đề.</div>';
+    const chips=arr.length?`<div class="exam-codes">${arr.map(c=>`<button class="exam-code-btn" title="Sao chép mã và mở trang làm bài" onclick="launchExamCode('${escapeJsSingle(c)}')"><i class="bi bi-clipboard-check"></i> ${escapeHtml(c)}</button>`).join('')}</div>`:'<div class="exam-empty">Chưa có mã đề.</div>';
     return `<div class="exam-item"><div class="exam-item-title">${escapeHtml(title||'Bài kiểm tra')}</div>${chips}</div>`;
   }
 
-  function launchExamCode(code){
-    code=String(code||'').trim(); if(!code)return;
-    if(/^https?:\/\//i.test(code)){const link=safeUrl(code);if(link==='#')return showToast('Liên kết bài kiểm tra không an toàn.','error');window.open(link,'_blank','noopener,noreferrer');return;}
-    try{navigator.clipboard?.writeText(code);}catch(e){}
-    const base=String(EXAM_STATE.launchBase||'').trim();
-    if(base){const target=safeUrl(base);if(target==='#')return showToast('Link bài kiểm tra chưa hợp lệ.','error');const url=new URL(target);url.searchParams.set('code',code);window.open(url.href,'_blank','noopener,noreferrer');}
-    else addChatBubble(`Đã sao chép mã đề <b>${escapeHtml(code)}</b>. Trung tâm chưa cấu hình link trang kiểm tra.`,'bot',true);
+  async function copyExamCode_(code){
+    try{
+      if(navigator.clipboard && window.isSecureContext){await navigator.clipboard.writeText(code);return true;}
+    }catch(e){}
+    try{
+      const ta=document.createElement('textarea');ta.value=code;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');ta.remove();return !!ok;
+    }catch(e){return false;}
   }
 
-  async function sendChatMessage(){const input=document.getElementById('chat-input'),text=input.value.trim();if(!text)return;input.value='';addChatBubble(CHAT_STATE.mode==='lookup_phone'?'SĐT xác thực: ••••••'+text.slice(-4):text,'user');if(CHAT_STATE.mode==='lookup_name'){await handleParentName(text);return;}if(CHAT_STATE.mode==='lookup_phone'){await handleParentPhone(text);return;}if(CHAT_STATE.mode==='schedule'&&/^(6|7|8|9|10|11|12)$/.test(text)){await loadPublicSchedule(text);return;}if(CHAT_STATE.mode==='exam'&&/^(6|7|8|9|10|11|12)$/.test(text)){await loadPublicExams(text,EXAM_STATE.type||'regular',true);return;}if(CHAT_STATE.mode==='exam'&&/dinh ky|cuoi cap|giua ky|cuoi ky/.test(normalizeChatText(text))){await loadPublicExams(EXAM_STATE.grade||'9','periodic',true);return;}if(CHAT_STATE.mode==='exam'&&/thuong xuyen|bai hoc|chuyen de/.test(normalizeChatText(text))){await loadPublicExams(EXAM_STATE.grade||'6','regular',true);return;}const norm=normalizeChatText(text);if(/dia chi|o dau|google map|ban do|lien he|hotline|so dien thoai|sdt|zalo/.test(norm)){await showCenterContact();return;}if(/kiem tra|bai kiem tra|thi thu|luyen de|lam de|de thi/.test(norm)){ensureParentService_('exam');showExamPortal(false);const m=norm.match(/(?:khoi|lop)\s*(6|7|8|9|10|11|12)/);const examType=/dinh ky|cuoi cap|giua ky|cuoi ky|thi thu|tuyen sinh|tot nghiep/.test(norm)?'periodic':'regular';if(m)await loadPublicExams(m[1],examType,true);return;}if(/thoi khoa bieu|lich hoc|khoi\s*\d+|lop\s*\d+/.test(norm)){ensureParentService_('schedule');const m=norm.match(/(?:khoi|lop)\s*(6|7|8|9|10|11|12)/);if(m)await loadPublicSchedule(m[1]);else showScheduleChoices();return;}if(/dang ky|xin hoc|tu van|hoc phi/.test(norm)){ensureParentService_('registration');await showRegistrationGuide();return;}if(/tra cuu|ket qua|diem|con toi/.test(norm)){ensureParentService_('lookup');startParentLookup();return;}addChatBubble('Xin lỗi, Trợ lý hiện chỉ hỗ trợ các nội dung của Trung tâm như tra cứu kết quả học tập, thời khóa biểu, kiểm tra trực tuyến và đăng ký học. Với nội dung khác, kính phiền Quý phụ huynh liên hệ Trung tâm qua SĐT/Zalo <b>0972466347</b> để được giải đáp trực tiếp.','bot',true);}
+  async function launchExamCode(code){
+    code=String(code||'').trim(); if(!code)return;
+    const copied=await copyExamCode_(code);
+    if(copied) showToast(`Đã sao chép mã đề ${code}. Hãy dán mã tại trang làm bài.`);
+    else showToast(`Không tự sao chép được. Mã đề: ${code}`,'error');
+    window.open(EXAM_STUDENT_URL,'_blank','noopener,noreferrer');
+  }
+
+  async function sendChatMessage(){
+    if(CHAT_SEND_BUSY)return;
+    const input=document.getElementById('chat-input'),text=input?.value.trim()||'';if(!text)return;
+    const form=input?.closest('form'),sendBtn=form?.querySelector('button[type="submit"]')||form?.querySelector('button');
+    CHAT_SEND_BUSY=true;if(sendBtn)sendBtn.disabled=true;if(input)input.disabled=true;input.value='';addChatBubble(text,'user');
+    try{
+      if(CHAT_STATE.mode==='lookup_name'){await handleParentName(text);return;}
+      if(CHAT_STATE.mode==='lookup_phone'){await handleParentPhone(text);return;}
+      if(CHAT_STATE.mode==='schedule'&&/^(6|7|8|9|10|11|12)$/.test(text)){await loadPublicSchedule(text);return;}
+      const norm=normalizeChatText(text);
+      if(/kiem tra|bai kiem tra|thi thu|luyen de|lam de|de thi/.test(norm)){ensureParentService_('exam');showExamPortal(false);const mm=norm.match(/(?:khoi|lop)\s*(6|7|8|9|10|11|12)/);const examType=/dinh ky|cuoi cap|giua ky|cuoi ky|thi thu|tuyen sinh|tot nghiep/.test(norm)?'periodic':'regular';if(mm)await loadPublicExams(mm[1],examType,true);return;}
+      if(/thoi khoa bieu|lich hoc|khoi\s*\d+|lop\s*\d+/.test(norm)){ensureParentService_('schedule');const mm=norm.match(/(?:khoi|lop)\s*(6|7|8|9|10|11|12)/);if(mm)await loadPublicSchedule(mm[1]);else await showScheduleChoices();return;}
+      if(/dang ky|xin hoc|tu van|hoc phi/.test(norm)){ensureParentService_('registration');await showRegistrationGuide();return;}
+      if(/tra cuu|ket qua|diem|con toi/.test(norm)){ensureParentService_('lookup');startParentLookup();return;}
+      addChatBubble('Xin lỗi, Trợ lý hiện chỉ hỗ trợ các nội dung của Trung tâm như tra cứu kết quả học tập & học phí, thời khóa biểu, kiểm tra trực tuyến và đăng ký học. Với nội dung khác, kính phiền Quý phụ huynh liên hệ Trung tâm qua SĐT/Zalo <b>0972466347</b> để được giải đáp trực tiếp.','bot',true);
+    }finally{CHAT_SEND_BUSY=false;if(sendBtn)sendBtn.disabled=false;if(input){input.disabled=false;input.focus();}}
+  }
   function formatDateVN(v){if(!v)return'--';const m=String(v).match(/^(\d{4})-(\d{2})-(\d{2})/);return m?`${m[3]}/${m[2]}/${m[1]}`:escapeHtml(v);}
-  function safeUrl(v){try{const u=new URL(String(v||''));return u.protocol==='https:'?u.href:'#';}catch(e){return'#';}}
+  function safeUrl(v){try{const u=new URL(String(v||''));return['http:','https:'].includes(u.protocol)?u.href:'#';}catch(e){return'#';}}
 
   // TÀI LIỆU & THỐNG KÊ
   function loadMaterials() { loading(true); callAPI('getMaterialStatus', {grade: document.getElementById('tl-khoi').value, className: document.getElementById('tl-lop').value}).then(r=>{ loading(false); document.getElementById('list-tl').innerHTML=r.data.map((s,i)=>`<tr><td data-label="STT">${i+1}</td><td data-label="Họ tên" style="font-weight:600">${escapeHtml(s.name)}</td><td data-label="Lớp"><span class="badge badge-success">${s.class_info}</span></td>${[1,2,3,4,5,6].map(j=>`<td data-label="Đợt ${j}" style="text-align:center"><input type="checkbox" class="cb-material" style="width:20px;height:20px" ${s['batch'+j]?'checked':''} onchange="toggleMaterial('${s.student_id}',${j},this.checked)"></td>`).join('')}</tr>`).join(''); }).catch(showError); }
@@ -2052,10 +2069,10 @@
   }
 
   async function runSetupV4() {
-    if (!confirm('Chạy setup V4.11 Security để bổ sung lớp bảo mật và giữ nguyên dữ liệu hiện có?')) return;
+    if (!confirm('Chạy setup V4.14 Security để bổ sung lớp bảo mật và giữ nguyên dữ liệu hiện có?')) return;
     try {
       loading(true);
-      const r = await callAPI('setupSystemV411', {}, 'POST');
+      const r = await callAPI('setupSystemV414', {}, 'POST');
       const x = r.data || {};
       showToast(`${x.message || 'Setup hoàn tất.'}${x.duplicate_queue_rows_marked ? ` Đã khóa ${x.duplicate_queue_rows_marked} dòng tin trùng.` : ''}${x.duplicate_zalo_triggers_removed ? ` Đã xóa ${x.duplicate_zalo_triggers_removed} trigger Zalo trùng.` : ''}`);
     } catch(e) { showError(e); } finally { loading(false); }

@@ -4,7 +4,7 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AN PHÚC EDUCATION | Hệ Thống Quản Lý V4.14</title>
+  <title>AN PHÚC EDUCATION | Hệ Thống Quản Lý V4.15</title>
   
   <!-- Font Be Vietnam Pro & Bootstrap Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -353,7 +353,7 @@
   
 
     /* ============================================================
-       V4.14 - PARENT PORTAL MOBILE-FIRST / MODERN EDUTECH
+       V4.15 - PARENT PORTAL MOBILE-FIRST / MODERN EDUTECH
        ============================================================ */
     .public-shell{background:linear-gradient(180deg,#EAF3FF 0,#F8FAFC 52%,#FFFFFF 100%);padding:18px 14px 32px}
     .public-wrap{max-width:1320px;margin:0 auto}
@@ -798,11 +798,11 @@
 
     <!-- PANEL CÀI ĐẶT -->
     <div id="st" class="panel">
-      <h3 class="section-title"><i class="bi bi-sliders"></i> Cài đặt Hệ thống V4.14</h3>
+      <h3 class="section-title"><i class="bi bi-sliders"></i> Cài đặt Hệ thống V4.15</h3>
       <div style="background:#EFF6FF;border:1px solid #BFDBFE;padding:20px;border-radius:var(--radius-md);margin-bottom:20px;">
-        <h4 style="color:var(--primary-dark);margin-bottom:8px;"><i class="bi bi-database-check"></i> CẬP NHẬT CẤU TRÚC & BẢO MẬT V4.14</h4>
+        <h4 style="color:var(--primary-dark);margin-bottom:8px;"><i class="bi bi-database-check"></i> CẬP NHẬT CẤU TRÚC & BẢO MẬT V4.15</h4>
         <p style="color:var(--text-muted);margin-bottom:12px;">Chạy một lần để giữ toàn bộ bảo mật V4.8 và bổ sung nhập dữ liệu Kiểm tra trực tiếp từ Excel, liên kết bài kiểm tra và thông báo đăng ký về Zalo Trung tâm.</p>
-        <button class="btn btn-primary" onclick="runSetupV4()"><i class="bi bi-tools"></i> Chạy setup V4.14</button>
+        <button class="btn btn-primary" onclick="runSetupV4()"><i class="bi bi-tools"></i> Chạy setup V4.15</button>
       </div>
 
 
@@ -826,7 +826,48 @@
           <button class="btn btn-success" onclick="saveExamSettingsAdmin()"><i class="bi bi-link-45deg"></i> Lưu link trang kiểm tra</button>
           <button class="btn btn-primary" onclick="checkPublicBackend_(true)"><i class="bi bi-activity"></i> Kiểm tra Backend công khai</button>
         </div>
-        <div class="mini-note"><b>Cột code</b> có thể là mã đề (VD: D6C1B1) hoặc một URL https:// đầy đủ. Nếu là URL, học sinh bấm sẽ mở trực tiếp URL đó.</div>
+        <div class="mini-note"><b>Cột code</b> lưu mã đề (VD: D6C1B1). Khi học sinh bấm mã, hệ thống tự sao chép mã và mở link trang làm bài đã cấu hình ở trên.</div>
+      </div>
+
+      <div class="sub-card" style="border:1px solid #93C5FD;background:#F8FBFF">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+          <h4 style="margin:0;color:#1D4ED8"><i class="bi bi-pencil-square"></i> Quản lý đề kiểm tra trực tiếp trên Google Sheet</h4>
+          <button class="btn" style="background:#E0F2FE;color:#075985" onclick="loadExamAdminRows()"><i class="bi bi-arrow-clockwise"></i> Tải dữ liệu</button>
+        </div>
+        <div class="mini-note" style="margin-top:8px">Giáo viên có thể thêm, sửa, xóa mã đề ngay tại đây. Mọi thay đổi được lưu trực tiếp vào sheet <b>ExamRegular</b> hoặc <b>ExamPeriodic</b> và hiện ở Cổng phụ huynh ngay sau khi lưu.</div>
+        <div class="schedule-editor-grid" style="margin-top:12px">
+          <select id="exam-admin-type" onchange="updateExamAdminForm();loadExamAdminRows()"><option value="regular">Thường xuyên</option><option value="periodic">Định kỳ & Cuối cấp</option></select>
+          <select id="exam-admin-grade" onchange="loadExamAdminRows()"><option value="">-- Chọn khối --</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
+          <input id="exam-admin-row" type="hidden" value="">
+          <input id="exam-admin-chapter" type="text" placeholder="Chương / Chủ đề">
+          <input id="exam-admin-lesson" type="text" placeholder="Tên bài / chuyên đề">
+          <input id="exam-admin-year" type="text" placeholder="Năm học, VD 2026-2027" style="display:none">
+          <input id="exam-admin-category" type="text" placeholder="Kỳ thi, VD Giữa kì I" style="display:none">
+          <input id="exam-admin-display" type="text" placeholder="Tên đề hiển thị" style="display:none">
+          <input id="exam-admin-code" type="text" placeholder="Mã đề, VD D8C1B1">
+        </div>
+        <div class="report-actions">
+          <button class="btn btn-success" onclick="saveExamAdminEntry()"><i class="bi bi-floppy"></i> Lưu đề</button>
+          <button class="btn" style="background:#F1F5F9" onclick="clearExamAdminForm()"><i class="bi bi-plus-circle"></i> Tạo mới</button>
+        </div>
+        <div class="table-responsive" style="margin-top:10px"><table><thead id="exam-admin-head"></thead><tbody id="exam-admin-list"><tr><td style="text-align:center">Chọn khối rồi bấm Tải dữ liệu.</td></tr></tbody></table></div>
+      </div>
+
+      <div class="sub-card" style="border:1px solid #FCA5A5;background:#FFF7F7">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+          <h4 style="margin:0;color:#B91C1C"><i class="bi bi-send-check-fill"></i> Chẩn đoán Zalo Gateway</h4>
+          <button class="btn" style="background:#FEE2E2;color:#991B1B" onclick="loadZaloDiagnostics()"><i class="bi bi-activity"></i> Kiểm tra</button>
+        </div>
+        <div class="mini-note" style="margin-top:8px">Ảnh lỗi HTTP 401 cho thấy khóa bảo mật giữa Apps Script và Python đang không khớp. V4.15 có thể kiểm tra fingerprint và đồng bộ lại khóa mà không làm mất tin đang chờ.</div>
+        <div class="schedule-editor-grid" style="margin-top:10px">
+          <input id="zalo-gateway-url-admin" type="url" placeholder="https://...ngrok-free.dev">
+          <div id="zalo-diag-box" class="mini-note" style="padding:12px;background:#fff;border:1px solid var(--border);border-radius:9px">Chưa kiểm tra Gateway.</div>
+        </div>
+        <div class="report-actions">
+          <button class="btn btn-primary" onclick="saveZaloGatewayUrlAdmin()"><i class="bi bi-link-45deg"></i> Lưu Gateway URL</button>
+          <button class="btn btn-danger" onclick="syncZaloSecurityAdmin()"><i class="bi bi-shield-lock"></i> Đồng bộ khóa Zalo V4.15</button>
+          <button class="btn btn-success" onclick="pushWaitingZaloAdmin()"><i class="bi bi-send"></i> Gửi lại tin đang chờ</button>
+        </div>
       </div>
 
       <div class="sub-card">
@@ -905,9 +946,9 @@
   // ============================================
   // CẤU HÌNH API - LIÊN KẾT VỚI GOOGLE SHEET
   // ============================================
-  const API_URL = "https://script.google.com/macros/s/AKfycbzkY16XBJNGKpS_Qo7tFIuIK92Tl3ZqkpfOgA9sBZBzexErTeYCfd7F_Q4kIGEwCSfO8w/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycby-jDigd3pzVVo6LmFvZZX1xbt3oDTx6xrAClPkqKNZPeQ4vQnX-uzi02BH1rFfHnKV2w/exec";
   const CENTER_INFO = {
-    address: '30/11D Phước Tường, Phước Long, Nam Nha Trang',
+    address: '30/11A Phước Tường, Phước Long, Nam Nha Trang',
     phone: '0972466347',
     zalo: '0972466347',
     maps_url: 'https://www.google.com/maps/search/?api=1&query=30%2F11D%20Ph%C6%B0%E1%BB%9Bc%20T%C6%B0%E1%BB%9Dng%2C%20Ph%C6%B0%E1%BB%9Bc%20Long%2C%20Nam%20Nha%20Trang'
@@ -932,7 +973,7 @@
   const PUBLIC_GET_ACTIONS = new Set(['validateAdminSession','getPublicBootstrap','getPublicSchedule','getPublicExams','getPublicSystemStatus','publicPing','publicFindStudentByName']);
   const EXAM_STUDENT_URL = 'https://anphuceducation.netlify.app/student';
   const PUBLIC_POST_ACTIONS = new Set(['adminLogin','publicVerifyStudentPhone','submitRegistration']);
-  const EXPECTED_BACKEND_VERSION='V4.14';
+  const EXPECTED_BACKEND_VERSION='V4.15';
   const PUBLIC_API_STATE={status:'unknown',version:'',message:''};
   let CHAT_SEND_BUSY=false;
 
@@ -970,7 +1011,7 @@
   async function checkPublicBackend_(showOk=false){
     try{
       const r=await rawPublicPing_(); const v=String(r?.data?.version||r?.meta?.version||''); PUBLIC_API_STATE.version=v;
-      if(v!==EXPECTED_BACKEND_VERSION){setPublicApiStatus_('warn',`⚠️ Giao diện ${EXPECTED_BACKEND_VERSION} đang kết nối Backend <b>${escapeHtml(v||'không xác định')}</b>. Hãy Deploy <b>New Version</b> của Code.gs V4.14 rồi tải lại trang.`);return false;}
+      if(v!==EXPECTED_BACKEND_VERSION){setPublicApiStatus_('warn',`⚠️ Giao diện ${EXPECTED_BACKEND_VERSION} đang kết nối Backend <b>${escapeHtml(v||'không xác định')}</b>. Hãy Deploy <b>New Version</b> của Code.gs V4.15 rồi tải lại trang.`);return false;}
       if(showOk)setPublicApiStatus_('ok',`✅ Backend ${escapeHtml(v)} đang hoạt động bình thường.`); else {const el=document.getElementById('public-api-status');if(el)el.style.display='none';}
       PUBLIC_API_STATE.status='ok';return true;
     }catch(e){setPublicApiStatus_('error',`❌ Không kết nối được máy chủ Google Apps Script. Hãy kiểm tra <b>Deploy → Manage deployments → Execute as Me → Who has access: Anyone</b> và bảo đảm API_URL đang dùng đúng link <b>/exec</b>.`);return false;}
@@ -989,11 +1030,11 @@
     else{options.headers={'Content-Type':'text/plain;charset=utf-8'};options.body=JSON.stringify({action,...payload});}
 
     const controller=new AbortController();options.signal=controller.signal;const timeoutId=setTimeout(()=>controller.abort(),isPublic?20000:30000);const started=performance.now();let response;
-    try{response=await fetch(url,options);}catch(e){if(e.name==='AbortError'){if(isPublic&&action!=='publicPing'){await checkPublicBackend_(false);if(PUBLIC_API_STATE.status==='ok')throw new Error('Backend đang kết nối nhưng tác vụ dữ liệu phản hồi quá chậm. Hãy chạy setupSystemV414() một lần rồi Deploy New Version.');}throw new Error('Không kết nối được máy chủ. Vui lòng kiểm tra trạng thái Backend ở đầu Cổng phụ huynh.');}throw e;}finally{clearTimeout(timeoutId);}
+    try{response=await fetch(url,options);}catch(e){if(e.name==='AbortError'){if(isPublic&&action!=='publicPing'){await checkPublicBackend_(false);if(PUBLIC_API_STATE.status==='ok')throw new Error('Backend đang kết nối nhưng tác vụ dữ liệu phản hồi quá chậm. Hãy chạy setupSystemV415() một lần rồi Deploy New Version.');}throw new Error('Không kết nối được máy chủ. Vui lòng kiểm tra trạng thái Backend ở đầu Cổng phụ huynh.');}throw e;}finally{clearTimeout(timeoutId);}
     const text=await response.text();let result;try{result=JSON.parse(text);}catch(e){throw new Error('API không trả JSON. HTTP '+response.status+': '+text.slice(0,100));}
     if(!response.ok)throw new Error(result.message||'HTTP '+response.status);
     if(result.success===false){ if(/UNAUTHORIZED|Phiên đăng nhập/i.test(result.message||'')) logoutAdmin(false); throw new Error(result.message||'Thao tác thất bại'); }
-    const totalMs=Math.round(performance.now()-started);if((result.meta?.server_ms||totalMs)>800)console.info(`[V4.14] ${action}: server ${result.meta?.server_ms??'?'} ms, tổng ${totalMs} ms`);
+    const totalMs=Math.round(performance.now()-started);if((result.meta?.server_ms||totalMs)>800)console.info(`[V4.15] ${action}: server ${result.meta?.server_ms??'?'} ms, tổng ${totalMs} ms`);
     if(method==='GET')CLIENT_GET_CACHE.set(cacheKey,{value:result,expires:Date.now()+12000});
     else{clearClientApiCache();TAB_LOADED.tk=false;try{sessionStorage.removeItem('anphuc_v48_initial');}catch(e){}const qActions=new Set(['saveAttendance','sendTuitionMessage','sendBulkTuitionReminders','sendClassLessonReport','sendBulkClassLessonReports','sendStudentSituationReport','sendBulkStudentSituationReports','sendMultiMonthTuitionReminder','sendBulkMultiMonthTuitionReminders','saveScores','saveAndSendHomework','processZaloQueue','submitRegistration']);if(qActions.has(action)&&isAdminAuthenticated())setTimeout(refreshZaloQueueStatus,250);}
     return result;
@@ -1397,6 +1438,49 @@
     try{loading(true);await callAPI('saveExamSettings',{exam_redirect_base_url:url},'POST');EXAM_CLIENT_CACHE.clear();showToast('Đã lưu link trang kiểm tra.');}catch(e){showError(e);}finally{loading(false);}
   }
 
+
+  // V4.15 - QUẢN LÝ ĐỀ TRỰC TIẾP
+  let EXAM_ADMIN_ROWS=[];
+  function updateExamAdminForm(){
+    const periodic=document.getElementById('exam-admin-type')?.value==='periodic';
+    ['exam-admin-chapter','exam-admin-lesson'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display=periodic?'none':'';});
+    ['exam-admin-year','exam-admin-category','exam-admin-display'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display=periodic?'':'none';});
+    clearExamAdminForm(false);
+  }
+  function clearExamAdminForm(clearGrade=true){
+    const ids=['exam-admin-row','exam-admin-chapter','exam-admin-lesson','exam-admin-year','exam-admin-category','exam-admin-display','exam-admin-code'];ids.forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+    if(clearGrade){const g=document.getElementById('exam-admin-grade');if(g&&!g.value){} }
+  }
+  async function loadExamAdminRows(){
+    const type=document.getElementById('exam-admin-type')?.value||'regular',grade=document.getElementById('exam-admin-grade')?.value||'';
+    if(!grade)return;
+    try{const r=await callAPI('getExamAdminRows',{type,grade},'GET'),x=r.data||{};EXAM_ADMIN_ROWS=Array.isArray(x.rows)?x.rows:[];renderExamAdminRows();}catch(e){showError(e);}
+  }
+  function renderExamAdminRows(){
+    const type=document.getElementById('exam-admin-type')?.value||'regular',head=document.getElementById('exam-admin-head'),tb=document.getElementById('exam-admin-list');if(!head||!tb)return;
+    head.innerHTML=type==='regular'?'<tr><th>Khối</th><th>Chương</th><th>Bài</th><th>Mã đề</th><th>Thao tác</th></tr>':'<tr><th>Khối</th><th>Năm học</th><th>Kỳ thi</th><th>Tên đề</th><th>Mã đề</th><th>Thao tác</th></tr>';
+    if(!EXAM_ADMIN_ROWS.length){tb.innerHTML=`<tr><td colspan="${type==='regular'?5:6}" style="text-align:center">Chưa có dữ liệu.</td></tr>`;return;}
+    tb.innerHTML=EXAM_ADMIN_ROWS.map((x,i)=>type==='regular'?`<tr><td>${escapeHtml(x.grade||'')}</td><td>${escapeHtml(x.chapter||'')}</td><td>${escapeHtml(x.lesson||'')}</td><td>${escapeHtml(x.code||'')}</td><td><button class="btn btn-sm" onclick="editExamAdminRow(${i})">Sửa</button> <button class="btn btn-sm btn-danger" onclick="deleteExamAdminRow(${i})">Xóa</button></td></tr>`:`<tr><td>${escapeHtml(x.grade||'')}</td><td>${escapeHtml(x.year||'')}</td><td>${escapeHtml(x.category||'')}</td><td>${escapeHtml(x.display_name||'')}</td><td>${escapeHtml(x.code||'')}</td><td><button class="btn btn-sm" onclick="editExamAdminRow(${i})">Sửa</button> <button class="btn btn-sm btn-danger" onclick="deleteExamAdminRow(${i})">Xóa</button></td></tr>`).join('');
+  }
+  function editExamAdminRow(i){
+    const x=EXAM_ADMIN_ROWS[i];if(!x)return;document.getElementById('exam-admin-row').value=x._row||'';document.getElementById('exam-admin-grade').value=String(x.grade||'');document.getElementById('exam-admin-code').value=x.code||'';
+    if(document.getElementById('exam-admin-type').value==='regular'){document.getElementById('exam-admin-chapter').value=x.chapter||'';document.getElementById('exam-admin-lesson').value=x.lesson||'';}else{document.getElementById('exam-admin-year').value=x.year||'';document.getElementById('exam-admin-category').value=x.category||'';document.getElementById('exam-admin-display').value=x.display_name||'';}
+  }
+  async function saveExamAdminEntry(){
+    const type=document.getElementById('exam-admin-type').value,grade=document.getElementById('exam-admin-grade').value,row_no=document.getElementById('exam-admin-row').value,code=document.getElementById('exam-admin-code').value.trim();if(!grade)return showToast('Vui lòng chọn khối.','error');
+    const p={type,grade,row_no,code};if(type==='regular'){p.chapter=document.getElementById('exam-admin-chapter').value.trim();p.lesson=document.getElementById('exam-admin-lesson').value.trim();}else{p.year=document.getElementById('exam-admin-year').value.trim();p.category=document.getElementById('exam-admin-category').value.trim();p.display_name=document.getElementById('exam-admin-display').value.trim();}
+    try{loading(true);await callAPI('saveExamEntry',p,'POST');EXAM_CLIENT_CACHE.clear();clearExamAdminForm(false);await loadExamAdminRows();showToast('Đã lưu đề vào Google Sheet.');}catch(e){showError(e);}finally{loading(false);}
+  }
+  async function deleteExamAdminRow(i){const x=EXAM_ADMIN_ROWS[i];if(!x||!confirm('Xóa mục đề này khỏi Google Sheet?'))return;try{await callAPI('deleteExamEntry',{type:document.getElementById('exam-admin-type').value,row_no:x._row},'POST');EXAM_CLIENT_CACHE.clear();await loadExamAdminRows();showToast('Đã xóa.');}catch(e){showError(e);}}
+
+  // V4.15 - CHẨN ĐOÁN / ĐỒNG BỘ ZALO GATEWAY
+  async function loadZaloDiagnostics(){
+    const box=document.getElementById('zalo-diag-box');try{const r=await callAPI('getZaloDiagnostics',{},'GET'),x=r.data||{};const url=document.getElementById('zalo-gateway-url-admin');if(url)url.value=x.gateway_url||'';if(box)box.innerHTML=`Gateway: <b>${escapeHtml(x.gateway_reachable?'Kết nối được':'Chưa kết nối')}</b><br>Backend key: <code>${escapeHtml(x.key_fingerprint||'')}</code> · Python key: <code>${escapeHtml(x.gateway_key_fingerprint||'chưa đọc được')}</code><br>Khớp khóa: <b style="color:${x.key_match===false?'#B91C1C':'#15803D'}">${x.key_match===false?'KHÔNG':'Có/Chưa xác định'}</b><br>${escapeHtml(x.message||'')}`;}catch(e){if(box)box.textContent=e.message;}
+  }
+  async function saveZaloGatewayUrlAdmin(){const gateway_url=document.getElementById('zalo-gateway-url-admin')?.value.trim()||'';try{await callAPI('saveZaloGatewayConfig',{gateway_url},'POST');showToast('Đã lưu Gateway URL.');await loadZaloDiagnostics();}catch(e){showError(e);}}
+  async function syncZaloSecurityAdmin(){if(!confirm('Đồng bộ lại khóa bảo mật Zalo theo bộ V4.15? Sau đó cần thay Python/BAT V4.15 và khởi động lại Gateway.'))return;try{const r=await callAPI('resetZaloSecurityV415',{},'POST');showToast('Đã đồng bộ khóa trên Apps Script. Hãy khởi động lại Python/BAT V4.15.');await loadZaloDiagnostics();}catch(e){showError(e);}}
+  async function pushWaitingZaloAdmin(){try{loading(true);const r=await callAPI('processZaloQueue',{},'POST'),x=r.data||{};showToast(`Đã xử lý ${x.processed||0} tin; gửi ${x.sent||0}; còn chờ ${x.waiting_server||0}.`);await loadZaloDiagnostics();}catch(e){showError(e);}finally{loading(false);}}
+
   // HỌC LIỆU SỐ / BÀI TẬP
   function clearHomeworkHistory() { const tb=document.getElementById('list-homework'); if(tb) tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text-muted)">Chọn Khối + Lớp để xem bài tập đã giao.</td></tr>'; }
   async function loadHomework() {
@@ -1714,7 +1798,7 @@
 
   function renderExamCatalog(data,showHeader=false){
     const grade=String(data.grade||EXAM_STATE.grade||''),type=String(data.type||EXAM_STATE.type||'regular'),rows=Array.isArray(data.rows)?data.rows:[];
-    EXAM_STATE.grade=grade;EXAM_STATE.type=type;ensureParentService_('exam');
+    EXAM_STATE.grade=grade;EXAM_STATE.type=type;EXAM_STATE.launchBase=String(data.launch_base||EXAM_STUDENT_URL);ensureParentService_('exam');
     if(!document.getElementById('exam-portal-results'))showExamPortal(false);
     updateExamPortalControls_();
     let body='';
@@ -1749,7 +1833,7 @@
     const copied=await copyExamCode_(code);
     if(copied) showToast(`Đã sao chép mã đề ${code}. Hãy dán mã tại trang làm bài.`);
     else showToast(`Không tự sao chép được. Mã đề: ${code}`,'error');
-    window.open(EXAM_STUDENT_URL,'_blank','noopener,noreferrer');
+    window.open(EXAM_STATE.launchBase||EXAM_STUDENT_URL,'_blank','noopener,noreferrer');
   }
 
   async function sendChatMessage(){
@@ -2069,10 +2153,10 @@
   }
 
   async function runSetupV4() {
-    if (!confirm('Chạy setup V4.14 Security để bổ sung lớp bảo mật và giữ nguyên dữ liệu hiện có?')) return;
+    if (!confirm('Chạy setup V4.15 Security để bổ sung lớp bảo mật và giữ nguyên dữ liệu hiện có?')) return;
     try {
       loading(true);
-      const r = await callAPI('setupSystemV414', {}, 'POST');
+      const r = await callAPI('setupSystemV415', {}, 'POST');
       const x = r.data || {};
       showToast(`${x.message || 'Setup hoàn tất.'}${x.duplicate_queue_rows_marked ? ` Đã khóa ${x.duplicate_queue_rows_marked} dòng tin trùng.` : ''}${x.duplicate_zalo_triggers_removed ? ` Đã xóa ${x.duplicate_zalo_triggers_removed} trigger Zalo trùng.` : ''}`);
     } catch(e) { showError(e); } finally { loading(false); }

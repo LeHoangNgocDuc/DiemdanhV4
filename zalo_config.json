@@ -1,0 +1,9 @@
+{
+  "gas_url": "https://script.google.com/macros/s/AKfycbyowvXKHzguu53eI9ucGoJMeZtZALwxKDCw23IkV0q8dkG1Y_saRet9uG4Kz0ET71CD7A/exec",
+  "ngrok_domain": "pummel-crumb-ferret.ngrok-free.dev",
+  "gateway_api_key": "-X7uFumGFAZ9RVccg8hdAC2UZOiQhdsghDz5lMCx4LQ",
+  "wake_key": "fJqTHQSl4bLyfJjQQTNTsJp7uFjuMRj4q_0xGBvQ2Ts",
+  "logged_in_phone": "0972466347",
+  "failure_notify_phone": "0986108104",
+  "port": 5000
+}

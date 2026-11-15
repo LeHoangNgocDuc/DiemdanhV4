@@ -1622,7 +1622,7 @@
           <label>Nội dung thông báo
             <select id="notice-mode"><option value="full">Đầy đủ (mặc định)</option><option value="short">Rút gọn - chỉ hiện học phí</option></select>
           </label>
-          <button class="btn btn-primary" type="button" onclick="loadTuitionNoticeRows()"><i class="bi bi-search"></i> Lấy danh sách</button>
+          <button class="btn btn-primary" type="button" id="notice-load-btn" onclick="loadTuitionNoticeRows()"><i class="bi bi-search"></i> Lấy danh sách</button>
         </div>
         <details class="notice-edit"><summary><i class="bi bi-pencil-square"></i> Chỉnh sửa lời nhắn chung trước khi in</summary>
           <textarea id="notice-letter" rows="5" maxlength="700">Kính mong Quý Phụ huynh vui lòng kiểm tra và sắp xếp hoàn tất khoản học phí trên trong thời gian thuận tiện.
@@ -3999,19 +3999,103 @@ function noticeResetLetter(){document.getElementById('notice-letter').value=NOTI
 function noticeMoney(v){return new Intl.NumberFormat('vi-VN',{maximumFractionDigits:0}).format(Number(v)||0)+' đ';}
 function noticeFilters(){return {month:Number(document.getElementById('tk-thang').value),year:Number(document.getElementById('tk-nam').value),grade:document.getElementById('tk-khoi').value,className:document.getElementById('tk-lop').value,status:'UNPAID'};}
 function noticeFilterKey(f){return [f.month,f.year,f.grade,f.className,f.status].join('|');}
+// V4.31: fall back to the already deployed reporting API if the V4.30 endpoint is unavailable.
+// This keeps the original two-state tuition policy (PAID / UNPAID), without partial payments.
+function noticeMonthIsEligible_(student, month, year) {
+  const raw=student.enrollment_date || student.created_at;
+  if(!raw)return true; // The original backend likewise permits legacy students without enrollment dates.
+  let dt=null;
+  if(raw instanceof Date && Number.isFinite(raw.getTime()))dt=raw;
+  else {
+    const t=String(raw).trim();
+    let a=t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if(a)dt=new Date(Number(a[1]),Number(a[2])-1,Number(a[3]));
+    else {
+      a=t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+      if(a)dt=new Date(Number(a[3]),Number(a[2])-1,Number(a[1]));
+      else dt=new Date(t);
+    }
+  }
+  if(!dt || !Number.isFinite(dt.getTime()))return false; // Unknown enrollment date: fail closed.
+  const end=new Date(Number(year),Number(month),0,23,59,59,999);
+  return dt.getTime()<=end.getTime();
+}
+function noticeRowsFromReport_(bundle,filters){
+  const stat=bundle?.data?.statistics;
+  if(!stat || !Array.isArray(stat.unpaid_list))
+    throw new Error('API báo cáo không cung cấp danh sách học sinh chưa đóng. Kiểm tra bản Google Apps Script đang triển khai.');
+  const warnings=[], seen=new Set(), rows=[];
+  for(const s of stat.unpaid_list){
+    const id=String(s.student_id||'').trim();
+    if(!id){warnings.push('Có học sinh trong báo cáo thiếu mã học sinh.');continue;}
+    if(seen.has(id)){warnings.push('Mã học sinh '+id+' bị trùng trong dữ liệu báo cáo.');continue;}
+    seen.add(id);
+    if(String(s.grade||'')!==String(filters.grade||s.grade||''))continue;
+    if(filters.className && String(s.class||'').trim().toUpperCase()!==String(filters.className).trim().toUpperCase())continue;
+    if(!noticeMonthIsEligible_(s,filters.month,filters.year))continue;
+    const due=Number(s.expected_fee);
+    if(!Number.isFinite(due) || due<=0){warnings.push('Chưa có mức học phí hợp lệ cho '+String(s.name||id)+' ('+id+').');continue;}
+    rows.push({student_id:id,name:String(s.name||''),grade:String(s.grade||''),class:String(s.class||''),
+      class_info:String(s.class_info||('K'+s.grade+'-'+s.class)),month:filters.month,year:filters.year,
+      expected_amount:due,paid_amount:0,remaining_amount:due,status:'UNPAID'});
+  }
+  rows.sort((a,b)=>Number(a.grade)-Number(b.grade)||a.class.localeCompare(b.class,'vi')||a.name.localeCompare(b.name,'vi'));
+  return {rows,warnings,source:'report'};
+}
+function noticeSetLoading_(message,kind){
+  const el=document.getElementById('notice-summary');
+  if(el){el.textContent=message;el.classList.toggle('warn',kind==='error');}
+}
 async function loadTuitionNoticeRows(){
+  const btn=document.getElementById('notice-load-btn');
   try{
     if(!isAdminAuthenticated())throw new Error('Vui lòng đăng nhập quyền giáo viên.');
-    loading(true);
     const filters=noticeFilters();
-    const response=await callAPI('getTuitionNoticeRows',{...filters,_refresh:Date.now()});
-    const data=response.data||{};
-    NOTICE_DATA=Array.isArray(data.rows)?data.rows:[];
-    NOTICE_CONTEXT={filters,key:noticeFilterKey(filters),warnings:data.warnings||[],loaded_at:Date.now()};
+    if(!Number.isInteger(filters.month)||filters.month<1||filters.month>12||
+       !Number.isInteger(filters.year)||filters.year<2000||filters.year>2100)
+      throw new Error('Tháng/năm không hợp lệ.');
+    const now=new Date();
+    if(filters.year*12+filters.month>now.getFullYear()*12+now.getMonth()+1)
+      throw new Error('Không in thông báo cho tháng trong tương lai.');
+    NOTICE_DATA=[];NOTICE_CONTEXT=null;NOTICE_SELECTED.clear();
+    noticeSetLoading_('Đang lấy danh sách học sinh chưa đóng học phí tháng '+filters.month+'/'+filters.year+'...');
+    if(btn){btn.disabled=true;btn.setAttribute('aria-busy','true');}
+    loading(true);
+    let data,source='notice-api',fallbackReason='';
+    try{
+      const response=await callAPI('getTuitionNoticeRows',{...filters,_refresh:Date.now()});
+      data=response?.data;
+      if(!data || !Array.isArray(data.rows))throw new Error('API thông báo trả về dữ liệu không đúng cấu trúc.');
+    }catch(e){
+      const message=String(e?.message||e);
+      // The running GAS may still be the pre-V4.30 deployment. Reuse the reporting API
+      // rather than requiring a new Apps Script deployment just to print notices.
+      if(!/ACTION_NOT_FOUND|action (không|khong) t(o|ồ)n t(a|ạ)i|API thông báo trả về dữ liệu không đúng cấu trúc|không hỗ trợ|unsupported/i.test(message))throw e;
+      fallbackReason=message;
+      noticeSetLoading_('API in thông báo chưa có trên máy chủ. Đang đọc dữ liệu từ Báo cáo học phí...');
+      const bundle=await callAPI('getReportBundle',{...filters,months:String(filters.month),_refresh:Date.now()});
+      data=noticeRowsFromReport_(bundle,filters);
+      source='report';
+    }
+    NOTICE_DATA=data.rows;
+    NOTICE_CONTEXT={filters,key:noticeFilterKey(filters),warnings:Array.isArray(data.warnings)?data.warnings:[],loaded_at:Date.now(),source};
     NOTICE_SELECTED=new Set(NOTICE_DATA.map(s=>String(s.student_id)));
     noticeRenderRows();
-  }catch(e){NOTICE_DATA=[];NOTICE_CONTEXT=null;NOTICE_SELECTED.clear();noticeRenderRows();showError(e);}
-  finally{loading(false);}
+    if(source==='report'){
+      const el=document.getElementById('notice-summary');
+      if(el)el.textContent+=' Nguồn: Báo cáo học phí hiện có (tương thích Apps Script cũ).';
+      console.info('[V4.31] Tuition notice used reporting fallback:',fallbackReason);
+    }
+  }catch(e){
+    NOTICE_DATA=[];NOTICE_CONTEXT=null;NOTICE_SELECTED.clear();
+    noticeRenderRows();
+    const reason=String(e?.message||e||'Lỗi không xác định');
+    noticeSetLoading_('Không thể lấy danh sách: '+reason+' Kiểm tra kết nối, đăng nhập giáo viên hoặc cập nhật bản triển khai Apps Script.','error');
+    showError(e);
+  }finally{
+    if(btn){btn.disabled=false;btn.removeAttribute('aria-busy');}
+    loading(false);
+  }
 }
 function noticeRenderRows(){
   const body=document.getElementById('notice-list'),summary=document.getElementById('notice-summary');
@@ -4021,7 +4105,7 @@ function noticeRenderRows(){
   const problems=NOTICE_CONTEXT?.warnings||[];
   summary.classList.toggle('warn',problems.length>0);
   summary.textContent=NOTICE_CONTEXT ? `Đã tìm thấy ${NOTICE_DATA.length} học sinh chưa đóng; chọn ${selected.length} học sinh, tổng ${noticeMoney(total)}.${problems.length?' CẢNH BÁO dữ liệu: '+problems[0]+' (tổng '+problems.length+' cảnh báo).':''}` : 'Chưa tải được danh sách. Chọn bộ lọc và bấm Lấy danh sách.';
-  if(!NOTICE_DATA.length){document.getElementById('notice-all').checked=false;body.innerHTML='<tr><td colspan="7" class="notice-empty">Không có học sinh phù hợp hoặc chưa tải dữ liệu.</td></tr>';return;}
+  if(!NOTICE_DATA.length){document.getElementById('notice-all').checked=false;body.innerHTML='<tr><td colspan="7" class="notice-empty">'+(NOTICE_CONTEXT?'Không có học sinh chưa đóng phù hợp với tháng/lớp đã chọn.':'Chưa có dữ liệu; bấm Lấy danh sách để tải.')+'</td></tr>';return;}
   body.innerHTML=NOTICE_DATA.map((x,i)=>`<tr><td><input type="checkbox" aria-label="Chọn học sinh ${escapeHtml(x.name)}" data-notice-id="${escapeHtml(x.student_id)}" onchange="noticeToggleStudent(this)" ${NOTICE_SELECTED.has(String(x.student_id))?'checked':''}></td><td><b>${i+1}. ${escapeHtml(x.name)}</b></td><td>${escapeHtml(x.class_info)}</td><td>${noticeMoney(x.expected_amount)}</td><td>${noticeMoney(x.paid_amount)}</td><td style="font-weight:800;color:#b91c1c">${noticeMoney(x.remaining_amount)}</td><td>Chưa đóng</td></tr>`).join('');
   document.getElementById('notice-all').checked=selected.length===NOTICE_DATA.length;
 }

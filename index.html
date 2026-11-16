@@ -1614,7 +1614,7 @@
       <section class="notice-module" aria-labelledby="notice-module-title">
         <div class="notice-title-row">
           <div><h3 id="notice-module-title"><i class="bi bi-printer-fill"></i> In thông báo học phí cho phụ huynh</h3>
-            <p>Dùng tháng, năm, khối và lớp ở thanh bộ lọc phía trên. Một học sinh một phiếu A5; mặc định 2 phiếu trên giấy A4 ngang.</p></div>
+            <p>Dùng tháng, năm, khối và lớp ở thanh bộ lọc phía trên. Một học sinh một phiếu A5; mặc định 2 phiếu trên giấy A4 ngang. Logo và chữ được tối ưu để in rõ nét.</p></div>
           <span class="notice-tag">A5 / A4</span>
         </div>
         <div class="notice-controls">
@@ -4144,31 +4144,45 @@ function noticePageCard(x,opt){
   </article>`;
 }
 function noticePrintCSS(mode){return `
-  *{box-sizing:border-box}body{font-family:Arial,'Segoe UI',sans-serif;background:white;margin:0;color:#152b45;font-size:12px}
-  .notice-paper{width:${mode==='a4'?'297mm':'148mm'};height:210mm;display:flex;page-break-after:always;break-after:page;overflow:hidden}
-  .notice-card{width:${mode==='a4'?'148.5mm':'148mm'};height:210mm;flex:0 0 auto;padding:12mm 10mm 9mm;display:flex;flex-direction:column;background:white;overflow:hidden;line-height:1.42}
-  .notice-card+.notice-card{border-left:1px dashed #bcc6d7}
-  .notice-brand{display:flex;align-items:center;gap:9px;min-height:23mm}
-  .notice-brand img{width:22mm;height:22mm;object-fit:contain;flex:0 0 auto}
-  .notice-brandtext{min-width:0;text-align:center;flex:1}.notice-brandtext strong{font-size:13px;color:#083e79;display:block;line-height:1.3}.notice-brandtext small{display:block;color:#124977;font-size:8px;font-weight:800;letter-spacing:.2px;margin-top:5px}
-  .notice-rule{height:1.5px;background:#134c84;margin:3mm 0 5mm}
-  h1{font-size:18px;color:#083e79;letter-spacing:.2px;text-align:center;margin:0}h2{font-size:12px;color:#43536b;text-align:center;margin:1.5mm 0 5mm;font-weight:500}
-  p{font-size:11.5px;margin:0 0 3mm;line-height:1.48}.notice-greeting{margin-bottom:3mm}
-  .notice-details{margin:2mm 0 4mm;padding:3.8mm 4mm;background:#f5f8fc;border:1px solid #d9e3f0;border-radius:2.5mm}
-  .notice-details>div{display:flex;justify-content:space-between;gap:7mm;font-size:11px;padding:1.3mm 0}.notice-details>div>b:first-child{color:#324a64;font-weight:700;flex:0 0 auto}.notice-details>div>:last-child{text-align:right}
-  .notice-details .notice-due{border-top:1px solid #b8cce3;padding-top:2.7mm;margin-top:1.7mm;align-items:center;color:#083e79;font-weight:800}.notice-due strong{font-size:14px;white-space:nowrap}
-  .notice-message p{margin:0 0 3mm;font-size:11px;line-height:1.45}
-  footer{margin-top:auto;padding-top:4mm;text-align:center;display:flex;align-items:center;flex-direction:column;align-self:flex-end;min-width:58mm;font-size:10.5px}
-  footer .notice-place{font-size:10px;font-style:italic;white-space:nowrap;margin-bottom:2mm;color:#334155}
-  footer>b{font-size:11px}footer .signature{width:46mm;height:14mm;object-fit:contain;margin:2mm auto 0}footer>strong{font-size:12px;margin-top:0}
+  /* V4.32 - A5 ISO 148x210 mm, 2 x A5 panels on A4 landscape. */
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:Arial,'Liberation Sans','Segoe UI',sans-serif;background:#fff;color:#101827;font-size:13.6px;-webkit-font-smoothing:auto}
+  .notice-paper{width:${mode==='a4'?'297mm':'148mm'};height:210mm;display:flex;flex-flow:row nowrap;break-after:page;page-break-after:always;overflow:hidden;position:relative;background:#fff}
+  .notice-card{width:${mode==='a4'?'148.5mm':'148mm'};height:210mm;flex:none;padding:7mm 8.5mm 7.5mm;display:flex;flex-direction:column;position:relative;background:#fff;overflow:hidden;line-height:1.47;color:#101827}
+  .notice-card+.notice-card{border-left:0.22mm dashed #6b7280;padding-left:8.5mm}
+  .notice-brand{display:flex;align-items:center;gap:4mm;min-height:34mm;height:34mm;flex:none}
+  .notice-brand img{width:34mm;height:34mm;object-fit:contain;flex:none;display:block;image-rendering:auto}
+  .notice-brandtext{min-width:0;flex:1;text-align:center}
+  .notice-brandtext strong{display:block;font-size:15.3px;color:#083469;line-height:1.26;letter-spacing:0;font-weight:800}
+  .notice-brandtext small{display:block;font-size:11.2px;color:#193c66;line-height:1.35;font-weight:700;margin-top:2.4mm}
+  .notice-rule{height:0.45mm;background:#153f70;margin:1.7mm 0 2.8mm;flex:none}
+  .notice-card h1{font-family:Arial,'Liberation Sans',sans-serif;font-size:20.5px;color:#082f63;letter-spacing:.12px;line-height:1.2;text-align:center;margin:0;font-weight:800;flex:none}
+  .notice-card h2{font-size:13.3px;color:#283f5d;text-align:center;margin:1.1mm 0 3mm;font-weight:600;line-height:1.4;flex:none}
+  .notice-card p{font-size:13.35px;line-height:1.52;margin:0 0 2.3mm;orphans:2;widows:2}
+  .notice-card .notice-greeting{margin-bottom:2.5mm}
+  .notice-details{margin:1.2mm 0 3mm;padding:2mm 3.1mm;background:#fff;border:0.32mm solid #93a4b7;border-radius:1.2mm;flex:none}
+  .notice-details>div{display:flex;align-items:baseline;justify-content:space-between;gap:3mm;font-size:13.05px;line-height:1.44;padding:1mm 0}
+  .notice-details>div>b:first-child{color:#1b304b;font-weight:700;flex:none}
+  .notice-details>div>:last-child{text-align:right;overflow-wrap:anywhere}
+  .notice-details .notice-due{border-top:0.27mm solid #9fb1c4;padding-top:2mm;margin-top:1.2mm;align-items:center;color:#073469;font-weight:800}
+  .notice-due strong{font-size:15.4px;white-space:nowrap;color:#062f60}
+  .notice-message{flex:none}
+  .notice-message p{margin:0 0 2mm;font-size:13.15px;line-height:1.48;text-align:left}
+  .notice-card footer{margin-top:auto;padding-top:2.2mm;text-align:center;display:flex;align-items:center;flex-direction:column;align-self:flex-end;min-width:61mm;max-width:100%;font-size:12px;line-height:1.36;flex:none}
+  .notice-card footer .notice-place{font-size:11.5px;font-style:italic;white-space:nowrap;margin-bottom:1.6mm;color:#293e5b}
+  .notice-card footer>b{font-size:12.2px;color:#111827}
+  .notice-card footer .signature{width:49mm;height:15mm;object-fit:contain;margin:1mm auto 0}
+  .notice-card footer>strong{font-size:13.6px;margin-top:0;color:#111827}
   .notice-toolbar{position:sticky;top:0;z-index:10;background:#0f3e71;color:white;padding:12px;text-align:center;display:flex;justify-content:center;align-items:center;gap:10px}
   .notice-toolbar button{padding:8px 13px;border:0;border-radius:6px;background:#fff;color:#0f3e71;font-weight:bold;cursor:pointer}
-  @page{size:${mode==='a4'?'A4 landscape':'A5 portrait'};margin:0}
+  .notice-pdf-host .notice-paper{margin:0!important;box-shadow:none!important}
+  @page{size:${mode==='a4'?'A4 landscape':'148mm 210mm'};margin:0}
   @media screen{body{background:#e7edf5}.notice-paper{margin:15px auto;background:#fff;box-shadow:0 8px 35px #94a3b877}}
-  @media print{body{margin:0;background:#fff;print-color-adjust:exact;-webkit-print-color-adjust:exact}.notice-toolbar{display:none}.notice-paper{margin:0;box-shadow:none}.notice-paper:last-child{page-break-after:auto;break-after:auto}}
+  @media print{html,body{width:auto;overflow:visible;background:#fff!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.notice-toolbar{display:none!important}.notice-paper{margin:0!important;box-shadow:none!important}.notice-paper:last-child{break-after:auto;page-break-after:auto}}
   `;}
 function noticePagesHtml(c,format){
-  const logo=new URL('logo.jpg',window.location.href).href;
+  const logo=new URL('logo_in_A5.png',window.location.href).href;
   const now=new Date();const date={d:String(now.getDate()).padStart(2,'0'),m:String(now.getMonth()+1).padStart(2,'0'),y:now.getFullYear()};
   const signature=new URL('chu_ky_quoc_hai.png',window.location.href).href;
   const opt={...c,logo,signature,date};
@@ -4184,9 +4198,23 @@ function noticeOpenPreview(format='a4',autoprint=false){
   const pageData=noticePagesHtml(context,format);
   const popup=window.open('','_blank');
   if(!popup){showToast('Trình duyệt chặn cửa sổ xem trước. Hãy cho phép pop-up rồi thử lại.','error');return;}
-  const page=`<!doctype html><html lang="vi"><head><meta charset="UTF-8"><title>Thong bao hoc phi ${context.month}-${context.year}</title><style>${noticePrintCSS(format)}</style></head><body><div class="notice-toolbar"><span>${pageData.count} trang - ${context.rows.length} học sinh</span><button onclick="window.print()">In / Lưu PDF</button><button onclick="window.close()">Đóng</button></div>${pageData.html}</body></html>`;
+  const script=`<script>
+    function noticePrintValidated(){
+      const cards=Array.from(document.querySelectorAll('.notice-card'));
+      if(cards.some(card=>card.scrollHeight>card.clientHeight+2)){
+        alert('Nội dung bị tràn khổ A5. Vui lòng trở về trang quản lý và rút gọn lời nhắn trước khi in.');return;
+      }
+      window.print();
+    }
+    window.addEventListener('load',async()=>{
+      try{
+        await Promise.all(Array.from(document.images).map(img=>img.decode()));
+        if(${autoprint?'true':'false'})noticePrintValidated();
+      }catch(e){alert('Logo hoặc chữ ký chưa tải được. Vui lòng kiểm tra file ảnh trước khi in.');}
+    },{once:true});
+  <\/script>`;
+  const page=`<!doctype html><html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Thong bao hoc phi ${context.month}-${context.year}</title><style>${noticePrintCSS(format)}</style></head><body><div class="notice-toolbar"><span>${pageData.count} trang - ${context.rows.length} học sinh</span><button onclick="noticePrintValidated()">In / Lưu PDF</button><button onclick="window.close()">Đóng</button></div>${pageData.html}${script}</body></html>`;
   popup.document.open();popup.document.write(page);popup.document.close();
-  if(autoprint)popup.addEventListener('load',()=>{Promise.all(Array.from(popup.document.images).map(img=>img.decode())).then(()=>{popup.focus();popup.print();}).catch(()=>{popup.alert('Kh\u00f4ng t\u1ea3i \u0111\u01b0\u1ee3c logo ho\u1eb7c ch\u1eef k\u00fd; kh\u00f4ng th\u1ec3 in.');});},{once:true});
 }
 // Kết xuất PDF nhiều trang trực tiếp ở máy giáo viên; dữ liệu không tải lên dịch vụ thứ ba.
 async function noticeEnsureJsPdf(){
@@ -4205,7 +4233,7 @@ async function noticeDownloadPdf(format='a4'){
     loading(true);showToast('\u0110ang t\u1ea1o PDF ' + format.toUpperCase() + '...');
     const [JsPdf,html2canvas]=await Promise.all([noticeEnsureJsPdf(),ensureHtml2CanvasLib()]);
     const data=noticePagesHtml(ctx,format);
-    host=document.createElement('div');host.style.cssText='position:fixed;left:0;top:0;width:297mm;z-index:-1000;pointer-events:none;background:#fff;';
+    host=document.createElement('div');host.className='notice-pdf-host';host.style.cssText='position:fixed;left:0;top:0;width:297mm;z-index:-1000;pointer-events:none;background:#fff;';
     const style=document.createElement('style');style.textContent=noticePrintCSS(format);host.appendChild(style);
     document.body.appendChild(host);
     const pdf=new JsPdf({orientation:format==='a4'?'landscape':'portrait',unit:'mm',format:format,compress:true});
@@ -4213,9 +4241,10 @@ async function noticeDownloadPdf(format='a4'){
       const el=document.createElement('div');el.innerHTML=data.pages[i];host.appendChild(el);
       await Promise.all(Array.from(el.querySelectorAll('img')).map(img=>img.decode().catch(()=>{throw new Error('Kh\u00f4ng t\u1ea3i \u0111\u01b0\u1ee3c logo ho\u1eb7c ch\u1eef k\u00fd. Ki\u1ec3m tra t\u00e0i nguy\u00ean \u1ea3nh.');})));
       const node=el.querySelector('.notice-paper');
-      const canvas=await html2canvas(node,{backgroundColor:'#ffffff',scale:1.6,useCORS:true,logging:false,windowWidth:1600});
+      if(Array.from(node.querySelectorAll('.notice-card')).some(card=>card.scrollHeight>card.clientHeight+2))throw new Error('Nội dung quá dài so với khổ A5. Vui lòng rút gọn lời nhắn trước khi xuất PDF.');
+      const canvas=await html2canvas(node,{backgroundColor:'#ffffff',scale:2.65,useCORS:true,logging:false,windowWidth:1600});
       if(i)pdf.addPage(format,format==='a4'?'landscape':'portrait');
-      pdf.addImage(canvas.toDataURL('image/jpeg',0.92),'JPEG',0,0,format==='a4'?297:148,210,undefined,'FAST');
+      pdf.addImage(canvas.toDataURL('image/png'),'PNG',0,0,format==='a4'?297:148,210,undefined,'FAST');
       el.remove();
     }
     pdf.save(`Thong_bao_hoc_phi_${ctx.month}_${ctx.year}_${ctx.rows.length}HS_${format.toUpperCase()}.pdf`);

@@ -4,7 +4,10 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AN PHÚC EDUCATION | Hệ Thống Quản Lý V4.27</title>
+  <title>AN PHÚC EDUCATION | Cổng thông tin Trung tâm Toán An Phúc</title>
+  <meta name="description" content="Cổng thông tin Trung tâm Toán An Phúc: tra cứu học tập, học phí, lịch học và quản lý dành cho giáo viên.">
+  <meta name="theme-color" content="#0B3161">
+  <link rel="preload" as="image" href="logo.jpg" fetchpriority="high">
   
   <!-- Font Be Vietnam Pro & Bootstrap Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1119,6 +1122,409 @@
     .notice-table{min-width:740px}.notice-table th{font-size:11px;padding:11px 12px}.notice-table td{font-size:12px;height:auto;padding:10px 12px}.notice-table input[type=checkbox]{width:17px;height:17px;cursor:pointer}
     .notice-empty{text-align:center!important;color:#64748b!important;padding:18px!important}.notice-help{margin:13px 0 0;font-size:11px;color:#64748b;line-height:1.65}
     @media(max-width:720px){.notice-module{padding:14px;border-radius:16px}.notice-title-row h3{font-size:16px}.notice-controls label,.notice-controls button,.notice-rule-pill{width:100%}.notice-actions .btn{flex:1 1 150px}.notice-table, .notice-table thead,.notice-table tbody,.notice-table tr,.notice-table th,.notice-table td{display:revert}.notice-table{width:100%;min-width:740px}.notice-table td::before{display:none}}
+
+
+/* ========================================================================== */
+/* AN PHUC EDUCATION | EXECUTIVE EDUTECH 2026                                  */
+/* Additive presentation overrides. Do not alter JS, handlers, or print engine. */
+/* ========================================================================== */
+:root {
+  --ap-navy: #0b3161;
+  --ap-navy-deep: #08254b;
+  --ap-blue: #155ba4;
+  --ap-emerald: #047857;
+  --ap-ink: #152741;
+  --ap-muted: #586b82;
+  --ap-soft: #f3f7fb;
+  --ap-line: #dae4ef;
+  --ap-card: #ffffff;
+  --ap-shadow: 0 2px 8px rgba(11,49,97,.025),0 18px 46px rgba(11,49,97,.055);
+  --primary: #155ba4;
+  --primary-dark: #0b3161;
+  --success: #047857;
+  --bg: #f3f7fb;
+  --text-main: #152741;
+  --text-muted: #586b82;
+  --border: #dae4ef;
+  --border-focus: #438acf;
+  --shadow-sm: 0 2px 8px rgba(11,49,97,.035);
+  --shadow-md: 0 14px 38px rgba(11,49,97,.09);
+}
+@supports (color: oklch(45% 0.12 250)) {
+  :root {
+    --ap-navy: oklch(34% .091 255);
+    --ap-navy-deep: oklch(26% .075 255);
+    --ap-blue: oklch(47% .13 252);
+    --ap-emerald: oklch(48% .105 168);
+    --ap-ink: oklch(29% .041 253);
+    --ap-muted: oklch(50% .038 255);
+    --ap-soft: oklch(97.2% .012 244);
+    --ap-line: oklch(89.3% .017 246);
+    --primary: var(--ap-blue);
+    --primary-dark: var(--ap-navy);
+    --success: var(--ap-emerald);
+    --bg: var(--ap-soft);
+    --text-main: var(--ap-ink);
+    --text-muted: var(--ap-muted);
+    --border: var(--ap-line);
+  }
+}
+@supports (color: color-mix(in oklch, white 50%, black)) {
+  :root {
+    --ap-hairline: color-mix(in oklch,var(--ap-navy) 12%,white);
+    --ap-muted-bg: color-mix(in oklch,var(--ap-navy) 3%,white);
+    --ap-emerald-soft: color-mix(in oklch,var(--ap-emerald) 9%,white);
+  }
+}
+body { color:var(--ap-ink); background:var(--ap-soft); }
+body, button, input, select, textarea { font-family:'Be Vietnam Pro',sans-serif; }
+h1,h2,h3,h4,.section-title,.brand-title { text-wrap:balance; }
+p,li,.chat-bubble { text-wrap:pretty; }
+:where(button,a,input,select,textarea,[role="button"],summary,.tab):focus-visible {
+  outline:3px solid #5eafe8!important; outline-offset:3px!important;
+}
+:where(button,input,select,textarea) { accent-color:var(--ap-emerald); }
+:where(#admin-app,#public-app,#role-landing) :is(button,select,input,textarea) { max-width:100%; }
+:where(#admin-app,#public-app) :is(.table-responsive,.student-report-section) { overscroll-behavior-x:contain; }
+:where(#admin-app,#parent-portal) :is(table,.stat-info p,.parent-metric,.chat-metric,.student-mini-stat,
+ .score-chip,.tuition-item,.tuition-panel,.notice-table,.score-summary-item,.ai-metric) {
+  font-variant-numeric:tabular-nums;
+}
+
+/* Landing page - calm visual hierarchy and exact original logo artwork. */
+#role-landing.role-landing {
+  min-height:100vh; min-height:100dvh; width:100%; padding:32px 22px;
+  background:
+    radial-gradient(ellipse 45% 55% at 1% 8%,rgba(40,121,194,.09),transparent 90%),
+    radial-gradient(ellipse 48% 40% at 98% 90%,rgba(12,120,106,.07),transparent 90%),
+    linear-gradient(180deg,#f9fbfe 0%,#f2f6fb 100%);
+}
+#role-landing.role-landing::before,#role-landing.role-landing::after { display:none; }
+#role-landing .role-landing-wrap { max-width:940px; width:100%; }
+#role-landing .role-brand { margin-bottom:27px; }
+#role-landing .role-logo {
+  width:118px;height:118px;margin:0 auto 18px;border-radius:27px;
+  padding:8px;background:white;overflow:hidden;border:1px solid #e2eaf4;
+  box-shadow:0 1px 0 #fff inset,0 15px 40px rgba(11,49,97,.105);
+}
+#role-landing .role-logo img { width:100%;height:100%;object-fit:contain; }
+#role-landing .role-kicker {
+  display:inline-flex;align-items:center;gap:9px;padding:7px 13px;margin-bottom:11px;
+  color:#175b92;background:#eaf4fb;border:1px solid #d5e7f5;border-radius:999px;
+  font-size:10px;font-weight:800;letter-spacing:1.15px;
+}
+#role-landing .role-kicker::before {
+  content:'';height:7px;width:7px;border-radius:50%;background:#0b8b7e;
+}
+#role-landing .role-brand h1 { font-size:clamp(23px,3.4vw,37px);letter-spacing:-.9px;line-height:1.35;color:var(--ap-navy-deep); }
+#role-landing .role-tagline { margin:6px auto 0;color:var(--ap-emerald);font-size:clamp(13px,1.5vw,16px);font-weight:800; }
+#role-landing .role-description { margin:10px auto 0;max-width:650px;font-size:13px;line-height:1.75;color:var(--ap-muted); }
+#role-landing .role-brand::after { display:none; }
+#role-landing .role-card-grid { max-width:820px;gap:20px;grid-template-columns:repeat(2,minmax(0,1fr)); }
+#role-landing .role-card {
+  min-height:307px;padding:28px 29px 25px;align-items:stretch;text-align:left;
+  background:var(--ap-card);border:1px solid #e0e8f2;border-radius:22px;
+  box-shadow:var(--ap-shadow);position:relative;
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+}
+#role-landing .role-card::before {height:5px;}
+#role-landing .role-card::after {display:none;}
+#role-landing .role-card.parent::before { background:#0f9a79; }
+#role-landing .role-card.teacher::before { background:#154c86; }
+#role-landing .role-card:hover {transform:translateY(-3px);border-color:#b9cde4;box-shadow:0 22px 46px rgba(11,49,97,.105);}
+#role-landing .role-icon {width:62px;height:62px;border-radius:16px;margin-bottom:16px;}
+#role-landing .role-card.parent .role-icon {background-color:#e8f8f1;color:#047857;background-size:32px 32px;}
+#role-landing .role-card.teacher .role-icon {background-color:#e9f2fc;color:#155ba4;background-size:32px 32px;}
+#role-landing .role-audience {
+  position:absolute;right:24px;top:37px;display:inline-flex;padding:7px 9px;
+  color:#49647c;border-radius:999px;border:1px solid #e0e8f2;background:#f7fafc;
+  font-size:9px;font-weight:800;letter-spacing:.48px;
+}
+#role-landing .role-card.parent .role-audience {color:#047857;background:#f0fdf7;border-color:#ccebdc;}
+#role-landing .role-card h2 {font-size:23px;color:var(--ap-navy-deep);letter-spacing:-.5px;}
+#role-landing .role-card p {max-width:none;margin:9px 0 21px;font-size:12.5px;line-height:1.78;color:#52657b;}
+#role-landing .role-entry-btn {
+  max-width:none;width:100%;min-height:48px;height:48px;margin-top:auto;
+  border-radius:12px;font-size:13px;box-shadow:none;
+}
+#role-landing .role-card.parent .role-entry-btn {color:white;background:#087b61;border:1px solid #087b61;}
+#role-landing .role-card.teacher .role-entry-btn {color:white;background:#0d4179;border:1px solid #0d4179;}
+#role-landing .role-card.parent:hover .role-entry-btn {background:#056a53;}
+#role-landing .role-card.teacher:hover .role-entry-btn {background:#082e59;}
+#role-landing .role-entry-btn i { transition:transform .2s ease; }
+#role-landing .role-card:hover .role-entry-btn i { transform:translateX(3px); }
+#role-landing .role-security {margin-top:20px;color:#617589;font-size:11px;line-height:1.6;}
+#role-landing .role-contact-footer {
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 21px;
+  margin:11px auto 0;color:#64778c;font-size:11px;line-height:1.6;
+}
+#role-landing .role-contact-footer span,#role-landing .role-contact-footer a {display:inline-flex;align-items:center;gap:5px;}
+#role-landing .role-contact-footer a {color:#0d5289;font-weight:750;text-decoration:none;}
+#role-landing .role-contact-footer a:hover {text-decoration:underline;}
+
+/* Parent portal: restrained emerald active state; contrast-compliant surface. */
+#public-app.public-shell {background:linear-gradient(170deg,#f6faff 0%,#f1f6fb 100%);padding:17px 18px 35px;}
+#public-app .public-wrap {max-width:1320px;}
+#public-app .public-header {
+  position:sticky;top:10px;z-index:90;border-radius:20px;padding:11px 16px;
+  background:rgba(255,255,255,.92);border:1px solid #dce6f0;
+  box-shadow:0 12px 33px rgba(11,49,97,.065);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+}
+#public-app .public-header .brand-title {color:var(--ap-navy-deep);}
+#public-app .public-header .brand-slogan {color:#536b83;font-weight:650;}
+#public-app .public-header .logo-box {padding:4px;background:white;}
+#public-app .portal-back-btn,#public-app .public-login-btn {min-height:43px;color:#144977;background:#f4f8fc;border-color:#d7e2ee;}
+#public-app .public-login-btn {background:#e7f5ef;color:#056e55;border-color:#c7e5d6;}
+#public-app .portal-back-btn:hover,#public-app .public-login-btn:hover {background:#e5f1fb;}
+#parent-portal.parent-portal-v414 {grid-template-columns:320px minmax(0,1fr);gap:18px;align-items:start;margin-top:15px;}
+#parent-portal .parent-brand-hero {background:linear-gradient(145deg,#0b2b55 0%,#134b82 100%);border-radius:23px;box-shadow:0 16px 35px rgba(7,42,84,.14);}
+#parent-portal .parent-brand-hero::after {opacity:.40;}
+#parent-portal .parent-brand-hero h2 {font-size:23px;}
+#parent-portal .parent-trust-row span {background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.16);}
+#parent-portal .parent-quick-hub {gap:9px;}
+#parent-portal .parent-hub-action {
+  min-height:69px;border:1px solid #dfe8f1;border-radius:15px;box-shadow:0 5px 17px rgba(11,49,97,.035);background:white;
+}
+#parent-portal .parent-hub-action:hover,#parent-portal .parent-hub-action.active {
+  border-color:#8bc6b5;box-shadow:0 8px 23px rgba(4,120,87,.105);background:#f1faf6;
+}
+#parent-portal .parent-hub-action.active::before {content:'';width:3px;height:32px;border-radius:99px;background:#078066;position:absolute;left:-1px;}
+#parent-portal .parent-hub-action {position:relative;}
+#parent-portal .parent-hub-action>i {color:#67869c;}
+#parent-portal .parent-contact-card {background:white;border-color:#dfe8f1;box-shadow:0 5px 16px rgba(11,49,97,.035);}
+#parent-portal .parent-chat-app {
+  height:calc(100vh - 143px);height:calc(100dvh - 143px);
+  min-height:610px;max-height:920px;border:1px solid #dce6f0;border-radius:23px;
+  background:#fff;box-shadow:0 16px 42px rgba(11,49,97,.075);
+}
+#parent-portal .parent-chat-toolbar {height:70px;background:linear-gradient(180deg,#fff,#f8fbfd);}
+#parent-portal .assistant-avatar {background:linear-gradient(145deg,#0f5b99,#1a80bd);}
+#parent-portal .chat-body.parent-service-content {min-height:0;max-height:none;flex:1;background:#f8fbfe;scrollbar-color:#c8d8ea transparent;}
+#parent-portal .chat-row.user .chat-bubble {background:#134d84;color:#fff;}
+#parent-portal .chat-row.bot .chat-bubble {border-color:#dce5ef;}
+#parent-portal .parent-welcome-card {background:linear-gradient(145deg,#fff,#f2f8fe);border-color:#d8e6f2;}
+#parent-portal .parent-chat-dock {position:relative;z-index:10;background:#fff;}
+#parent-portal .chat-input-row {padding:9px 13px 13px;}
+#parent-portal .quick-reply-strip {padding:10px 13px 5px;}
+#parent-portal .quick-reply-strip button {background:#f4f9fe!important;border-color:#d1e4f4!important;color:#1a5283;}
+#parent-portal .parent-send-btn {background:var(--ap-navy);border:0;color:white;}
+#parent-portal .parent-module-card {background:white;border-color:#dae5ef;box-shadow:0 3px 12px rgba(11,49,97,.035);}
+#parent-portal .parent-module-title h3 {color:var(--ap-navy);}
+#parent-portal .portal-grade-btn.active,#parent-portal .portal-subtab.active {background:var(--ap-navy);border-color:var(--ap-navy);color:white;}
+#parent-portal .parent-service-tab.active {background:var(--ap-emerald);border-color:var(--ap-emerald);}
+#parent-portal .student-report-head {background:linear-gradient(125deg,#edf6fc,#effbf5);}
+#parent-portal :is(.chat-metric,.parent-metric,.tuition-panel,.student-mini-stat) {border-radius:12px;}
+#parent-portal :is(.student-report-section,.chat-card,.parent-module-card) {min-width:0;}
+#parent-portal .student-report-section {overflow-x:auto;}
+
+/* Teacher admin - navy header, tabular KPI, measured density. */
+#admin-app.container {max-width:1380px;padding:20px 23px 46px;gap:18px;}
+#admin-app .app-header {
+  background:linear-gradient(115deg,#08264f 0%,#0d3e76 70%,#0f5a90 100%);
+  border:1px solid #184d81;color:#fff;border-radius:21px;padding:17px 21px;
+  box-shadow:0 15px 36px rgba(8,38,79,.17);
+}
+#admin-app .logo-box {background:white;border-color:rgba(255,255,255,.7);}
+#admin-app .brand-title {color:#fff;font-weight:800;font-size:clamp(15px,1.45vw,19px);}
+#admin-app .brand-slogan {color:#c4e3f8;font-size:12px;font-weight:650;}
+#admin-app .header-right {gap:10px;}
+#admin-app .queue-pill {color:#fff;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.24);padding:7px 9px;}
+#admin-app .queue-pill strong {color:#fff;font-variant-numeric:tabular-nums;}
+#admin-app .queue-btn {background:#c7f1df;color:#06553c;min-height:36px;border-radius:9px;padding:8px 11px;}
+#admin-app .queue-btn:hover {background:#a6e5ca;}
+#admin-app .avatar {background:#e5f0fa;color:#123e67;}
+#admin-app .user-name {color:#fff;}
+#admin-app .user-role {color:#c8daed;}
+#admin-app .btn-ghost-light {background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.23);color:white;}
+#admin-app .btn-ghost-light:hover {background:rgba(255,255,255,.23);color:white;border-color:rgba(255,255,255,.48);}
+#admin-app .dashboard-stats {grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+#admin-app .stat-card {
+  min-height:113px;border-radius:18px;padding:21px 19px;background:white;border:1px solid #e0e7ef;
+  box-shadow:var(--ap-shadow);overflow:hidden;position:relative;
+}
+#admin-app .stat-card::after {content:'';height:4px;position:absolute;left:0;right:0;bottom:0;background:#216fae;}
+#admin-app .stat-card:nth-child(2)::after {background:#059669;}
+#admin-app .stat-card:nth-child(3)::after {background:#d18a27;}
+#admin-app .stat-icon {border-radius:14px;width:52px;height:52px;}
+#admin-app .stat-info h3 {text-transform:uppercase;letter-spacing:.7px;font-size:10.5px;color:#61748a;font-weight:800;}
+#admin-app .stat-info p {font-variant-numeric:tabular-nums;letter-spacing:-.85px;font-size:clamp(24px,2.3vw,32px);color:var(--ap-navy-deep);}
+#admin-app .tabs {background:white;border:1px solid #dce5ee;border-radius:16px;padding:5px;box-shadow:0 4px 16px rgba(11,49,97,.04);}
+#admin-app .tab {border-radius:11px;color:#52667d;font-size:12px;font-weight:750;}
+#admin-app .tab:hover {background:#eaf3fc;color:#144d85;border-color:transparent;}
+#admin-app .tab.active {background:var(--ap-navy);border-color:var(--ap-navy);color:white;box-shadow:0 5px 12px rgba(11,49,97,.17);}
+#admin-app .panel {border-color:#e1e8f0;border-radius:21px;background:white;box-shadow:var(--ap-shadow);}
+#admin-app .toolbar {background:#f5f8fc;border:1px solid #e1e8f1;border-radius:14px;padding:13px;gap:10px;}
+#admin-app :is(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),select,textarea) {border-radius:11px;}
+#admin-app .btn-primary {background:#144c86;color:#fff;}
+#admin-app .btn-primary:hover {background:#0b3261;}
+#admin-app .btn-success {background:#087b61;color:#fff;}
+#admin-app .btn-success:hover {background:#055d48;}
+#admin-app .section-title {color:var(--ap-navy-deep);}
+#admin-app .table-responsive {border-radius:14px;border-color:#e0e8f1;}
+#admin-app th {background:#f0f5fa;color:#425872;font-size:10.5px;font-weight:800;}
+#admin-app td {color:#243a52;}
+#admin-app tbody tr:hover {background:#f5fafc;}
+#admin-app .sub-card {background:#f9fbfe;}
+#admin-app .report-collapse-head {background:#f5f8fc;}
+#admin-app .report-collapse-head:hover {background:#eef5fc;}
+#admin-app .notice-module {border-color:#d8e5f1;background:linear-gradient(145deg,#f8fbff,#fff 74%);}
+#admin-app .notice-title-row h3 {color:var(--ap-navy);}
+#admin-app :is(.score-summary-item b,.ai-metric strong,.notice-summary,.score-chip-value) {font-variant-numeric:tabular-nums;}
+
+/* Modal entrances are capability-gated; existing display: none/flex remains. */
+.modal .modal-box {border-radius:23px;max-height:min(90dvh,900px);}
+#modal-login .login-modal-card {background:white!important;}
+@supports (transition-behavior:allow-discrete) {
+  .modal {opacity:0;transition:opacity .21s ease,display .21s allow-discrete;}
+  .modal[style*="display:flex"],.modal[style*="display: flex"] {opacity:1;}
+  .modal .modal-box {transform:translateY(9px) scale(.987);transition:transform .21s ease;}
+  .modal[style*="display:flex"] .modal-box,.modal[style*="display: flex"] .modal-box {transform:translateY(0) scale(1);}
+  .exam-paper-modal {opacity:0;transition:opacity .21s ease,display .21s allow-discrete;}
+  .exam-paper-modal.open {opacity:1;}
+  @starting-style {
+    .modal[style*="display:flex"],.modal[style*="display: flex"],.exam-paper-modal.open {opacity:0;}
+    .modal[style*="display:flex"] .modal-box,.modal[style*="display: flex"] .modal-box {transform:translateY(9px) scale(.987);}
+  }
+}
+
+/* Component-based adaptation while retaining all pre-existing mobile selectors. */
+@supports (container-type:inline-size) {
+  #role-landing .role-landing-wrap {container-name:roleArea;container-type:inline-size;}
+  #admin-app {container-name:adminArea;container-type:inline-size;}
+  #public-app .public-wrap {container-name:publicArea;container-type:inline-size;}
+  #parent-portal .parent-chat-app {container-name:chatArea;container-type:inline-size;}
+  @container roleArea (max-width:650px) {
+    .role-card-grid {grid-template-columns:minmax(0,1fr);max-width:480px;gap:13px;}
+  }
+  @container adminArea (max-width:650px) {
+    .dashboard-stats {grid-template-columns:repeat(2,minmax(0,1fr));}
+    .dashboard-stats .stat-card:first-child {grid-column:1/-1;}
+  }
+  @container chatArea (max-width:520px) {
+    .chat-grid,.parent-grid,.tuition-grid {grid-template-columns:1fr;}
+    .student-mini-stats {grid-template-columns:repeat(3,minmax(0,1fr));}
+  }
+  @container publicArea (max-width:790px) {
+    .parent-portal-v414 {grid-template-columns:260px minmax(0,1fr);gap:12px;}
+  }
+}
+@media (max-width:850px) {
+  #parent-portal.parent-portal-v414 {grid-template-columns:250px minmax(0,1fr);gap:13px;}
+  #admin-app.container {padding:14px 13px 30px;}
+  #admin-app .app-header {gap:11px;}
+}
+@media (max-width:768px) {
+  #role-landing.role-landing {padding:20px 14px 30px;align-items:flex-start;}
+  #role-landing .role-brand {margin:8px 0 24px;}
+  #role-landing .role-logo {width:94px;height:94px;border-radius:23px;margin-bottom:13px;}
+  #role-landing .role-kicker {font-size:8.5px;letter-spacing:.55px;padding:6px 10px;}
+  #role-landing .role-brand h1 {font-size:clamp(21px,5.7vw,29px);}
+  #role-landing .role-tagline {font-size:13px;}
+  #role-landing .role-description {font-size:11.5px;max-width:420px;}
+  #role-landing .role-card-grid {grid-template-columns:1fr;max-width:500px;gap:12px;}
+  #role-landing .role-card {
+    padding:17px;min-height:0;border-radius:17px;display:grid;
+    grid-template-columns:59px minmax(0,1fr);grid-template-rows:auto auto auto auto;
+    gap:0 13px;align-items:start;text-align:left;
+  }
+  #role-landing .role-icon {width:54px;height:54px;border-radius:14px;margin:0;grid-column:1;grid-row:1/4;background-size:29px 29px!important;}
+  #role-landing .role-card .role-audience {position:static;grid-column:2;grid-row:1;justify-self:start;padding:4px 7px;margin:0 0 5px;font-size:8.5px;}
+  #role-landing .role-card h2 {grid-column:2;grid-row:2;font-size:18px;}
+  #role-landing .role-card p {grid-column:2;grid-row:3;font-size:11px;line-height:1.6;margin:4px 0 0;}
+  #role-landing .role-card .role-entry-btn {grid-column:1/-1;grid-row:4;max-width:none;width:100%;margin-top:13px;height:44px;min-height:44px;}
+  #role-landing .role-security {font-size:10px;margin-top:18px;}
+  #role-landing .role-contact-footer {font-size:10px;gap:4px 10px;}
+  #public-app.public-shell {padding:0;background:#f8fbfe;}
+  #public-app .public-header {top:0;margin:0;padding:8px 10px;border-radius:0;border-left:0;border-right:0;}
+  #public-app .public-header .logo-box {width:46px;height:46px;min-width:46px;padding:2px;}
+  #public-app .public-header .brand-title {font-size:11.5px;}
+  #public-app .public-header .brand-slogan {display:none;}
+  #public-app .portal-back-btn,#public-app .public-login-btn {width:41px;min-width:41px;height:42px;min-height:42px;padding:0;}
+  #parent-portal.parent-portal-v414 {display:block;margin-top:0;}
+  #parent-portal .parent-brand-panel {display:none;}
+  #parent-portal .parent-chat-app {height:calc(100dvh - 64px);min-height:0;max-height:none;border:0;border-radius:0;box-shadow:none;}
+  #parent-portal .parent-chat-toolbar {height:56px;flex:0 0 56px;}
+  #parent-portal .parent-mobile-welcome {flex-shrink:0;}
+  #parent-portal .chat-body.parent-service-content {min-height:0;overflow:auto;}
+  #parent-portal .parent-chat-dock {flex:none;position:relative;padding-bottom:env(safe-area-inset-bottom);}
+  #parent-portal .quick-reply-strip {padding:7px 8px 4px;}
+  #parent-portal .quick-reply-strip button {min-height:39px;font-size:11px!important;padding:7px 10px!important;}
+  #parent-portal .chat-input-row {padding:6px 9px 8px;}
+  #parent-portal .chat-input-row input,#parent-portal .parent-send-btn {height:46px!important;min-height:46px!important;}
+  #admin-app.container {padding:9px 10px 32px;gap:12px;}
+  #admin-app .app-header {padding:13px;border-radius:16px;}
+  #admin-app .brand-title {font-size:12.5px;}
+  #admin-app .brand-slogan {font-size:10px;}
+  #admin-app .header-right {flex-wrap:wrap;}
+  #admin-app .queue-pill {flex:1 1 100%;white-space:normal;}
+  #admin-app .dashboard-stats {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+  #admin-app .stat-card:first-child {grid-column:1/-1;}
+  #admin-app .stat-card {min-height:83px;border-radius:14px;padding:11px 12px;}
+  #admin-app .stat-icon {height:42px;width:42px;}
+  #admin-app .stat-info p {font-size:22px;}
+  #admin-app .tabs {overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  #admin-app .tab {min-height:44px;flex:0 0 auto;}
+  #admin-app .panel {padding:13px;border-radius:16px;}
+  #admin-app .toolbar {padding:10px;gap:8px;}
+  #admin-app .table-responsive {overflow-x:auto!important;}
+  #admin-app .table-responsive table {min-width:610px;}
+  #admin-app .notice-table {min-width:740px;}
+  .modal .modal-box {max-height:92dvh;}
+}
+@media (max-width:390px) {
+  #role-landing.role-landing {padding:14px 10px 20px;}
+  #role-landing .role-logo {width:83px;height:83px;}
+  #role-landing .role-card {padding:13px;grid-template-columns:50px minmax(0,1fr);gap:0 10px;}
+  #role-landing .role-icon {width:46px;height:46px;background-size:26px 26px!important;}
+  #role-landing .role-card h2 {font-size:16.5px;}
+  #role-landing .role-card p {font-size:10.5px;}
+  #parent-portal .parent-chat-app {height:calc(100dvh - 61px);}
+}
+@media (prefers-reduced-motion:reduce) {
+  #role-landing .role-card,#role-landing .role-entry-btn i,
+  .modal,.modal .modal-box,.exam-paper-modal {transition:none!important;animation:none!important;}
+  #parent-portal .chat-body.parent-service-content {scroll-behavior:auto;}
+}
+
+
+
+/* Existing Bootstrap icon CDN is retained; essential portal cues also render offline. */
+#parent-portal .parent-brand-icon i,
+#parent-portal .parent-quick-hub .hub-icon i,
+#admin-app .dashboard-stats .stat-icon i {display:none;}
+#parent-portal .parent-brand-icon {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m2 10 10-5 10 5-10 5zM6 12v5c3.5 3 8.5 3 12 0v-5M22 10v6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-size:30px 30px;background-position:center;
+}
+#parent-portal .parent-quick-hub .hub-icon {background-repeat:no-repeat;background-size:22px 22px;background-position:center;}
+#parent-portal .parent-quick-hub .hub-icon.blue {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23155ba4' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='10.8' cy='10.8' r='6.6'/%3E%3Cpath d='m16 16 5 5'/%3E%3C/svg%3E");
+}
+#parent-portal .parent-quick-hub .hub-icon.teal {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f766e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M7 3v4M17 3v4M3 10h18M7 14h4'/%3E%3C/svg%3E");
+}
+#parent-portal .parent-quick-hub .hub-icon.amber {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B45309' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='4' width='14' height='18' rx='2'/%3E%3Cpath d='M9 4.5v-2h6v2M9 12h6M9 16h6'/%3E%3C/svg%3E");
+}
+#parent-portal .parent-quick-hub .hub-icon.purple {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m13 7 4 4M4 20l4-.8L19 8a2.8 2.8 0 0 0-4-4L4 15.3z'/%3E%3C/svg%3E");
+}
+#admin-app .dashboard-stats .stat-icon {background-repeat:no-repeat;background-size:25px 25px;background-position:center;}
+#admin-app .dashboard-stats .stat-icon.icon-blue {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23155ba4' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='8' r='3'/%3E%3Cpath d='M2.5 20v-2a5.5 5.5 0 0 1 5.5-5.5h2a5.5 5.5 0 0 1 5.5 5.5v2M16 5.7a3 3 0 0 1 0 5.6M18 13a5 5 0 0 1 3 5v2'/%3E%3C/svg%3E");
+}
+#admin-app .dashboard-stats .stat-icon.icon-yellow {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239a6700' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='7' r='3.2'/%3E%3Cpath d='M4 21v-2a7 7 0 0 1 10-6.4M15 17l2.3 2.4L22 14.5'/%3E%3C/svg%3E");
+}
+#admin-app .dashboard-stats .stat-icon.icon-red {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b42335' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='7' r='3.2'/%3E%3Cpath d='M3 21v-2a6 6 0 0 1 10-4.5M16 16l5 5m0-5-5 5'/%3E%3C/svg%3E");
+}
+@supports (color: color-mix(in oklch, white 50%, black)) {
+  #admin-app .toolbar {background:var(--ap-muted-bg);border-color:var(--ap-hairline);}
+  #parent-portal .parent-hub-action.active {background:var(--ap-emerald-soft);}
+}
+
 </style>
   <!-- Export bảng điểm: SheetJS & html2canvas, tự tải trước khi sử dụng -->
   <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -1133,25 +1539,33 @@
 <div id="role-landing" class="role-landing">
   <div class="role-landing-wrap">
     <div class="role-brand">
-      <div class="role-logo"><img src="logo.jpg" alt="Logo An Phúc"></div>
+      <div class="role-logo"><img src="logo.jpg" alt="Logo Trung tâm Toán An Phúc" width="2048" height="2048" decoding="async" fetchpriority="high"></div>
+      <div class="role-kicker">CỔNG THÔNG TIN GIÁO DỤC TRỰC TUYẾN</div>
       <h1>TRUNG TÂM TOÁN AN PHÚC</h1>
-      <p>Hệ thống học tập và quản lý trung tâm. Vui lòng chọn cổng phù hợp để tiếp tục.</p>
+      <p class="role-tagline">Vững kiến thức. Chắc tương lai.</p>
+      <p class="role-description">Kết nối gia đình và nhà trường, quản lý học tập thuận tiện trong một nền tảng thống nhất.</p>
     </div>
     <div class="role-card-grid">
       <article class="role-card parent" onclick="openParentPortal()" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openParentPortal()">
         <div class="role-icon"><i class="bi bi-people-fill"></i></div>
+        <span class="role-audience">CỔNG GIA ĐÌNH</span>
         <h2>Phụ huynh</h2>
         <p>Tra cứu kết quả học tập, điểm danh, học phí, lịch học, nhận xét và bài kiểm tra của con.</p>
         <button class="role-entry-btn" type="button">Truy cập <i class="bi bi-arrow-right"></i></button>
       </article>
       <article class="role-card teacher" onclick="openTeacherPortal()" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openTeacherPortal()">
         <div class="role-icon"><i class="bi bi-person-workspace"></i></div>
+        <span class="role-audience">CỔNG QUẢN TRỊ</span>
         <h2>Giáo viên</h2>
         <p>Quản lý học sinh, điểm danh, học phí, Zalo và chấm tự động trắc nghiệm + tự luận bằng AI.</p>
         <button class="role-entry-btn" type="button">Đăng nhập <i class="bi bi-arrow-right"></i></button>
       </article>
     </div>
     <div class="role-security"><i class="bi bi-shield-check"></i> Dữ liệu quản trị chỉ mở sau khi giáo viên đăng nhập.</div>
+    <footer class="role-contact-footer" aria-label="Thông tin liên hệ Trung tâm">
+      <span><i class="bi bi-geo-alt"></i> 30/11D Phước Tường, Phước Long, Nam Nha Trang</span>
+      <a href="tel:0972466347" aria-label="Gọi Trung tâm Toán An Phúc số 0972466347"><i class="bi bi-telephone"></i> 0972 466 347</a>
+    </footer>
   </div>
 </div>
 
@@ -1161,10 +1575,10 @@
   <div class="public-wrap">
     <header class="app-header public-header">
       <div class="header-left">
-        <div class="logo-box"><img src="logo.jpg" alt="Logo"></div>
+        <div class="logo-box"><img src="logo.jpg" alt="Logo Trung tâm Toán An Phúc" width="2048" height="2048" decoding="async"></div>
         <div>
           <h1 class="brand-title">TRUNG TÂM TOÁN AN PHÚC</h1>
-          <p class="brand-slogan">"Vững kiến thức - Chắc tương lai"</p>
+          <p class="brand-slogan">Vững kiến thức. Chắc tương lai.</p>
         </div>
       </div>
       <div class="header-right" style="background:transparent;border:0;padding:0;display:flex;gap:8px;">
@@ -1180,7 +1594,7 @@
           <div class="parent-brand-kicker">AN PHÚC EDUCATION</div>
           <h2>Đồng hành cùng phụ huynh</h2>
           <p>Tra cứu nhanh, xem lịch học và kết nối với Trung tâm trong một giao diện an toàn, dễ sử dụng.</p>
-          <div class="parent-slogan">“Vững kiến thức - Chắc tương lai”</div>
+          <div class="parent-slogan">Vững kiến thức. Chắc tương lai.</div>
           <div class="parent-trust-row"><span><i class="bi bi-shield-lock-fill"></i> Xác thực SĐT</span><span><i class="bi bi-phone"></i> Mobile-first</span><span><i class="bi bi-lightning-charge-fill"></i> Tra cứu nhanh</span></div>
         </div>
 
@@ -1218,6 +1632,7 @@
             <button onclick="selectParentService('lookup')"><i class="bi bi-search"></i> Tra cứu học tập & Học phí</button>
             <button onclick="selectParentService('schedule')"><i class="bi bi-calendar3"></i> Xem Thời khóa biểu</button>
             <button onclick="selectParentService('registration')"><i class="bi bi-clipboard2-check"></i> Đăng ký học mới</button>
+            <button onclick="selectParentService('exam')"><i class="bi bi-pencil-square"></i> Kiểm tra trực tuyến</button>
           </div>
           <form id="parent-chat-form" class="chat-input-row" onsubmit="event.preventDefault();sendChatMessage();">
             <input id="chat-input" type="text" autocomplete="off" placeholder="Nhập tên học sinh hoặc câu hỏi dành cho Trung tâm...">
@@ -1234,11 +1649,11 @@
   <header class="app-header">
     <div class="header-left">
       <div class="logo-box">
-        <img src="logo.jpg" alt="Logo">
+        <img src="logo.jpg" alt="Logo Trung tâm Toán An Phúc" width="2048" height="2048" decoding="async">
       </div>
       <div>
         <h1 class="brand-title">HỆ THỐNG QUẢN LÝ TRUNG TÂM TOÁN AN PHÚC</h1>
-        <p class="brand-slogan">"Vững kiến thức - Chắc tương lai"</p>
+        <p class="brand-slogan">Vững kiến thức. Chắc tương lai.</p>
       </div>
     </div>
     <div class="header-right">
